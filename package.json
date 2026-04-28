@@ -6,7 +6,7 @@
   "unity": "2022.3",
   "author": {
     "name": "Palexen",
-    "url": "https://github.com",
+    "url": "https://github.com/Palexen/Palexen-Tools.git",
     "email": "tfyeeunravel@gmail.com"
   },
   "keywords": [
@@ -17,5 +17,7 @@
   "dependencies": {
     "com.unity.modules.jsonserialize": "1.0.0"
   },
-  "licensesUrl": "https://raw.githubusercontent.com/Palexen/Palexen-Tools-And-Xeen-Render-License/refs/heads/main/LICENSE"
+  "licensesUrl": "https://raw.githubusercontent.com/Palexen/Palexen-Tools-And-Xeen-Render-License/refs/heads/main/LICENSE",
+  "documentationUrl": "https://www.palexen.com/assets/palexen-tools/palexen-tools-documentation",
+  "changelogUrl": "https://www.palexen.com/assets/palexen-tools/changelog"
 }
