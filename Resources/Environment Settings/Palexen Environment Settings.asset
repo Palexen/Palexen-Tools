@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a587cc92d6f41d4f8652f78a46518bc, type: 3}
+  m_Name: Palexen Environment Settings
+  m_EditorClassIdentifier: 
+  scriptDescriptionState: 0
+  scriptNameSpace: Palexen
+  scriptTitleColor: {r: 1, g: 0.627451, b: 0.47843137, a: 1}
+  scriptTitleSize: 18
+  headerColorValue: {r: 0.6784314, g: 0.84705883, b: 0.9019608, a: 1}
+  headerSize: 16
+  contextSeparatorColor: {r: 0, g: 1, b: 1, a: 1}
+  gizmosColor: {r: 0.0071456432, g: 1, b: 0, a: 0.5019608}
+  inactiveGizmosColor: {r: 1, g: 0, b: 0.084195614, a: 1}
+  infoString: The object can be called automatically
+  warningString: The object is optional here!
+  errorString: The object does not contain any references, before entering play mode,
+    make sure to assign it to avoid errors!
+  infoObject: {fileID: 0}
+  warningObject: {fileID: 0}
+  errorObject: {fileID: 0}
+  cyanObject: {fileID: 0}
+  yellowObject: {fileID: 0}
+  redObject: {fileID: 0}
+  greenObject: {fileID: 0}
+  blueObject: {fileID: 0}
+  magentaObject: {fileID: 0}
+  orangeObject: {fileID: 0}
+  clearBlueObject: {fileID: 0}
+  pinkObject: {fileID: 0}
+  neonGreenObject: {fileID: 0}
+  salmonObject: {fileID: 0}

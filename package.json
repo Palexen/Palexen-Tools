@@ -1,0 +1,21 @@
+{
+  "name": "com.palexen.tools",
+  "version": "5.6.1",
+  "displayName": "Palexen Tools",
+  "description": "Save a lot of time when you start a new game with this tool kit!.",
+  "unity": "2022.3",
+  "author": {
+    "name": "Palexen",
+    "url": "https://github.com",
+    "email": "tfyeeunravel@gmail.com"
+  },
+  "keywords": [
+    "tools",
+    "utils",
+    "palexen"
+  ],
+  "dependencies": {
+    "com.unity.modules.jsonserialize": "1.0.0"
+  },
+  "licensesUrl": "https://raw.githubusercontent.com/Palexen/Palexen-Tools-And-Xeen-Render-License/refs/heads/main/LICENSE"
+}

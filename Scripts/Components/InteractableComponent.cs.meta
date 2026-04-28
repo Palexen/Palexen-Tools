@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 320137cdec9946046a4f7192b4363070
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - baseIcon: {fileID: 21300000, guid: 2a5b5074a56fe514da9d955d8e9780e7, type: 3}
+  - baseButton: {fileID: 21300000, guid: a619f2a1df9c94b11bb0a10bae522b97, type: 3}
+  - _PCButton: {fileID: 21300000, guid: a619f2a1df9c94b11bb0a10bae522b97, type: 3}
+  - _nintentdoSwitchButton: {fileID: 21300000, guid: 22909ea4cf1e14602afa144f92bcdd71, type: 3}
+  - _xBOXButton: {fileID: 21300000, guid: 4e97c43e2ac744e5d93b564a75da9c6f, type: 3}
+  - _PlayStationButton: {fileID: 21300000, guid: 5c63fa512ba88468a89b3880560374fe, type: 3}
+  - _touchScreenButton: {fileID: 21300000, guid: 02a69f9ea9e01f44781cfac88e0d1b33, type: 3}
+  executionOrder: 0
+  icon: {fileID: 2800000, guid: c47efde1a69c55345aed2d3917597150, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

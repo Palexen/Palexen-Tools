@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb9d5812b63f461448bf384f00f218b4, type: 3}
+  m_Name: Input Schema Default
+  m_EditorClassIdentifier: 
+  _schemaName: Default Actions
+  buttonSchemas:
+  - schemaName: Action
+    variants:
+    - {fileID: 21300000, guid: a619f2a1df9c94b11bb0a10bae522b97, type: 3}
+    - {fileID: 21300000, guid: 4e97c43e2ac744e5d93b564a75da9c6f, type: 3}
+    - {fileID: 21300000, guid: 5c63fa512ba88468a89b3880560374fe, type: 3}
+    - {fileID: 21300000, guid: 241eb2118b8414866a7d2ec4a7729e0d, type: 3}
+    - {fileID: 21300000, guid: 02a69f9ea9e01f44781cfac88e0d1b33, type: 3}
+  - schemaName: Jump
+    variants:
+    - {fileID: 21300000, guid: 622f1e2b64c8341ae9d54c883f1e3872, type: 3}
+    - {fileID: 21300000, guid: f276bcee571a34db2940512a4f83876a, type: 3}
+    - {fileID: 21300000, guid: 9c774130152e54922b9e6de5c1811921, type: 3}
+    - {fileID: 21300000, guid: 9f3da53de06ba41b68d6c9c905e307ce, type: 3}
+    - {fileID: 21300000, guid: 02a69f9ea9e01f44781cfac88e0d1b33, type: 3}
+  - schemaName: Change
+    variants:
+    - {fileID: 21300000, guid: a619f2a1df9c94b11bb0a10bae522b97, type: 3}
+    - {fileID: 21300000, guid: 54423c67ec2e3444b8dd97b5db53b0f8, type: 3}
+    - {fileID: 21300000, guid: 6289b09ee486a4388892fa2f4497add4, type: 3}
+    - {fileID: 21300000, guid: 22909ea4cf1e14602afa144f92bcdd71, type: 3}
+    - {fileID: 21300000, guid: 02a69f9ea9e01f44781cfac88e0d1b33, type: 3}
+  - schemaName: Crouch
+    variants:
+    - {fileID: 21300000, guid: a619f2a1df9c94b11bb0a10bae522b97, type: 3}
+    - {fileID: 21300000, guid: 66a0fee11cb654e8b9a977b34e730b88, type: 3}
+    - {fileID: 21300000, guid: 3cf6fe5edfc664cbfae3ec38577969bd, type: 3}
+    - {fileID: 21300000, guid: e0a7b5e5327c54a06835084eac3147a7, type: 3}
+    - {fileID: 21300000, guid: 02a69f9ea9e01f44781cfac88e0d1b33, type: 3}
