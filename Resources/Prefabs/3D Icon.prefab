@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_3DIconMethod: 1
   sizeControl: {x: 1, y: 50}
-  maxDistance: 100
+  maxDistance: 20
   m_UIFadeMethod: 1
   canvasGroup: {fileID: 5368286771333243825}
   icon: {fileID: 2667192852354490876}

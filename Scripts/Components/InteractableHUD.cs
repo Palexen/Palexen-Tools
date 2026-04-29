@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -25,15 +25,15 @@ using UnityEngine.UI;
 namespace Palexen.Gameplay.UI
 {
     [AddComponentMenu("Palexen/UI/Interaction HUD")]
-    [ScriptDescription("Interaction HUD", " A Representation on screen when you can interact with many objects in yout game")]
+    [ScriptDescription("Interaction HUD", "A Representation on screen when you can interact with many objects in yout game")]
     public class InteractableHUD : MonoBehaviour
     {
         #region VARIABLES
 
-        public Animator m_animator;
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)] public Animator m_animator;
 
-        public Image baseImage;
-        public Image baseImageButton;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public Image baseImage;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public Image baseImageButton;
 
         Sprite baseIcon;
         Sprite baseButton;

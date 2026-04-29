@@ -1,7 +1,7 @@
 ﻿/*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -30,8 +30,8 @@ namespace Palexen.Misc
     public class ExampleScript : MonoBehaviour
     {
         
-        [VectorSlider(0, 10)] public Vector2 minMaxFloat;
-        [VectorSlider(0, 10)] public Vector2Int minMaxInt;
+        [VectorSlider(0, 10)] public Vector2 minMaxFloat = new(2, 8);
+        [VectorSlider(0, 10)] public Vector2Int minMaxInt = new(2, 8);
 
         [MyHeader("Red Object Without Error")]
         [FieldColor] public GameObject redObject;
@@ -70,7 +70,7 @@ namespace Palexen.Misc
         [FieldColor(FieldPropertyColor.salmon)] public GameObject salmonObject;
 
         [MyHeader("Array")]
-        [FieldColor] public GameObject[] arrayObjects;
+        [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)] public GameObject[] arrayObjects = new GameObject[5];
 
         public void GoToOnlineManual()
         {

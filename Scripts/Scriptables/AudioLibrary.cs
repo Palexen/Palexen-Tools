@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -19,8 +19,12 @@
 * -----------------------------------------------------------------------------
 */
 
-using UnityEngine;
+using Palexen.Scriptables;
 using Palexen.Tools;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using UnityEngine;
 
 namespace Palexen.Audio
 {
@@ -50,4 +54,38 @@ namespace Palexen.Audio
 
         #endregion
     }
+
+    #region MAIN CUSTOM EDITOR
+#if UNITY_EDITOR
+    [CustomEditor(typeof(AudioLibrary))]
+    [CanEditMultipleObjects]
+    public class AudioLibraryEditor : Editor
+    {
+        private SerializedProperty _sounds;
+
+        private void OnEnable()
+        {
+            _sounds = serializedObject.FindProperty("sounds");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Audio Library</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Add audio clips here, and then you can call them in your scripts, or you can randomly select one from " +
+                "here using the <color=yellow>GetRandomClip();</color> method.\r\n\r\nThis is great for sound effects in your game.",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 90));
+
+            GUILayout.Space(10);
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_sounds);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+#endif
+    #endregion
 }

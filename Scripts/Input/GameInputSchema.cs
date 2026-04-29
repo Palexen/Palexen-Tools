@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -24,7 +24,6 @@ using Palexen.Scriptables;
 
 namespace Palexen.Gameplay.Input
 {
-
     [ScriptDescription("Input Schema", "Set Input Schema for the game")]
     [AddComponentMenu("Palexen/UI/Input Scheme Manager")]
     public class GameInputSchema : MonoBehaviour
@@ -36,10 +35,9 @@ namespace Palexen.Gameplay.Input
 
         [MyHeader("UI Schemas")]
         [Header("Actions Buttons")]
-        public InputSchemaContainer _actionSchema;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public InputSchemaContainer _actionSchema;
 
         #endregion
-
 
         #region METHODS
 
@@ -70,10 +68,28 @@ namespace Palexen.Gameplay.Input
             return schema;
         }
 
+        /// <summary>
+        /// Gets the input schema container associated with the specified action identifier.
+        /// </summary>
+        /// <param name="actionID">The identifier of the action for which to retrieve the input schema container.</param>
+        /// <returns>An <see cref="InputSchemaContainer"/> instance containing the input schema for the specified action.</returns>
         public InputSchemaContainer GetInputSchemaContainer(int actionID)
         {
             _actionSchema.GetSchema(actionID);
             return _actionSchema;
+        }
+
+        #endregion
+
+        #region API
+
+        /// <summary>
+        /// Sets the input schema used by the current instance.
+        /// </summary>
+        /// <param name="newSchema">The new input schema to apply. Cannot be null.</param>
+        public void SetSchema(InputSchema newSchema)
+        {
+            schema = newSchema;
         }
 
         #endregion

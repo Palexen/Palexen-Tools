@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -18,8 +18,11 @@
 
 * -----------------------------------------------------------------------------
 */
-using UnityEngine;
 using Palexen.Tools;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using UnityEngine;
 
 namespace Palexen.Scriptables
 {
@@ -45,4 +48,41 @@ namespace Palexen.Scriptables
 
         #endregion
     }
+
+    #region MAIN CUSTOM EDITOR
+#if UNITY_EDITOR
+    [CustomEditor(typeof(AnimatorLibrary))]
+    [CanEditMultipleObjects]
+    public class AnimatorLibraryEditor : Editor
+    {
+        private SerializedProperty _genderOrType;
+        private SerializedProperty _animators;
+
+        private void OnEnable()
+        {
+            _genderOrType = serializedObject.FindProperty("_genderOrType");
+            _animators = serializedObject.FindProperty("_animators");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animator Library</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Add your animators here, and call them in your scripts, or choose a random one from here using " +
+                "the <color=cyan>GetRandomAnimator();</color> method.\r\n\r\nThis is great when you need many NPCs that share the same structure but have different animations.",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 90));
+
+            GUILayout.Space(10);
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_genderOrType);
+            EditorGUILayout.PropertyField(_animators);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+#endif
+    #endregion
 }

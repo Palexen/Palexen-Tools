@@ -1,7 +1,7 @@
 ﻿/*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -42,46 +42,64 @@ namespace Palexen.Tools
     #region CUSTOM PROPERTY FIELD COLOR
 #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(FieldColor))]
+    [CanEditMultipleObjects]
     public class VariableColor : PropertyDrawer
     {
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            FieldColor field = attribute as FieldColor;
+
+            float height = EditorGUI.GetPropertyHeight(property, label, true);
+
+            if (property.objectReferenceValue == null && field.toShow != ShowObjectMessage.no)
+            {
+                height += EditorGUIUtility.singleLineHeight * 2f;
+            }
+
+            return height;
+        }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             FieldColor field = attribute as FieldColor;
 
             CustomEnvironment msj = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
 
+            Rect fieldRect = new Rect(position.x, position.y, position.width, EditorGUI.GetPropertyHeight(property, label));
+
             if (property.objectReferenceValue == null)
             {
                 GUI.color = field.color;
-                EditorGUI.PropertyField(position, property, label);
+                EditorGUI.PropertyField(fieldRect, property, label, true);
                 GUI.color = Color.white;
 
-                if (field.toShow == ShowObjectMessage.message)
+                if (field.toShow != ShowObjectMessage.no && msj != null)
                 {
-                    if (msj != null)
-                    {
-                        EditorGUILayout.HelpBox(msj.infoString, MessageType.Info);
-                    }
-                }
+                    Rect helpBoxRect = new Rect(
+                        position.x,
+                        fieldRect.y + fieldRect.height + 2,
+                        position.width,
+                        EditorGUIUtility.singleLineHeight * 2f
+                    );
 
-                if (field.toShow == ShowObjectMessage.warningMessage)
-                {
-                    if (msj != null)
-                    {
-                        EditorGUILayout.HelpBox(msj.warningString, MessageType.Warning);
-                    }
-                }
+                    MessageType type = MessageType.Info;
 
-                if (field.toShow == ShowObjectMessage.errorMessage)
-                {
-                    if (msj != null)
-                    {
-                        EditorGUILayout.HelpBox(msj.errorString, MessageType.Error);
-                    }
+                    if (field.toShow == ShowObjectMessage.warningMessage)
+                        type = MessageType.Warning;
+                    else if (field.toShow == ShowObjectMessage.errorMessage)
+                        type = MessageType.Error;
+
+                    string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
+                                     field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
+                                     msj.errorString;
+
+                    EditorGUI.HelpBox(helpBoxRect, message, type);
                 }
             }
             else
-                EditorGUI.PropertyField(position, property, label);
+            {
+                EditorGUI.PropertyField(fieldRect, property, label, true);
+            }
         }
     }
 #endif
@@ -461,6 +479,7 @@ namespace Palexen.Tools
 
 #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(MyHeaderAttribute), true)]
+    [CanEditMultipleObjects]
     public class HeaderDecoratorDrawer : DecoratorDrawer
     {
         public override float GetHeight()
@@ -829,6 +848,24 @@ namespace Palexen.Tools
             }
         }
 
+        [MenuItem("GameObject/Palexen/Game Logics/Trigger Event", false, 0)]
+        static void CreateTriggerEvent()
+        {
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Trigger Event");
+
+            if (prefabAsset != null)
+            {
+                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                Selection.activeGameObject = clone;
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                Debug.LogError("Can't Find prefab in the <color=yellow>Prefabs/ </color> folder, " +
+                    "create new prefab and put in there, or <color=cyan>Reimport</color> the package");
+            }
+        }
+
         [MenuItem("GameObject/Palexen/Game Logics/Interactable GameObject", false, 0)]
         static void CreateInteractableGO()
         {
@@ -851,6 +888,24 @@ namespace Palexen.Tools
         static void CreateAsyncLoader()
         {
             GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Async Loader");
+
+            if (prefabAsset != null)
+            {
+                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                Selection.activeGameObject = clone;
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                Debug.LogError("Can't Find prefab in the <color=yellow>Prefabs/ </color> folder, " +
+                    "create new prefab and put in there, or <color=cyan>Reimport</color> the package");
+            }
+        }
+
+        [MenuItem("GameObject/Palexen/Game Logics/Footsteps (Preconfigured)", false, 0)]
+        static void CreatePlayerFootSteps()
+        {
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Footsteps - Preconfigured");
 
             if (prefabAsset != null)
             {

@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ public static class PalexenEditorStyles
         }
     }
 
-    public static GUIStyle CoolBox(int fontSize = 10, TextAnchor textAnchor = TextAnchor.MiddleCenter, FontStyle fontStyle = FontStyle.Normal)
+    public static GUIStyle CoolBox(int fontSize = 10, TextAnchor textAnchor = TextAnchor.MiddleCenter, FontStyle fontStyle = FontStyle.Normal, int height = 40)
     {
         GUIStyle style = new(GUI.skin.box)
         {
@@ -46,14 +46,14 @@ public static class PalexenEditorStyles
             alignment = textAnchor,
             fontSize = fontSize,
             fontStyle = fontStyle,
-            fixedHeight = 40,
+            fixedHeight = height,
             fixedWidth = Screen.width * .9f,
             stretchWidth = true
         };
         return style;
     }
 
-    public static GUIStyle CoolTitle(int fontSize = 18, TextAnchor textAlignment = TextAnchor.MiddleCenter, FontStyle fontStyle = FontStyle.Bold)
+    public static GUIStyle CoolTitle(int fontSize = 18, TextAnchor textAlignment = TextAnchor.MiddleCenter, FontStyle fontStyle = FontStyle.Bold, int height = 40)
     {
         GUIStyle style = new(GUI.skin.label)
         {        
@@ -61,7 +61,7 @@ public static class PalexenEditorStyles
             alignment = textAlignment,
             fontSize = fontSize,
             fontStyle = fontStyle,
-            fixedHeight = 40
+            fixedHeight = height
         };
         return style;
     }

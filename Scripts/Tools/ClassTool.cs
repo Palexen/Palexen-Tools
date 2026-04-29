@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -24,6 +24,9 @@ using Palexen.Gameplay;
 using UnityEngine.Events;
 using Palexen.Scriptables;
 using Palexen.Audio.Atmos;
+using Palexen.Gameplay.UI;
+using Palexen.Gameplay.Input;
+using Palexen.Gameplay.Player;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -44,6 +47,18 @@ namespace Palexen.Tools
     public enum InteractionButton { action, jump, change, crouch }
     public enum GetInputSchemaBehaviour { fromGameInputManager, fromInteractableScheme }
     public enum InputSchema { PC, nintendoSwitch, XBOX, playStation, touchScreen }
+
+    public enum FootstepsSurface { concrete, grass, water, glass, gravel, rock, sand, wood, dirt, snow, mud, metal }
+    public enum SurfaceType { mesh, terrain }
+    #endregion
+
+    #region TERRAIN SURFACE
+    [Serializable]
+    public class TerrainSurface
+    {
+        public string textureName;
+        public FootstepsSurface surfaceType;
+    }
     #endregion
 
     #region OBJECTS MANAGER
@@ -52,7 +67,7 @@ namespace Palexen.Tools
     {
         [Tooltip("The name of the object collection")] public string _regionName = "Collection Name";
         [Tooltip("Object behavior")] public ObjectManagerInteractionMode objectsBehaviour;
-        [Tooltip("Collection of objects in list format")] public GameObject[] _objects;
+        [Tooltip("Collection of objects in list format")] [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public GameObject[] _objects;
 
         public void ApplyChanges()
         {
@@ -97,6 +112,278 @@ namespace Palexen.Tools
     #region CUSTOM INSPECTORS
 
 #if UNITY_EDITOR
+
+    #region INPUT SCHEMA
+
+    [CustomEditor(typeof(GameInputSchema))]
+    [CanEditMultipleObjects]
+    public class GameInputSchemaEditor : Editor
+    {
+        GameInputSchema gis;
+        SerializedProperty schema;
+        SerializedProperty _actionSchema;
+        private void OnEnable()
+        {
+            gis = (GameInputSchema)target;
+            schema = serializedObject.FindProperty("schema");
+            _actionSchema = serializedObject.FindProperty("_actionSchema");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Game Input Schema</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("It globally establishes an action control scheme to change the control scheme or separate " +
+                "the platform.\r\n\r\nYou can also modify the scheme by activating a different one when calling the " +
+                "instance and setting a new input with the type in the <color=green>SetSchema(InputSchema newSchema);</color> method.\r\n\r\n" +
+                "This is essential when your users prefer their own input control and its respective scheme.", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 200));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(schema);
+            EditorGUILayout.PropertyField(_actionSchema);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region INTERACTABLE OBJECT
+    [CustomEditor(typeof(InteractableComponent))]
+    [CanEditMultipleObjects]
+    public class InteractableObjectEditor : Editor
+    {
+        InteractableComponent io;
+        SerializedProperty interactButton;
+        SerializedProperty playMethods;
+        SerializedProperty externalBehaviours;
+        SerializedProperty objectManager;
+        SerializedProperty motorVelocity;
+        SerializedProperty vibrationTimer;
+        SerializedProperty baseIcon;
+        SerializedProperty baseButton;
+        SerializedProperty inputSchemaBehaviour;
+        SerializedProperty schema;
+        SerializedProperty _PCButton;
+        SerializedProperty _nintentdoSwitchButton;
+        SerializedProperty _xBOXButton;
+        SerializedProperty _PlayStationButton;
+        SerializedProperty _touchScreenButton;
+
+        private void OnEnable()
+        {
+            io = (InteractableComponent)target;
+            interactButton = serializedObject.FindProperty("interactButton");
+            playMethods =  serializedObject.FindProperty("playMethods");
+            externalBehaviours = serializedObject.FindProperty("externalBehaviours");
+            objectManager = serializedObject.FindProperty("objectManager");
+            motorVelocity = serializedObject.FindProperty("motorVelocity");
+            vibrationTimer = serializedObject.FindProperty("vibrationTimer");
+            baseIcon = serializedObject.FindProperty("baseIcon");
+            baseButton = serializedObject.FindProperty("baseButton");
+            inputSchemaBehaviour = serializedObject.FindProperty("inputSchemaBehaviour");
+            schema = serializedObject.FindProperty("schema");
+            _PCButton = serializedObject.FindProperty("_PCButton");
+            _nintentdoSwitchButton = serializedObject.FindProperty("_nintentdoSwitchButton");
+            _xBOXButton = serializedObject.FindProperty("_xBOXButton");
+            _PlayStationButton = serializedObject.FindProperty("_PlayStationButton");
+            _touchScreenButton = serializedObject.FindProperty("_touchScreenButton");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Interactable Object</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("You can interact with (player needs <color=green>Player interaction Script</color>), mark this object as " +
+                "<color=cyan>interactable layer</color>", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(interactButton);
+            EditorGUILayout.PropertyField(playMethods);
+            EditorGUILayout.PropertyField(externalBehaviours);
+            EditorGUILayout.PropertyField(objectManager);
+            EditorGUILayout.PropertyField(motorVelocity);
+            EditorGUILayout.PropertyField(vibrationTimer);
+            EditorGUILayout.PropertyField(baseIcon);
+            EditorGUILayout.PropertyField(baseButton);
+            EditorGUILayout.PropertyField(inputSchemaBehaviour);
+            EditorGUILayout.PropertyField(schema);
+            EditorGUILayout.PropertyField(_PCButton);
+            EditorGUILayout.PropertyField(_nintentdoSwitchButton);
+            EditorGUILayout.PropertyField(_xBOXButton);
+            EditorGUILayout.PropertyField(_PlayStationButton);
+            EditorGUILayout.PropertyField(_touchScreenButton);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region PLAYER INTERACTION
+    [CustomEditor(typeof(PlayerInteraction))]
+    [CanEditMultipleObjects]
+    public class PlayerInteractionEditor : Editor
+    {
+        PlayerInteraction pi;
+        SerializedProperty button;
+        SerializedProperty interactableLayerMask;
+        SerializedProperty interactionMethod;
+        SerializedProperty maxDistance;
+
+        private void OnEnable()
+        {
+            pi = (PlayerInteraction)target;
+            button = serializedObject.FindProperty("button");
+            interactableLayerMask = serializedObject.FindProperty("interactableLayerMask");
+            interactionMethod = serializedObject.FindProperty("interactionMethod");
+            maxDistance = serializedObject.FindProperty("maxDistance");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Player Interaction</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Setup the player interaction system, you can set the layer for interactable objects, " +
+                "the method to detect them and the max distance to interact", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(button);
+            EditorGUILayout.PropertyField(interactableLayerMask);
+            EditorGUILayout.PropertyField(interactionMethod);
+            EditorGUILayout.PropertyField(maxDistance);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region INTERACTABLE HUD
+
+    [CustomEditor(typeof(InteractableHUD))]
+    [CanEditMultipleObjects]
+    public class InteractableHUDEditor : Editor
+    {
+        InteractableHUD ih;
+        SerializedProperty m_animator;
+        SerializedProperty baseImage;
+        SerializedProperty baseImageButton;
+
+        private void OnEnable()
+        {
+            ih = (InteractableHUD)target;
+            m_animator = serializedObject.FindProperty("m_animator");
+            baseImage = serializedObject.FindProperty("baseImage");
+            baseImageButton = serializedObject.FindProperty("baseImageButton");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Interactable HUD</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("A Representation on screen when you can interact with many objects in yout game", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(m_animator);
+            EditorGUILayout.PropertyField(baseImage);
+            EditorGUILayout.PropertyField(baseImageButton);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region WORDL ICON
+
+    [CustomEditor(typeof(WorldIcon))]
+    [CanEditMultipleObjects]
+    public class WorldIconEditor : Editor
+    {
+        WorldIcon wi;
+        SerializedProperty m_3DIconMethod;
+        SerializedProperty sizeControl;
+        SerializedProperty maxDistance;
+        SerializedProperty m_UIFadeMethod;
+        SerializedProperty canvasGroup;
+        SerializedProperty icon;
+        SerializedProperty opacity;
+        SerializedProperty minDistance;
+        SerializedProperty fadeSpeed;
+
+        private void OnEnable()
+        {
+            wi = (WorldIcon)target;
+            m_3DIconMethod = serializedObject.FindProperty("m_3DIconMethod");
+            sizeControl = serializedObject.FindProperty("sizeControl");
+            maxDistance = serializedObject.FindProperty("maxDistance");
+            m_UIFadeMethod = serializedObject.FindProperty("m_UIFadeMethod");
+            canvasGroup = serializedObject.FindProperty("canvasGroup");
+            icon = serializedObject.FindProperty("icon");
+            opacity = serializedObject.FindProperty("opacity");
+            minDistance = serializedObject.FindProperty("minDistance");
+            fadeSpeed = serializedObject.FindProperty("fadeSpeed");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>World Icon</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Create world icon in this object, you can set the method to show it and the distance to show it", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(m_3DIconMethod);
+
+            if (wi.m_3DIconMethod == Icon3DMethod.distance)
+            {
+                EditorGUILayout.PropertyField(sizeControl);
+                EditorGUILayout.PropertyField(maxDistance);
+            }
+            else
+            {
+                EditorGUILayout.PropertyField(m_UIFadeMethod);
+
+                if (wi.m_UIFadeMethod == Icon3DUIUsage.canvasGroup)
+                {
+                    GUILayout.Box("The icon will fade using the canvas group component, you need to assign it in the field below",
+                        PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+                    EditorGUILayout.PropertyField(canvasGroup);
+                }
+                else
+                {
+                    GUILayout.Box("The icon will fade using the image component, you need to assign it in the field below",
+                        PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+                    EditorGUILayout.PropertyField(icon);
+                }
+                EditorGUILayout.PropertyField(opacity);
+                EditorGUILayout.PropertyField(minDistance);
+                EditorGUILayout.PropertyField(fadeSpeed);
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
 
     #region TRIGGER OBJECT MANAGER
     [CustomEditor(typeof(TriggerObjectsManager))]
@@ -572,6 +859,97 @@ namespace Palexen.Tools
                     DestroyImmediate(te.gameObject.GetComponent<ShapeVisualizer>());
                 }
             }
+        }
+    }
+
+    #endregion
+
+    #region FOOTSTEPS SYSTEM
+
+    [CustomEditor(typeof(FootstepsSystem))]
+    public class FootstepsSystemEditor : Editor
+    {
+        FootstepsSystem fs;
+        SerializedProperty surfaceBehaviour;
+        SerializedProperty meshLayerMask;
+        SerializedProperty terrainLayerMask;
+        SerializedProperty currentSurface;
+        SerializedProperty foots;
+        SerializedProperty concrete;
+        SerializedProperty grass;
+        SerializedProperty water;
+        SerializedProperty glass;
+        SerializedProperty wood;
+        SerializedProperty gravel;
+        SerializedProperty rock;
+        SerializedProperty sand;
+        SerializedProperty dirt;
+        SerializedProperty snow;
+        SerializedProperty mud;
+        SerializedProperty metal;
+        SerializedProperty terrainTextureIndex;
+        SerializedProperty terrainSurfaceSettings;
+        SerializedProperty voice;
+        SerializedProperty climb;
+
+        private void OnEnable()
+        {
+            fs = (FootstepsSystem)target;
+            surfaceBehaviour = serializedObject.FindProperty("surfaceBehaviour");
+            meshLayerMask = serializedObject.FindProperty("meshLayerMask");
+            terrainLayerMask = serializedObject.FindProperty("terrainLayerMask");
+            currentSurface = serializedObject.FindProperty("currentSurface");
+            foots = serializedObject.FindProperty("foots");
+            concrete = serializedObject.FindProperty("concrete");
+            grass = serializedObject.FindProperty("grass");
+            water = serializedObject.FindProperty("water");
+            glass = serializedObject.FindProperty("glass");
+            wood = serializedObject.FindProperty("wood");
+            gravel = serializedObject.FindProperty("gravel");
+            rock = serializedObject.FindProperty("rock");
+            sand = serializedObject.FindProperty("sand");
+            dirt = serializedObject.FindProperty("dirt");
+            snow = serializedObject.FindProperty("snow");
+            mud = serializedObject.FindProperty("mud");
+            metal = serializedObject.FindProperty("metal");
+            terrainTextureIndex = serializedObject.FindProperty("terrainTextureIndex");
+            terrainSurfaceSettings = serializedObject.FindProperty("terrainSurfaceSettings");
+            voice = serializedObject.FindProperty("voice");
+            climb = serializedObject.FindProperty("climb");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Footsteps System</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Create footsteps system in this level, you can set different audio clips for each terrain texture", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(surfaceBehaviour);
+            EditorGUILayout.PropertyField(meshLayerMask);
+            EditorGUILayout.PropertyField(terrainLayerMask);
+            EditorGUILayout.PropertyField(currentSurface);
+            EditorGUILayout.PropertyField(foots);
+            EditorGUILayout.PropertyField(concrete);
+            EditorGUILayout.PropertyField(grass);
+            EditorGUILayout.PropertyField(water);
+            EditorGUILayout.PropertyField(glass);
+            EditorGUILayout.PropertyField(wood);
+            EditorGUILayout.PropertyField(gravel);
+            EditorGUILayout.PropertyField(rock);
+            EditorGUILayout.PropertyField(sand);
+            EditorGUILayout.PropertyField(dirt);
+            EditorGUILayout.PropertyField(snow);
+            EditorGUILayout.PropertyField(mud);
+            EditorGUILayout.PropertyField(metal);
+            EditorGUILayout.PropertyField(terrainTextureIndex);
+            EditorGUILayout.PropertyField(terrainSurfaceSettings);
+            EditorGUILayout.PropertyField(voice);
+            EditorGUILayout.PropertyField(climb);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 

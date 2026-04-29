@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bff821be08ae4a4b841ec408dc4326d, type: 3}
+  m_Name: footsteps_glass
+  m_EditorClassIdentifier: 
+  sounds:
+  - {fileID: 8300000, guid: 055dd65645ab645b8a0474d181bb4a4a, type: 3}
+  - {fileID: 8300000, guid: b6e3373eda0ca43929b8a9dcda921c4a, type: 3}
+  - {fileID: 8300000, guid: 615d04d7fc4e24ca7b532720cae8e2ae, type: 3}
+  - {fileID: 8300000, guid: dad7e4f58b9fc446c8af703b4d19531c, type: 3}
+  - {fileID: 8300000, guid: d97322e8ace9d483990c0e6afd9e7536, type: 3}
+  - {fileID: 8300000, guid: bf0f3ca931a6b4adcbd39654e5950f8d, type: 3}
+  - {fileID: 8300000, guid: d580507a5922d4f238f285123f9944f8, type: 3}
+  - {fileID: 8300000, guid: 9e7cd26445cc7431998c9ffebb194ff8, type: 3}
+  - {fileID: 8300000, guid: 39ec6ada20379486e9f3af80b317ae48, type: 3}
+  - {fileID: 8300000, guid: 042b3179a27d74a7b845c200f37b92e7, type: 3}
+  - {fileID: 8300000, guid: 99e9339dc9be24a9a9792740e73e60b8, type: 3}
+  - {fileID: 8300000, guid: 220b4256a93bf4395842e55a082dad23, type: 3}
+  - {fileID: 8300000, guid: f1a2c237181b447f291add69c0188c69, type: 3}
+  - {fileID: 8300000, guid: a2d8abd767db34c3fb249e66daf55fa4, type: 3}

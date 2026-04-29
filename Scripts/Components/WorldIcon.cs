@@ -1,7 +1,7 @@
 /*
 * -----------------------------------------------------------------------------
 * Palexen Tools
-* © 2023 Palexen | Xeen Render & Devward. All rights reserved.
+* © Palexen | Xeen Render & Devward. All rights reserved.
 * https://www.palexen.com/
 
 * -----------------------------------------------------------------------------
@@ -30,14 +30,14 @@ namespace Palexen.Gameplay.UI
     {
         [MyHeader("World Setup")]
         public Icon3DMethod m_3DIconMethod;
-        [VectorSlider(1, 50)] public Vector2Int sizeControl;
-        public float maxDistance = 10;
+        [VectorSlider(1, 50)] public Vector2Int sizeControl = new(1, 50);
+        public float maxDistance = 20;
         Transform target;
 
         [MyHeader("Fade UI Setup")]
         public Icon3DUIUsage m_UIFadeMethod;
-        public CanvasGroup canvasGroup;
-        public Image icon;
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] public CanvasGroup canvasGroup;
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)] public Image icon;
         [VectorSlider(0, 1)] public Vector2 opacity = new(0, 1);
         public float minDistance = 15;
         public float fadeSpeed = 5;
