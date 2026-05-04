@@ -18,9 +18,8 @@
 
 * -----------------------------------------------------------------------------
 */
-using Palexen.Tools;
-using System.ComponentModel;
 using UnityEngine;
+using Palexen.Tools;
 
 namespace Palexen.Scriptables
 {
@@ -56,12 +55,20 @@ namespace Palexen.Scriptables
         [TextArea] public string errorString = "Error Message | Example";
 
 
-		[MyHeader("The color fields and messages will look like this (No need to add any reference here)")]
+		[MyHeader("The Field Colors and messages will look like this (No need to add any reference here)" +
+            "\n Use </color>[FieldColor(FieldPropertyColor, ShowObjectMessage, bool)] to use it", 3)]
         [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.message)] [SerializeField] private GameObject infoObject;
         [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] [SerializeField] private GameObject warningObject;
         [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)] [SerializeField] private GameObject errorObject;
 
-		[MyHeader("All Field Colors")]
+        [MyHeader("Tag Attribute, use </color>[TagField] on your string tag to use it")]
+        [TagField] public string tagFieldAttribute;
+
+        [MyHeader("Slider Attribute, use </color>[VectorSlider(0, 1)] to use it")]
+        [VectorSlider(0, 1)] public Vector2 vector2Slider = new(0, 1);
+        [VectorSlider(0, 100)] public Vector2Int vector2SliderInt = new(0, 50);
+
+        [MyHeader("All Field Colors")]
         [FieldColor(FieldPropertyColor.cyan)] public GameObject cyanObject;
         [FieldColor(FieldPropertyColor.yellow)] public GameObject yellowObject;
         [FieldColor(FieldPropertyColor.red)] public GameObject redObject;

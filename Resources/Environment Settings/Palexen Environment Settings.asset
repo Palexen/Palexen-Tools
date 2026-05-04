@@ -28,6 +28,9 @@ MonoBehaviour:
   infoObject: {fileID: 0}
   warningObject: {fileID: 0}
   errorObject: {fileID: 0}
+  tagFieldAttribute: Player
+  vector2Slider: {x: 0, y: 1}
+  vector2SliderInt: {x: 0, y: 50}
   cyanObject: {fileID: 0}
   yellowObject: {fileID: 0}
   redObject: {fileID: 0}

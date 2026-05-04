@@ -67,38 +67,76 @@ namespace Palexen.Tools
 
             Rect fieldRect = new Rect(position.x, position.y, position.width, EditorGUI.GetPropertyHeight(property, label));
 
-            if (property.objectReferenceValue == null)
+            if (!field.keepColor)
+            {
+                if (property.objectReferenceValue == null)
+                {
+                    GUI.color = field.color;
+                    EditorGUI.PropertyField(fieldRect, property, label, true);
+                    GUI.color = Color.white;
+
+                    if (field.toShow != ShowObjectMessage.no && msj != null)
+                    {
+                        Rect helpBoxRect = new Rect(
+                            position.x,
+                            fieldRect.y + fieldRect.height + 2,
+                            position.width,
+                            EditorGUIUtility.singleLineHeight * 2f
+                        );
+
+                        MessageType type = MessageType.Info;
+
+                        if (field.toShow == ShowObjectMessage.warningMessage)
+                            type = MessageType.Warning;
+                        else if (field.toShow == ShowObjectMessage.errorMessage)
+                            type = MessageType.Error;
+
+                        string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
+                                         field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
+                                         msj.errorString;
+
+                        EditorGUI.HelpBox(helpBoxRect, message, type);
+                    }
+                }
+                else
+                {
+                    EditorGUI.PropertyField(fieldRect, property, label, true);
+                }
+            }
+            else
             {
                 GUI.color = field.color;
                 EditorGUI.PropertyField(fieldRect, property, label, true);
                 GUI.color = Color.white;
 
-                if (field.toShow != ShowObjectMessage.no && msj != null)
+                if (property.objectReferenceValue == null) 
                 {
-                    Rect helpBoxRect = new Rect(
-                        position.x,
-                        fieldRect.y + fieldRect.height + 2,
-                        position.width,
-                        EditorGUIUtility.singleLineHeight * 2f
-                    );
+                    if (field.toShow != ShowObjectMessage.no && msj != null)
+                    {
+                        Rect helpBoxRect = new Rect(
+                            position.x,
+                            fieldRect.y + fieldRect.height + 2,
+                            position.width,
+                            EditorGUIUtility.singleLineHeight * 2f
+                        );
 
-                    MessageType type = MessageType.Info;
+                        MessageType type = MessageType.Info;
 
-                    if (field.toShow == ShowObjectMessage.warningMessage)
-                        type = MessageType.Warning;
-                    else if (field.toShow == ShowObjectMessage.errorMessage)
-                        type = MessageType.Error;
+                        if (field.toShow == ShowObjectMessage.warningMessage)
+                            type = MessageType.Warning;
+                        else if (field.toShow == ShowObjectMessage.errorMessage)
+                            type = MessageType.Error;
 
-                    string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
-                                     field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
-                                     msj.errorString;
-
-                    EditorGUI.HelpBox(helpBoxRect, message, type);
+                        string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
+                                         field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
+                                         msj.errorString;
+                        EditorGUI.HelpBox(helpBoxRect, message, type);
+                    }
+                    else
+                    {
+                        EditorGUI.PropertyField(fieldRect, property, label, true);
+                    }
                 }
-            }
-            else
-            {
-                EditorGUI.PropertyField(fieldRect, property, label, true);
             }
         }
     }
@@ -108,9 +146,12 @@ namespace Palexen.Tools
     {
         public Color color;
         public ShowObjectMessage toShow;
+        public bool keepColor;
 
-        public FieldColor(FieldPropertyColor _color = FieldPropertyColor.red, ShowObjectMessage _message = ShowObjectMessage.no)
+        public FieldColor(FieldPropertyColor _color = FieldPropertyColor.red, ShowObjectMessage _message = ShowObjectMessage.no, bool _keepColor = false)
         {
+            keepColor = _keepColor;
+
             switch (_color)
             {
                 case FieldPropertyColor.red:
@@ -470,10 +511,12 @@ namespace Palexen.Tools
     public class MyHeaderAttribute : PropertyAttribute
     {
         public readonly string header;
+        public float h;
 
-        public MyHeaderAttribute(string header)
+        public MyHeaderAttribute(string header, float height = 2)
         {
             this.header = header;
+            this.h = height;
         }
     }
 
@@ -484,11 +527,14 @@ namespace Palexen.Tools
     {
         public override float GetHeight()
         {
-            return EditorGUIUtility.singleLineHeight * 2;
+            MyHeaderAttribute myAttribute = (MyHeaderAttribute)attribute;
+
+            return EditorGUIUtility.singleLineHeight * myAttribute.h;
         }
 
         public override void OnGUI(Rect position)
         {
+            MyHeaderAttribute myAttribute = (MyHeaderAttribute)attribute;
 
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
 
