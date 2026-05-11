@@ -47,7 +47,6 @@ namespace Palexen.Gameplay.UI
             target = Camera.main.transform;
         }
 
-
         private void Update()
         {
             CatchCamera();

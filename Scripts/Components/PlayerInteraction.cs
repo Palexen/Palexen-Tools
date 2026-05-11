@@ -19,9 +19,9 @@
 * -----------------------------------------------------------------------------
 */
 using UnityEngine;
-using Palexen.Gameplay.Input;
-using Palexen.Gameplay.UI;
 using Palexen.Tools;
+using Palexen.Gameplay.UI;
+using Palexen.Gameplay.Input;
 
 namespace Palexen.Gameplay.Player
 {

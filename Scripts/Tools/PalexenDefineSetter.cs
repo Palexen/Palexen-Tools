@@ -27,11 +27,18 @@ public static class PalexenDefineSetter
 {
     const string DEFINE_SYMBOL = "PALEXEN_TOOLS";
 
+    /// <summary>
+    /// Static constructor that runs when the Unity Editor loads. It checks for the presence of the PALEXEN_TOOLS 
+    /// define symbol and adds it if it's not already defined.
+    /// </summary>
     static PalexenDefineSetter()
     {
         AddDefineIfNeeded();
     }
 
+    /// <summary>
+    /// Automatically adds the PALEXEN_TOOLS define symbol to the project if it's not already present.
+    /// </summary>
     static void AddDefineIfNeeded()
     {
         var targetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;

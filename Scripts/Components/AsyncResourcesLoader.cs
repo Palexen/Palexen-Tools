@@ -42,6 +42,12 @@ namespace Palexen.Gameplay
             InvokeRepeating(nameof(ActivateNextResource), 0f, activationInterval);
         }
 
+        /// <summary>
+        /// Activates the next resource in the gameplayResources collection, if available.
+        /// </summary>
+        /// <remarks>If all resources have already been activated, this method cancels further scheduled
+        /// invocations of itself. This method is intended to be called repeatedly, typically as part of a timed
+        /// sequence.</remarks>
         private void ActivateNextResource()
         {
             if (currentIndex < gameplayResources.Length)

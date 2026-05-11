@@ -56,11 +56,19 @@ namespace Palexen.Audio.Atmos
             }
         }
 
+        /// <summary>
+        /// This is called when you need to perform a manual transmission; this method is also used with the Ambience Zone component.
+        /// </summary>
+        /// <param name="newState"></param>
         public void AtmosFadeIn(AudioTransitionState newState)
         {
             transitionState = newState;
         }
 
+        /// <summary>
+        /// This is called when you need to perform a manual transmission; this method is also used with the Ambience Zone component.
+        /// </summary>
+        /// <param name="newState"></param>
         public void AtmosFadeOut(AudioTransitionState newState)
         {
             transitionState = newState;
@@ -70,6 +78,11 @@ namespace Palexen.Audio.Atmos
 
         #region API
 
+        /// <summary>
+        /// Call this method to change the ambience audio clip, it will automatically fade out the current sound, 
+        /// change the clip, and then fade in the new sound.
+        /// </summary>
+        /// <param name="newClip"></param>
         public void SetAmbience(AudioClip newClip)
         {
             if (newClip.name != ambienceSource.clip.name)

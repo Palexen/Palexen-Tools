@@ -25,6 +25,7 @@ using UnityEngine.Events;
 using Palexen.Scriptables;
 using Palexen.Audio.Atmos;
 using Palexen.Gameplay.UI;
+using Palexen.CustomPhysics;
 using Palexen.Gameplay.Input;
 using Palexen.Gameplay.Player;
 
@@ -50,6 +51,9 @@ namespace Palexen.Tools
 
     public enum FootstepsSurface { concrete, grass, water, glass, gravel, rock, sand, wood, dirt, snow, mud, metal }
     public enum SurfaceType { mesh, terrain }
+
+    public enum HealthCondition { parent, single, byChilds }
+    public enum HealthImportance { notImportant, important }
     #endregion
 
     #region TERRAIN SURFACE
@@ -69,6 +73,9 @@ namespace Palexen.Tools
         [Tooltip("Object behavior")] public ObjectManagerInteractionMode objectsBehaviour;
         [Tooltip("Collection of objects in list format")] [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public GameObject[] _objects;
 
+        /// <summary>
+        /// call to activate, deactivate, or destroy objects within the Objects Manager array
+        /// </summary>
         public void ApplyChanges()
         {
             for (int i = 0; i < _objects.Length; i++)
@@ -101,6 +108,9 @@ namespace Palexen.Tools
         [Header("Set Behaviour of this script")]
         public UnityEvent _behaviour;
 
+        /// <summary>
+        /// Call this method to invoke events that are handled within this component
+        /// </summary>
         public void ApplyBehaviour()
         {
             _behaviour.Invoke();
@@ -987,6 +997,436 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_res);
             EditorGUILayout.PropertyField(_timer);
 
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region HEALTH SYSTEM
+
+    [CustomEditor(typeof(HealthSystem))]
+    public class HealthGOEditor : Editor
+    {
+        HealthSystem hg;
+        SerializedProperty _behaviour;
+        SerializedProperty _healthRange;
+        SerializedProperty _exceededThreshold;
+        SerializedProperty _afterKillObject;
+        SerializedProperty _afterExceeded;
+        SerializedProperty _animator;
+        SerializedProperty dieTriggerNames;
+        SerializedProperty onFinishDieAnimations;
+        SerializedProperty _rigidbodies;
+
+        private void OnEnable()
+        {
+            hg = (HealthSystem)target;
+            _behaviour = serializedObject.FindProperty("_behaviour");
+            _healthRange = serializedObject.FindProperty("_healthRange");
+            _exceededThreshold = serializedObject.FindProperty("_exceededThreshold");
+            _afterKillObject = serializedObject.FindProperty("_afterKillObject");
+            _afterExceeded = serializedObject.FindProperty("_afterExceeded");
+            _animator = serializedObject.FindProperty("_animator");
+            dieTriggerNames = serializedObject.FindProperty("dieTriggerNames");
+            onFinishDieAnimations = serializedObject.FindProperty("onFinishDieAnimations");
+            _rigidbodies = serializedObject.FindProperty("_rigidbodies");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Health System</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("Manage the HP of this object; after it reaches 0, the object will handle after-kill events, implemented in an event", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
+
+            Color c = setting.contextSeparatorColor;
+
+            GUILayout.Space(10);
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_behaviour);
+
+            if (hg._behaviour == HealthCondition.byChilds)
+            {
+                EditorGUILayout.HelpBox("Configure the other health component scripts to add HP to this object, " +
+                    "making sure to initialize the event with AddHealthAtParent and setting this object " +
+                    "as the parent of the component.", MessageType.Info);
+            }
+
+            if (hg._behaviour == HealthCondition.single)
+            {
+                EditorGUILayout.PropertyField(_healthRange);
+            }
+
+            if (hg._behaviour == HealthCondition.parent)
+            {
+                EditorGUILayout.PropertyField(_healthRange);
+                EditorGUILayout.HelpBox("Parental usage is not available for this script, so marking it as a " +
+                    "parent will result in it being used as a single.", MessageType.Warning);
+            }
+
+            EditorGUILayout.PropertyField(_exceededThreshold);
+
+            GUILayout.Space(10);
+
+            string currentHeader1 = hg.showEventsGroup ? "Hide Events" : "Show and Setup Events";
+
+            hg.showEventsGroup = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showEventsGroup, currentHeader1);
+            EditorGUI.indentLevel++;
+            if (hg.showEventsGroup)
+            {
+                EditorGUILayout.PropertyField(_afterKillObject);
+                EditorGUILayout.PropertyField(_afterExceeded);
+                EditorGUILayout.PropertyField(onFinishDieAnimations);
+                EditorGUILayout.HelpBox("You can add components and run them externally or in animation events.", MessageType.Info);
+            }
+            EditorGUI.indentLevel--;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(10);
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            GUILayout.Space(10);
+
+            if (!hg.useAnimationFeatures)
+            {
+                if(GUILayout.Button("Enable Animation Features", PalexenEditorStyles.BigButton))
+                {
+                    hg.useAnimationFeatures = true;
+                }
+            }
+
+
+            if (hg.useAnimationFeatures)
+            {
+                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+                EditorGUILayout.PropertyField(_animator);
+                EditorGUILayout.PropertyField(dieTriggerNames);
+
+                if (GUILayout.Button("Disable Animation Features", PalexenEditorStyles.BigButton))
+                {
+                    hg.useAnimationFeatures = false;
+                }
+            }
+
+            GUILayout.Space(10);
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            GUILayout.Space(10);
+
+
+            if (!hg.usePhysicsFeatures)
+            {
+                if (GUILayout.Button("Enable Physics Features", PalexenEditorStyles.BigButton))
+                {
+                    hg.usePhysicsFeatures = true;
+                }
+            }
+
+            if (hg.usePhysicsFeatures)
+            {
+                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Ragdoll or Physics Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+                EditorGUILayout.PropertyField(_rigidbodies);
+                EditorGUILayout.Space(10);
+
+                if (GUILayout.Button("Fetch Rigidbodies"))
+                {
+                    hg.FetchRigidbodies();
+                }
+
+                if(hg._rigidbodies.Length >= 1)
+                {
+                    if (GUILayout.Button("Draw Gizmos on physics"))
+                    {
+                        foreach (Rigidbody rb in hg._rigidbodies)
+                        {
+                            if (rb != null || rb.gameObject.GetComponent<ShapeVisualizer>() == null)
+                            {
+                                if (rb.gameObject.GetComponent<ShapeVisualizer>() == null)
+                                {
+                                    rb.gameObject.AddComponent<ShapeVisualizer>();
+                                }
+                            }
+                        }
+                    }
+
+                    if (GUILayout.Button("Add Velocity Limiter"))
+                    {
+                        foreach (Rigidbody rb in hg._rigidbodies)
+                        {
+                            if (rb != null)
+                            {
+                                if (rb.gameObject.GetComponent<RigidbodyVelocityLimitation>() == null)
+                                {
+                                    rb.gameObject.AddComponent<RigidbodyVelocityLimitation>();
+                                }
+                            }
+                        }
+                    }
+
+                    RigidbodyVelocityLimitation[] rl;
+                    rl = hg.gameObject.GetComponentsInChildren<RigidbodyVelocityLimitation>();
+
+                    hg.showVelocityLimiters = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showVelocityLimiters, "Rigidbody Velocity Limitation Settings");
+                    EditorGUI.indentLevel++;
+
+                    if (hg.showVelocityLimiters)
+                    {
+                        if (rl.Length >= 1)
+                        {
+                            for (int i = 0; i < rl.Length; i++)
+                            {
+                                if (rl[i] != null)
+                                {
+                                    rl[i].maxVelocity = EditorGUILayout.FloatField($"{rl[i].gameObject.name}", rl[i].maxVelocity);
+                                }
+                            }
+                        }
+                    }
+
+                    EditorGUI.indentLevel--;
+                    EditorGUILayout.EndFoldoutHeaderGroup();
+
+                    PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+                    hg.showShapeSettings = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showShapeSettings, "Shape Visualizer Settings");
+
+                    EditorGUI.indentLevel++;
+
+                    if (hg.showShapeSettings)
+                    {
+                        foreach (ShapeVisualizer sv in hg.gameObject.GetComponentsInChildren<ShapeVisualizer>())
+                        {
+                            if (sv != null)
+                            {
+                                sv.shapeColor = EditorGUILayout.ColorField($"{sv.gameObject.name}", sv.shapeColor);
+                            }
+                        }
+                    }
+
+                    EditorGUI.indentLevel--;
+                    EditorGUILayout.EndFoldoutHeaderGroup();
+
+                    PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+                    if (GUILayout.Button("Mark as Kinematic Ragdoll or physics"))
+                    {
+                        hg.KinematicRagdoll();
+                    }
+                }
+
+                PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+                if (GUILayout.Button("Disable Physics Features", PalexenEditorStyles.BigButton))
+                {
+                    hg.usePhysicsFeatures = false;
+                }
+            }
+
+            GUILayout.Space(10);
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            GUILayout.Space(10);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region HEALTH COMPONENT
+
+    [CustomEditor(typeof(HealthComponent))]
+    public class HealthComponentEditor : Editor
+    {
+        HealthComponent hc;
+        SerializedProperty _health;
+        SerializedProperty _exceededThreshold;
+        SerializedProperty _affectsOn;
+        SerializedProperty _importanceLevel;
+        SerializedProperty _atStart;
+        SerializedProperty _onTakeDamage;
+        SerializedProperty _atDie;
+        SerializedProperty _atExceeded;
+        SerializedProperty _healthParent;
+        SerializedProperty _animator;
+        SerializedProperty triggerNames;
+
+        private void OnEnable()
+        {
+            hc = (HealthComponent)target;
+            _health = serializedObject.FindProperty("_health");
+            _exceededThreshold = serializedObject.FindProperty("_exceededThreshold");
+            _affectsOn = serializedObject.FindProperty("_affectsOn");
+            _importanceLevel = serializedObject.FindProperty("_importanceLevel");
+            _atStart = serializedObject.FindProperty("_atStart");
+            _onTakeDamage = serializedObject.FindProperty("_onTakeDamage");
+            _atDie = serializedObject.FindProperty("_atDie");
+            _atExceeded = serializedObject.FindProperty("_atExceeded");
+            _healthParent = serializedObject.FindProperty("_healthParent");
+            _animator = serializedObject.FindProperty("_animator");
+            triggerNames = serializedObject.FindProperty("triggerNames");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Health Component</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("It manages the HP of this object and handles events that occur when it is affected", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            Color c = setting.contextSeparatorColor;
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_affectsOn);
+
+            if(hc._affectsOn == HealthCondition.parent)
+            {
+                EditorGUILayout.HelpBox("This component will affect the parent health, so make sure to set a parent with " +
+                    "a HealthGO or Health System script and set it as the health parent", MessageType.Info);
+                EditorGUILayout.PropertyField(_healthParent);
+            }
+
+            if (hc._affectsOn == HealthCondition.single)
+            {
+                EditorGUILayout.HelpBox("This component will affect only itself, and a parent script is not necessary", MessageType.Info);
+            }
+
+            if (hc._affectsOn == HealthCondition.byChilds)
+            {
+                EditorGUILayout.HelpBox("The `by child` option is not available because this script functions as a component, " +
+                    "so marking it as `by child` will make it use the single component.", MessageType.Warning);
+            }
+
+            EditorGUILayout.PropertyField(_health);
+            EditorGUILayout.PropertyField(_exceededThreshold);
+
+            EditorGUILayout.PropertyField(_importanceLevel);
+
+            if(hc._importanceLevel == HealthImportance.notImportant)
+            {
+                EditorGUILayout.HelpBox("When marked as Not Important, the object can die independently without affecting the parent.", MessageType.Info);
+            }
+
+            if(hc._importanceLevel == HealthImportance.important)
+            {
+                EditorGUILayout.HelpBox("When marked as Important, the death of the object will cause the parent to lose all its HP" +
+                    " and die instantly, good for headshots or too critical damages!.", MessageType.Info);
+            }
+
+            string headerText = hc.showEvents ? "Hide Events" : "Show and Setup Events";
+
+            hc.showEvents = EditorGUILayout.BeginFoldoutHeaderGroup(hc.showEvents, headerText);
+
+            EditorGUI.indentLevel++;
+
+            if (hc.showEvents)
+            {
+                EditorGUILayout.PropertyField(_atStart);
+                EditorGUILayout.PropertyField(_onTakeDamage);
+                EditorGUILayout.PropertyField(_atDie);
+                EditorGUILayout.PropertyField(_atExceeded);
+            }
+
+            EditorGUI.indentLevel--;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(10);
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+
+            if(!hc.animationFeatures)
+            {
+                if (GUILayout.Button("Enable Animation Features", PalexenEditorStyles.BigButton))
+                {
+                    hc.animationFeatures = true;
+                }
+            }
+
+            if (hc.animationFeatures)
+            {
+                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+                EditorGUILayout.PropertyField(_animator);
+                EditorGUILayout.PropertyField(triggerNames);
+
+                if (GUILayout.Button("Disable Animation Features", PalexenEditorStyles.BigButton))
+                {
+                    hc.animationFeatures = false;
+                }
+            }
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            GUILayout.Space(10);
+
+            string headerText2 = hc.showPresets ? "Hide Presets" : "Show and Setup Presets";
+
+            hc.showPresets = EditorGUILayout.BeginFoldoutHeaderGroup(hc.showPresets, headerText2);
+            EditorGUI.indentLevel++;
+
+            if (hc.showPresets)
+            {
+                if(GUILayout.Button("Set Preset: Head", PalexenEditorStyles.BigButton))
+                {
+                    hc.HeadExample();
+                }
+
+                if (GUILayout.Button("Set Preset: Chest", PalexenEditorStyles.BigButton))
+                {
+                    hc.ChestExample();
+                }
+
+                if (GUILayout.Button("Set Preset: Common Part", PalexenEditorStyles.BigButton))
+                {
+                    hc.BodyPartExample();
+                }
+            }
+
+            EditorGUI.indentLevel--;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region RIGIDBODY LIMITER
+
+    [CustomEditor(typeof(RigidbodyVelocityLimitation))]
+    public class RigidbodyVelocityLimitationEditor : Editor
+    {
+        RigidbodyVelocityLimitation rb;
+        SerializedProperty maxVelocity;
+
+        private void OnEnable()
+        {
+            rb = (RigidbodyVelocityLimitation)target;
+            maxVelocity = serializedObject.FindProperty("maxVelocity");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Rigidbody Velocity Limiter</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("Limit the velocity of this Rigidbody", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(maxVelocity);
             serializedObject.ApplyModifiedProperties();
         }
     }

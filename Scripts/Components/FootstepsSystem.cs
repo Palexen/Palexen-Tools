@@ -77,7 +77,7 @@ namespace Palexen.Gameplay.Player
                     break;
             }
         }
-
+        
         void EvaluateSurface()
         {
             RaycastHit hit;
@@ -173,7 +173,6 @@ namespace Palexen.Gameplay.Player
 
             if (mapX < 0 || mapZ < 0 || mapX >= terrainData.alphamapWidth || mapZ >= terrainData.alphamapHeight)
             {
-                //Debug.LogWarning("Posición fuera del rango del mapa de splats.");
                 return;
             }
 
@@ -218,6 +217,10 @@ namespace Palexen.Gameplay.Player
             currentSurface = terrainSurfaceSettings.terrainSurfaceSettings[index].surfaceType;
         }
 
+
+        /// <summary>
+        /// Plays the footstep sound effect based on the current surface type.
+        /// </summary>
         public void PlayFootstep()
         {
             switch (currentSurface)
@@ -357,6 +360,9 @@ namespace Palexen.Gameplay.Player
             }
         }
 
+        /// <summary>
+        /// Plays the climbing sound effect.
+        /// </summary>
         public void ClimbSound()
         {
             if (climb != null)

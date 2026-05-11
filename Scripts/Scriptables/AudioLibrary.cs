@@ -41,6 +41,10 @@ namespace Palexen.Audio
 
         #region API
 
+        /// <summary>
+        /// Get a random AudioClip from the library.
+        /// </summary>
+        /// <returns>Get random AudioClip from the library.</returns>
         public AudioClip GetRandomClip()
         {
             if (sounds == null || sounds.Length == 0)

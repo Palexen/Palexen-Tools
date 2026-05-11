@@ -43,6 +43,11 @@ namespace Palexen.Scriptables
 
         #region API
 
+        /// <summary>
+        /// Get the ActionVariables associated with the specified schema ID.
+        /// </summary>
+        /// <param name="SchemaID">The ID of the schema to retrieve.</param>
+        /// <returns>Returns the ActionVariables associated with the specified schema ID.</returns>
         public ActionVariables GetSchema(int SchemaID)
         {
             _uiVariableResult = buttonSchemas[SchemaID];

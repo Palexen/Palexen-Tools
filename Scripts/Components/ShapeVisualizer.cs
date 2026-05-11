@@ -22,6 +22,9 @@ using UnityEngine;
 
 namespace Palexen.Tools
 {
+    /// <summary>
+    /// This component allows you to visualize the shapes of colliders in the Unity Editor using gizmos.
+    /// </summary>
     [AddComponentMenu("Palexen/Tools/Shape Visualizer")]
     [ScriptDescription("Shape Visualizer", "Allows draw gizmos to the Unity Editor, you can draw many shapes forms as you need ")]
     public class ShapeVisualizer : MonoBehaviour

@@ -58,6 +58,13 @@ namespace Palexen.Audio.Atmos
             UpdateAudio();
         }
 
+        /// <summary>
+        /// Updates the audio volume based on the current transition state, applying fade-in or fade-out effects as
+        /// needed.
+        /// </summary>
+        /// <remarks>This method should be called regularly, such as once per frame, to ensure smooth
+        /// audio transitions. The volume is adjusted incrementally towards the target value depending on whether a
+        /// fade-in or fade-out is in progress.</remarks>
         void UpdateAudio()
         {
             if (transitionState == AudioTransitionState.fadeIn)

@@ -40,6 +40,10 @@ namespace Palexen.Scriptables
 
         #region API
 
+        /// <summary>
+        /// Get a random RuntimeAnimatorController from the library.
+        /// </summary>
+        /// <returns>Get random RuntimeAnimatorController from the library.</returns>
         public RuntimeAnimatorController GetRandomAnimator()
         {
             int i = Random.Range(0, _animators.Length);

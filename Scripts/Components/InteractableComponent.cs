@@ -270,7 +270,7 @@ namespace Palexen.Gameplay
         }
 
         /// <summary>
-        /// Interact with this game object!
+        /// It is called to interact with the interactable object
         /// </summary>
         public void Interact()
         {

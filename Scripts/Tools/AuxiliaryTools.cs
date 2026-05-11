@@ -142,6 +142,10 @@ namespace Palexen.Tools
     }
 #endif
 
+    /// <summary>
+    /// This attribute allows you to change the color of a field in the inspector, and you can 
+    /// also choose to show a message below the field when it's empty,
+    /// </summary>
     public class FieldColor : PropertyAttribute
     {
         public Color color;
@@ -403,6 +407,11 @@ namespace Palexen.Tools
 
     #region SCRIPT TITLES
 #if UNITY_EDITOR
+
+    /// <summary>
+    /// This custom editor is responsible for displaying the script title and description in the 
+    /// inspector for any MonoBehaviour script that has the ScriptDescription attribute,
+    /// </summary>
     [CustomEditor(typeof(MonoBehaviour), editorForChildClasses: true)]
     [CanEditMultipleObjects]
     public class MyRoot : Editor
@@ -488,6 +497,11 @@ namespace Palexen.Tools
     #region CUSTOM ATTRIBS
 
     #region Script Description Component
+
+    /// <summary>
+    /// This attribute allows you to add a title and description to your scripts, which will be displayed 
+    /// in the inspector when you select a GameObject with that script attached.
+    /// </summary>
     public class ScriptDescription : Attribute
     {
         public string Name { get; private set; } = null;
@@ -507,6 +521,12 @@ namespace Palexen.Tools
     #endregion
 
     #region My Header Attrib
+
+    /// <summary>
+    /// This attribute allows you to create a custom header in the inspector with a custom height, 
+    /// and you can also customize the color and size of the header text from the Custom 
+    /// Environment Settings asset.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = true)]
     public class MyHeaderAttribute : PropertyAttribute
     {
@@ -674,6 +694,11 @@ namespace Palexen.Tools
 
     }
 #endif
+
+    /// <summary>
+    /// This attribute allows you to create a slider for Vector2 or Vector2Int fields in the Unity Inspector,
+    /// specifying the minimum and maximum values for the slider.
+    /// </summary>
     public class VectorSliderAttribute : PropertyAttribute
     {
 
@@ -691,6 +716,10 @@ namespace Palexen.Tools
 
     #region TAGFIELD
 
+    /// <summary>
+    /// This attribute allows you to select a tag from a dropdown menu in the inspector, 
+    /// ensuring that only valid tags can be assigned to the string field.
+    /// </summary>
     public class TagFieldAttribute : PropertyAttribute
     {
         //Reference:
@@ -743,6 +772,9 @@ namespace Palexen.Tools
 
     #region UTILITY
 
+    /// <summary>
+    /// Extension method to convert Color to Hex string
+    /// </summary>
     public static class ColorExtension
     {
         public static string ConvertToHex(this Color color)
