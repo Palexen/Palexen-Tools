@@ -55,6 +55,7 @@ namespace Palexen.Scriptables
 
     #region MAIN CUSTOM EDITOR
 #if UNITY_EDITOR
+
     [CustomEditor(typeof(AnimatorLibrary))]
     [CanEditMultipleObjects]
     public class AnimatorLibraryEditor : Editor
@@ -77,7 +78,7 @@ namespace Palexen.Scriptables
 
             GUILayout.Box("Add your animators here, and call them in your scripts, or choose a random one from here using " +
                 "the <color=cyan>GetRandomAnimator();</color> method.\r\n\r\nThis is great when you need many NPCs that share the same structure but have different animations.",
-                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 90));
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 120));
 
             GUILayout.Space(10);
 
@@ -87,6 +88,43 @@ namespace Palexen.Scriptables
             serializedObject.ApplyModifiedProperties();
         }
     }
+
+    public class CreateAnimatorLibrary
+    {
+#if PALEXEN_UP_TOOLBAR
+        [MenuItem("Animator Library/Create Animator Library")]
+#else
+        [MenuItem("Palexen/Create Animator Library", false, 1)]
+#endif
+        private static void CreateAsset()
+        {
+            AnimatorLibrary asset = ScriptableObject.CreateInstance<AnimatorLibrary>();
+
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            string folderPath = setting.scriptablesFolderPath;
+
+            if (!AssetDatabase.IsValidFolder(folderPath))
+            {
+                AssetDatabase.CreateFolder($"{folderPath}", "Animator Library");
+            }
+
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Animator Library.asset");
+
+            AssetDatabase.CreateAsset(asset, assetPath);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.FocusProjectWindow();
+
+            Selection.activeObject = asset;
+
+            Debug.Log($"<color=green>Animator Library created at: </color><color=cyan>{assetPath}</color>");
+        }
+    }
+
 #endif
     #endregion
 }

@@ -95,6 +95,43 @@ namespace Palexen.Scriptables
             serializedObject.ApplyModifiedProperties();
         }
     }
+
+    public class CreateInputSchemaContainer
+    {
+#if PALEXEN_UP_TOOLBAR
+        [MenuItem("Input Schema/Create Input Schema")]
+#else
+        [MenuItem("Palexen/Create Input Schema", false, 3)]
+#endif
+        private static void CreateAsset()
+        {
+            InputSchemaContainer asset = ScriptableObject.CreateInstance<InputSchemaContainer>();
+
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            string folderPath = setting.scriptablesFolderPath;
+
+            if (!AssetDatabase.IsValidFolder(folderPath))
+            {
+                AssetDatabase.CreateFolder($"{folderPath}", "Input Schema");
+            }
+
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Input Schema.asset");
+
+            AssetDatabase.CreateAsset(asset, assetPath);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.FocusProjectWindow();
+
+            Selection.activeObject = asset;
+
+            Debug.Log($"<color=green>Input Schema created at: </color><color=cyan>{assetPath}</color>");
+        }
+    }
+
 #endif
     #endregion
 }

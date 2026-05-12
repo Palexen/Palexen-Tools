@@ -90,6 +90,44 @@ namespace Palexen.Audio
             serializedObject.ApplyModifiedProperties();
         }
     }
+
+
+    public class CreateAudioLibrary
+    {
+#if PALEXEN_UP_TOOLBAR
+        [MenuItem("Audio Library/Create Audio Library")]
+#else
+        [MenuItem("Palexen/Create Audio Library", false, 2)]
+#endif
+        private static void CreateAsset()
+        {
+            AudioLibrary asset = ScriptableObject.CreateInstance<AudioLibrary>();
+
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            string folderPath = setting.scriptablesFolderPath;
+
+            if (!AssetDatabase.IsValidFolder(folderPath))
+            {
+                AssetDatabase.CreateFolder($"{folderPath}", "Audio Library");
+            }
+
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Audio Library.asset");
+
+            AssetDatabase.CreateAsset(asset, assetPath);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.FocusProjectWindow();
+
+            Selection.activeObject = asset;
+
+            Debug.Log($"<color=green>Audio Library created at: </color><color=cyan>{assetPath}</color>");
+        }
+    }
+
 #endif
     #endregion
 }

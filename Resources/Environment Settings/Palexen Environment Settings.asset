@@ -19,8 +19,13 @@ MonoBehaviour:
   headerColorValue: {r: 0.6784314, g: 0.84705883, b: 0.9019608, a: 1}
   headerSize: 16
   contextSeparatorColor: {r: 0, g: 1, b: 1, a: 1}
-  gizmosColor: {r: 0.0071456432, g: 1, b: 0, a: 0.5019608}
+  contextGizmoForm: 0
+  gizmosColor: {r: 1, g: 0.8795767, b: 0, a: 1}
   inactiveGizmosColor: {r: 1, g: 0, b: 0.084195614, a: 1}
+  physicsSimulationLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  scriptablesFolderPath: Assets
   infoString: The object can be called automatically
   warningString: The object is optional here!
   errorString: The object does not contain any references, before entering play mode,

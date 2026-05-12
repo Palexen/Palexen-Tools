@@ -69,6 +69,43 @@ namespace Palexen.Scriptables
             serializedObject.ApplyModifiedProperties();
         }
     }
+
+    public class CreatePlayerTerrainSurfaceSettingsAsset
+    {
+#if PALEXEN_UP_TOOLBAR
+        [MenuItem("Player Terrain Surface Settings/Create Player Terrain Surface Settings")]
+#else
+        [MenuItem("Palexen/Create Player Terrain Surface Settings", false, 4)]
+#endif
+        private static void CreateAsset()
+        {
+            PlayerTerrainSurfaceSettings asset = ScriptableObject.CreateInstance<PlayerTerrainSurfaceSettings>();
+
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            string folderPath = setting.scriptablesFolderPath;
+
+            if (!AssetDatabase.IsValidFolder(folderPath))
+            {
+                AssetDatabase.CreateFolder($"{folderPath}", "Player Terrain Surface Settings");
+            }
+
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Player Terrain Surface Settings.asset");
+
+            AssetDatabase.CreateAsset(asset, assetPath);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.FocusProjectWindow();
+
+            Selection.activeObject = asset;
+
+            Debug.Log($"<color=green>Player Terrain Surface Settings created at: </color><color=cyan>{assetPath}</color>");
+        }
+    }
+
 #endif
     #endregion
 }

@@ -43,11 +43,19 @@ namespace Palexen.Scriptables
 
 		[MyHeader("Colors")]
 		public Color contextSeparatorColor = Color.cyan;
-        [Header("Global gizmo Color")]
-        public Color gizmosColor = Color.white;
-        public Color inactiveGizmosColor = Color.white;
 
-		[Space(12)]
+        [MyHeader("Global Gizmos Settings")]
+        public GizmoForm contextGizmoForm = GizmoForm.sphere;
+        public Color gizmosColor = Color.white;
+        public Color inactiveGizmosColor = Color.red;
+        
+        [MyHeader("<color=green>Physics</color> Simulation")]
+        public LayerMask physicsSimulationLayer = 1;
+
+        [MyHeader("Scriptables Folder Path: <size=10>(The scriptables generated from the toolbar.)</size>")]
+        public string scriptablesFolderPath = "Assets/";
+
+        [Space(12)]
 
         [MyHeader("Messages to Show in inspector")]
         [TextArea] public string infoString = "Info Message | Example";
@@ -85,6 +93,19 @@ namespace Palexen.Scriptables
         /*[MyHeader("Other Colors")]
 		public Color[] colors = { Color.white };*/
 
+        #endregion
+
+        #region API
+
+        /// <summary>
+        /// This method is used to set the scriptables folder path.
+        /// </summary>
+        /// <param name="path">The path to set for the scriptables folder.</param>
+        public void SetPath(string path)
+        {
+            scriptablesFolderPath = path;
+        }
+        
         #endregion
     }
 }

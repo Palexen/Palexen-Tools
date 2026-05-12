@@ -26,6 +26,7 @@ namespace Palexen.CustomPhysics
     [AddComponentMenu("Palexen/Custom Physics/Rigidbody Velocity Limiter")]
     [RequireComponent(typeof(Rigidbody))]
     [ScriptDescription("Rigidbody Velocity Limiter", "Limit Rigidbody Velocity")]
+    [ExecuteInEditMode]
     public class RigidbodyVelocityLimitation : MonoBehaviour
     {
         #region VARIABLES

@@ -20,6 +20,7 @@
 */
 using System;
 using UnityEngine;
+using System.Linq;
 using Palexen.Misc;
 using System.Reflection;
 using Palexen.Scriptables;
@@ -27,6 +28,7 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Build;
 #endif
 
 namespace Palexen.Tools
@@ -34,7 +36,7 @@ namespace Palexen.Tools
     #region ENUMS
     public enum FieldPropertyColor { red, green, blue, yellow, cyan, magenta, orange, clearBlue, pink, neonGreen, salmon }
     public enum ShowObjectMessage { no, message, warningMessage, errorMessage }
-
+    public enum GizmoForm { sphere, cube, cylinder, cone, arrow, circle, square, dot }
     public enum TurnOnScriptDescription { On, Off }
 
     #endregion
@@ -222,7 +224,7 @@ namespace Palexen.Tools
 #if UNITY_EDITOR
     public class PalexenAssetsCreator : Editor
     {
-        [MenuItem("Palexen/Create/Palexen Environment Settings Asset")]
+        //[MenuItem("Palexen/Create/Palexen Environment Settings Asset")]
         public static void CreateCustomMessageSettings()
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
@@ -255,7 +257,11 @@ namespace Palexen.Tools
         private CustomEnvironment environmentAsset;
         private Vector2 scrollPosition = Vector2.zero;
 
+#if PALEXEN_UP_TOOLBAR
+        [MenuItem("Environment Configuration/Show Environment Window")]
+#else
         [MenuItem("Palexen/Window/Environment Configuration")]
+#endif
         public static void ShowWindow()
         {
             EnvironmentSettingsWindow window = GetWindow<EnvironmentSettingsWindow>();
@@ -284,11 +290,40 @@ namespace Palexen.Tools
 
             if (environmentAsset != null)
             {
-
                 scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
                 EditorGUILayout.LabelField($"<color={"#" + environmentAsset.scriptTitleColor.ConvertToHex()}>Current Environment</color>", 
                     PalexenEditorStyles.CoolTitle(25, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
                 DisplayScriptableObjectInfo(environmentAsset);
+                EditorGUILayout.Space(20);
+
+                EditorGUILayout.LabelField($"<color={"#" + environmentAsset.scriptTitleColor.ConvertToHex()}>Toolbar Settings</color>",
+                    PalexenEditorStyles.CoolTitle(25, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+                EditorGUILayout.Space(20);
+
+                if (GUILayout.Button("Select path to save scriptables", PalexenEditorStyles.BigButton))
+                {
+                    string selectedPath = EditorUtility.OpenFolderPanel("Select Path", "", "");
+
+                    if (!string.IsNullOrEmpty(selectedPath))
+                    {
+                        string projectPath = Application.dataPath.Replace("Assets", "");
+
+                        if (selectedPath.StartsWith(projectPath))
+                        {
+                            string relativePath = selectedPath.Substring(projectPath.Length);
+
+                            environmentAsset.SetPath(relativePath);
+
+                            EditorUtility.SetDirty(environmentAsset);
+                            AssetDatabase.SaveAssets();
+                        }
+                        else
+                        {
+                            Debug.LogError("Selected folder must be inside this Unity project.");
+                        }
+                    }
+                }
+
                 EditorGUILayout.EndScrollView();
             }
         }
@@ -298,9 +333,8 @@ namespace Palexen.Tools
         {
             if (data == null) return;
 
-            SerializedObject serializedObject = new SerializedObject(data);
+            SerializedObject serializedObject = new(data);
             serializedObject.Update();
-
             SerializedProperty property = serializedObject.GetIterator();
             bool enterChildren = true;
 
@@ -347,13 +381,81 @@ namespace Palexen.Tools
     }
 #endif
 
+    #endregion
+
+    #region EDITOR CUSTOMIZATION
+
+#if UNITY_EDITOR
+
+    public class ToolbarCustomization
+    {
+        private const string DEFINE = "PALEXEN_UP_TOOLBAR";
+
+        static bool isExpanded = false;
+
+        [MenuItem("Palexen/Use Full Toolbar")]
+        public static void CustomizeToolbarToggle()
+        {
+            NamedBuildTarget target = NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+
+            string defines = PlayerSettings.GetScriptingDefineSymbols(target);
+
+            var defineList = defines
+                .Split(';')
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .ToList();
+
+            bool hasDefine = defineList.Contains(DEFINE);
+
+            if (!hasDefine)
+            {
+                defineList.Add(DEFINE);
+
+                EditorUtility.DisplayProgressBar("Applying Toolbar Settings", "Expanding toolbar...", 1f);
+
+                Debug.Log("Toolbar Expanded");
+                EditorUtility.ClearProgressBar();
+            }
+            else
+            {
+                defineList.Remove(DEFINE);
+
+                EditorUtility.DisplayProgressBar("Applying Toolbar Settings", "Collapsing toolbar...", 1f);
+
+                Debug.Log("Toolbar Collapsed");
+                EditorUtility.ClearProgressBar();
+            }
+
+            string result = string.Join(";", defineList);
+
+            PlayerSettings.SetScriptingDefineSymbols(target, result);
+
+            isExpanded = !hasDefine;
+        }
+
+        [MenuItem("Palexen/Use Full Toolbar", true)]
+        static bool ToggleToolBar()
+        {
+            NamedBuildTarget target = NamedBuildTarget.FromBuildTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+
+            string defines = PlayerSettings.GetScriptingDefineSymbols(target);
+            isExpanded = defines.Contains(DEFINE);
+
+            Menu.SetChecked("Palexen/Use Full Toolbar", isExpanded);
+
+            return true;
+        }
+    }
+
+#endif
+
 #endregion
 
     #region CUSTOM SCRIPT
 
     #region Example Script
 #if UNITY_EDITOR
-    [CustomEditor(typeof(ExampleScript))]
+        [CustomEditor(typeof(ExampleScript))]
     public class Example : Editor
     {
         GUIStyle buttonRegionStyle;
