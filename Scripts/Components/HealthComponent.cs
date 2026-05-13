@@ -65,6 +65,7 @@ namespace Palexen.Gameplay
         public string[] triggerNames = { "Trigger0", "Trigger1" };
 
         bool alreadyInstantiated = false;
+        bool isAlive = true;
 
         [HideInInspector] public bool showPresets = false;
 
@@ -200,10 +201,15 @@ namespace Palexen.Gameplay
                 }
             }
 
+            if (isAlive)
+            {
+                _onTakeDamage.Invoke();
+            }
 
             if ( _healt < 0)
             {
                 Die();
+                isAlive = false;
             }
 
             if(_healt <= _exceededOn)
