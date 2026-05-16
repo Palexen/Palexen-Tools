@@ -28,6 +28,8 @@ using Palexen.Gameplay.UI;
 using Palexen.CustomPhysics;
 using Palexen.Gameplay.Input;
 using Palexen.Gameplay.Player;
+using System.Collections.Generic;
+using Palexen.Sequences;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -54,6 +56,10 @@ namespace Palexen.Tools
 
     public enum HealthCondition { parent, single, byChilds }
     public enum HealthImportance { notImportant, important }
+
+    public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
+    public enum DialogAudioFeature { useAudio, noAudio }
+
     #endregion
 
     #region TERRAIN SURFACE
@@ -117,6 +123,24 @@ namespace Palexen.Tools
         }
     }
 
+    #endregion
+
+    #region DIALOG SYSTEM
+
+    [Serializable]
+    public class DialogScript
+    {
+        public string scriptID = "Part 0";
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] public DialogContainer _dialogContainer;
+    }
+
+    [Serializable]
+    public class DialogSequencer
+    {
+        public string _langName;
+        public List<DialogScript> _sequence;
+    }
+    
     #endregion
 
     #region CUSTOM INSPECTORS
@@ -1397,6 +1421,128 @@ namespace Palexen.Tools
 
             EditorGUI.indentLevel--;
             EditorGUILayout.EndFoldoutHeaderGroup();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region DIALOG SYSTEM
+
+    [CustomEditor(typeof(DialogSystem))]
+    public class DialogSystemEditor : Editor
+    {
+        DialogSystem _dialog;
+        SerializedProperty _lang;
+        SerializedProperty _dialogAudioFeature; 
+        SerializedProperty _afterComplete;
+        SerializedProperty _langAudioSource;
+        SerializedProperty _subtitles;
+        SerializedProperty _dialogSequencer;
+
+        SerializedProperty isPlaying;
+        SerializedProperty playback;
+        SerializedProperty currentSequence;
+        SerializedProperty dialogComplete;
+        SerializedProperty playbackTimer;
+        SerializedProperty nextToPlay;
+
+        private void OnEnable()
+        {
+            _dialog = (DialogSystem)target;
+            _lang = serializedObject.FindProperty("_lang");
+            _dialogAudioFeature = serializedObject.FindProperty("_dialogAudioFeature");
+            _afterComplete = serializedObject.FindProperty("_afterComplete");
+            _langAudioSource = serializedObject.FindProperty("_langAudioSource");
+            _subtitles = serializedObject.FindProperty("_subtitles");
+            _dialogSequencer = serializedObject.FindProperty("_dialogSequencer");
+
+            isPlaying = serializedObject.FindProperty("isPlaying");
+            playback = serializedObject.FindProperty("playback");
+            currentSequence = serializedObject.FindProperty("currentSequence");
+            dialogComplete = serializedObject.FindProperty("dialogComplete");
+            playbackTimer = serializedObject.FindProperty("playbackTimer");
+            nextToPlay = serializedObject.FindProperty("nextToPlay");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog System</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("Dialogue system for all your contexts, whether for narration or NPCs. It supports " +
+                "multiple languages, and you can also use audio for the dialogue system.\r\n\r\nTip: Make sure to manage your " +
+                "project well when configuring all your dialogues, whether they are text, " +
+                "voice, or both!", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 120));
+
+            Color c = setting.contextSeparatorColor;
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_lang);
+            EditorGUILayout.PropertyField(_dialogAudioFeature);
+
+            if (_dialog._dialogAudioFeature == DialogAudioFeature.useAudio)
+            {
+                EditorGUILayout.PropertyField(_langAudioSource);
+            }
+
+            EditorGUILayout.PropertyField(_afterComplete);
+            EditorGUILayout.PropertyField(_subtitles);
+
+            EditorGUILayout.Space();
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Sequences & Languages Setup</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize, TextAnchor.MiddleLeft));
+            EditorGUILayout.PropertyField(_dialogSequencer);
+
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+            if (!_dialog.debugMode)
+            {
+                if (GUILayout.Button("Enter Debug Mode"))
+                {
+                    _dialog.debugMode = true;
+
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("Exit Debug Mode"))
+                {
+                    _dialog.debugMode = false;
+                }
+            }
+
+            if (_dialog.debugMode)
+            {
+                EditorGUILayout.PropertyField(isPlaying);
+                EditorGUILayout.PropertyField(playback);
+                EditorGUILayout.PropertyField(currentSequence);
+                EditorGUILayout.PropertyField(dialogComplete);
+                EditorGUILayout.PropertyField(playbackTimer);
+                EditorGUILayout.PropertyField(nextToPlay);
+            }
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+
+            if (GUILayout.Button("Play", PalexenEditorStyles.BigButton))
+            {
+                _dialog.PlayDialog();
+            }
+            if (GUILayout.Button("Replay", PalexenEditorStyles.BigButton))
+            {
+                _dialog.RePlay();
+            }
+            if (GUILayout.Button("Break", PalexenEditorStyles.BigButton))
+            {
+                _dialog.BreakIntoDialogue();
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
