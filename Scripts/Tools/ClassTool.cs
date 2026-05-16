@@ -21,6 +21,7 @@
 using System;
 using UnityEngine;
 using Palexen.Gameplay;
+using Palexen.Sequences;
 using UnityEngine.Events;
 using Palexen.Scriptables;
 using Palexen.Audio.Atmos;
@@ -29,7 +30,6 @@ using Palexen.CustomPhysics;
 using Palexen.Gameplay.Input;
 using Palexen.Gameplay.Player;
 using System.Collections.Generic;
-using Palexen.Sequences;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -59,6 +59,7 @@ namespace Palexen.Tools
 
     public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
     public enum DialogAudioFeature { useAudio, noAudio }
+    public enum Initializer { auto, manual }
 
     #endregion
 
@@ -290,7 +291,7 @@ namespace Palexen.Tools
 
             GUILayout.Box("Setup the player interaction system, you can set the layer for interactable objects, " +
                 "the method to detect them and the max distance to interact", 
-                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 90));
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(button);
@@ -1435,6 +1436,7 @@ namespace Palexen.Tools
     {
         DialogSystem _dialog;
         SerializedProperty _lang;
+        SerializedProperty _catchLang;
         SerializedProperty _dialogAudioFeature; 
         SerializedProperty _afterComplete;
         SerializedProperty _langAudioSource;
@@ -1452,6 +1454,7 @@ namespace Palexen.Tools
         {
             _dialog = (DialogSystem)target;
             _lang = serializedObject.FindProperty("_lang");
+            _catchLang = serializedObject.FindProperty("_catchLang");
             _dialogAudioFeature = serializedObject.FindProperty("_dialogAudioFeature");
             _afterComplete = serializedObject.FindProperty("_afterComplete");
             _langAudioSource = serializedObject.FindProperty("_langAudioSource");
@@ -1483,6 +1486,7 @@ namespace Palexen.Tools
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(_lang);
+            EditorGUILayout.PropertyField(_catchLang);
             EditorGUILayout.PropertyField(_dialogAudioFeature);
 
             if (_dialog._dialogAudioFeature == DialogAudioFeature.useAudio)
@@ -1542,6 +1546,86 @@ namespace Palexen.Tools
             if (GUILayout.Button("Break", PalexenEditorStyles.BigButton))
             {
                 _dialog.BreakIntoDialogue();
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region LANG
+
+    [CustomEditor(typeof(LangManager))]
+    public class LangManagerEditor : Editor
+    {
+        LangManager lm;
+        SerializedProperty _lang;
+
+        private void OnEnable()
+        {
+            lm = (LangManager)target;
+            _lang = serializedObject.FindProperty("_lang");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Lang Manager</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("This handles the game's language; you can update this singleton using the <color=red>SetLang();</color> method." +
+                "\r\n\r\n<color=green>Note:</color> Other scripts that natively support this system contain a method to update the language, " +
+                "but if you've already created other systems that use this singleton, you'll need to update it manually.", 
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 150));
+
+            Color c = setting.contextSeparatorColor;
+
+            serializedObject.Update();
+
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+            EditorGUILayout.PropertyField(_lang);
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+            if (EditorApplication.isPlaying)
+            {
+                GUI.color = c;
+                EditorGUILayout.HelpBox("Debug Purposes", MessageType.None);
+                GUI.color = Color.white;
+
+                if (GUILayout.Button("Set English", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetEnglish();
+                }
+                if (GUILayout.Button("Set Spanish", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetSpanish();
+                }
+                if (GUILayout.Button("Set French", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetFrench();
+                }
+                if (GUILayout.Button("Set German", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetGerman();
+                }
+                if (GUILayout.Button("Set Japanese", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetJapanese();
+                }
+                if (GUILayout.Button("Set Chinese", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetChinese();
+                }
+                if (GUILayout.Button("Set Korean", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetKorean();
+                }
+                if (GUILayout.Button("Set Russian", PalexenEditorStyles.BigButton))
+                {
+                    lm.SetRussian();
+                }
             }
 
             serializedObject.ApplyModifiedProperties();

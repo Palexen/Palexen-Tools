@@ -1101,8 +1101,48 @@ namespace Palexen.Tools
         }
 
         #endregion
+
+        #region TOOLS
+
+        [MenuItem("GameObject/Palexen/Tools/Lang Manager", false, 0)]
+        static void CreateLangManager()
+        {
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Lang Manager");
+
+            if (prefabAsset != null)
+            {
+                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                Selection.activeGameObject = clone;
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                Debug.LogError("Can't Find prefab in the <color=yellow>Prefabs/ </color> folder, " +
+                    "create new prefab and put in there, or <color=cyan>Reimport</color> the package");
+            }
+        }
+
+        [MenuItem("GameObject/Palexen/Tools/Dialog (Example)", false, 1)]
+        static void CreateDialogExample()
+        {
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Dialog Example");
+
+            if (prefabAsset != null)
+            {
+                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                Selection.activeGameObject = clone;
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                Debug.LogError("Can't Find prefab in the <color=yellow>Prefabs/ </color> folder, " +
+                    "create new prefab and put in there, or <color=cyan>Reimport</color> the package");
+            }
+        }
+
+        #endregion
     }
 #endif
 
-#endregion
+    #endregion
 }

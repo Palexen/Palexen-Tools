@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
+  m_Name: Jap_3
+  m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
+  _dialogName: 
+  _dialogText: "<color=red>Palexen Tools</color>\u3092\u304A\u9078\u3073\u3044\u305F\u3060\u304D\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\uFF01"
+  _langClip: {fileID: 8300000, guid: fe5204caaea904b42984857beb2e7b6b, type: 3}
+  _onScreenTimeDialog: 2

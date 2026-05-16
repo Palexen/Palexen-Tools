@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
+  m_Name: Esp_Part_3
+  m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
+  _dialogName: 
+  _dialogText: "P\xE9rate, no tan r\xE1pido, tal vez un idioma de tu agrado o favorito
+    no est\xE9 aqu\xED, pero puedes configurarlo manualmente usando una <color=yellow>enumeraci\xF3n</color>
+    propia, ya sabes, por si los m\xEDos son pocos, no te alcanzan porque quieres
+    extenderlo, o simplemente porque no est\xE1n tu idioma favorito."
+  _langClip: {fileID: 8300000, guid: f2dd66b8bda91404298edff94397d808, type: 3}
+  _dialogTime: 2

@@ -39,6 +39,7 @@ namespace Palexen.Sequences
 
         [MyHeader("Language")]
         public Language _lang;
+        public Initializer _catchLang;
 
         [MyHeader("Audio Feature")]
         public DialogAudioFeature _dialogAudioFeature = DialogAudioFeature.useAudio;
@@ -48,7 +49,7 @@ namespace Palexen.Sequences
         public ObjectManagerInteractionMode _afterComplete = ObjectManagerInteractionMode.destroy;
 
         [MyHeader("Subtitles UI")]
-        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.warningMessage)] public TMP_Text _subtitles;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public TMP_Text _subtitles;
         public List<DialogSequencer> _dialogSequencer;
 
         [Header("Debug")]
@@ -68,6 +69,8 @@ namespace Palexen.Sequences
         void Start()
         {
             _subtitles.text = "";
+
+            UpdateLang();
         }
 
         // Update is called once per frame
@@ -346,6 +349,14 @@ namespace Palexen.Sequences
         public void BreakIntoDialogue()
         {
             Restore();
+        }
+
+        public void UpdateLang()
+        {
+            if (_catchLang == Initializer.auto)
+            {
+                _lang = LangManager.instance.GetLang();
+            }
         }
 
         #endregion
