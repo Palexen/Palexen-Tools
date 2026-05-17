@@ -172,7 +172,7 @@ namespace Palexen.Tools
 
                 case FieldPropertyColor.blue:
                     toShow = _message;
-                    color = Color.blue;
+                    color = new Color(.392f, .584f, .929f, 1);
                     break;
 
                 case FieldPropertyColor.yellow:
