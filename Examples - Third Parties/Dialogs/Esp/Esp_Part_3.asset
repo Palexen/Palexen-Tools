@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Esp_Part_3
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Autor: '
+  _actorColor: {r: 0.5529412, g: 1, b: 0, a: 1}
   _dialogText: "P\xE9rate, no tan r\xE1pido, tal vez un idioma de tu agrado o favorito
     no est\xE9 aqu\xED, pero puedes configurarlo manualmente usando una <color=yellow>enumeraci\xF3n</color>
     propia, ya sabes, por si los m\xEDos son pocos, no te alcanzan porque quieres
     extenderlo, o simplemente porque no est\xE1n tu idioma favorito."
   _langClip: {fileID: 8300000, guid: f2dd66b8bda91404298edff94397d808, type: 3}
-  _dialogTime: 2
+  _onScreenTimeDialog: 2

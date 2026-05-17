@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Ger_2
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'German Bro: '
+  _actorColor: {r: 1, g: 0.72533935, b: 0, a: 1}
   _dialogText: "Dies ist ein Beispiel f\xFCr einen Dialog auf Deutsch."
   _langClip: {fileID: 8300000, guid: 27eaa0baeb5b2bd4d8413e354ed61f91, type: 3}
+  _onScreenTimeDialog: 2

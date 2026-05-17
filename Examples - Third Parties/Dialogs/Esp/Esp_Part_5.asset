@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Esp_Part_5
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Autor: '
+  _actorColor: {r: 0.5529412, g: 1, b: 0, a: 1}
   _dialogText: Muchas gracias por usar <color=red>Palexen Tools</color>, Mucha suerte
     con tu desarrollo!
   _langClip: {fileID: 8300000, guid: 694cd47f2dae9344f9f86e9513b49835, type: 3}
-  _dialogTime: 2
+  _onScreenTimeDialog: 2

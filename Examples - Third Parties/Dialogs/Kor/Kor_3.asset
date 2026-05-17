@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Kor_3
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Korean Woman: '
+  _actorColor: {r: 0, g: 0.4135797, b: 1, a: 1}
   _dialogText: "<color=red>Palexen Tools</color>\uB97C \uC774\uC6A9\uD574 \uC8FC\uC154\uC11C
     \uB300\uB2E8\uD788 \uAC10\uC0AC\uD569\uB2C8\uB2E4!"
   _langClip: {fileID: 8300000, guid: e7bfbc6933dfda047b82bc29d4f9959d, type: 3}
+  _onScreenTimeDialog: 2

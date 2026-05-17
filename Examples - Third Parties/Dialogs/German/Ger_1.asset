@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Ger_1
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'German Bro: '
+  _actorColor: {r: 1, g: 0.72533935, b: 0, a: 1}
   _dialogText: Hallo Entwickler!
   _langClip: {fileID: 8300000, guid: 6abb6ecbe80baf14ba346bb4d9784af7, type: 3}
+  _onScreenTimeDialog: 2

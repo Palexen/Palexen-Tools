@@ -18,6 +18,7 @@
 
 * -----------------------------------------------------------------------------
 */
+using Palexen.Gameplay.UI;
 using Palexen.Sequences;
 using UnityEngine;
 
@@ -74,6 +75,16 @@ namespace Palexen.Tools
             }
         }
 
+        void UpdateCC()
+        {
+            LangTextConversion[] ltc = FindObjectsByType<LangTextConversion>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+            for(int i = 0;i < ltc.Length; i++)
+            {
+                ltc[i].UpdateLang();
+            }
+        }
+
         public void SetEnglish()
         {
             SetLang(Language.english);
@@ -121,6 +132,7 @@ namespace Palexen.Tools
         {
             _lang = newLang;
             UpdateDialogSystems();
+            UpdateCC();
         }
 
         /// <summary>

@@ -65,7 +65,6 @@ namespace Palexen.Sequences
 
         #region UNITY METHODS
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             _subtitles.text = "";
@@ -73,7 +72,6 @@ namespace Palexen.Sequences
             UpdateLang();
         }
 
-        // Update is called once per frame
         void Update()
         {
             OnPlayDialogs();
@@ -155,25 +153,18 @@ namespace Palexen.Sequences
             }
         }
 
-        #endregion
-
-        #region API
-
-        /// <summary>
-        /// This method initiates the playback of a dialog sequence based on the selected language. It retrieves the
-        /// appropriate dialog text and audio clip from the dialog sequencer and plays them.
-        /// </summary>
-        [ContextMenu("Play Dialog")]
-        public void PlayDialog()
+        void InterPlay()
         {
             isPlaying = true;
 
-            switch(_lang)
+            switch (_lang)
             {
                 case Language.english:
-                    _subtitles.text = _dialogSequencer[0]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" + 
+                        _dialogSequencer[0]._sequence[playback]._dialogContainer._actorName +"</color>" + 
+                        _dialogSequencer[0]._sequence[playback]._dialogContainer._dialogText;
 
-                    if(_dialogAudioFeature == DialogAudioFeature.useAudio)
+                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
                         _langAudioSource.clip = _dialogSequencer[0]._sequence[playback]._dialogContainer._langClip;
                         _langAudioSource.Play();
@@ -187,7 +178,9 @@ namespace Palexen.Sequences
                     currentSequence = 0;
                     break;
                 case Language.spanish:
-                    _subtitles.text = _dialogSequencer[1]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[1]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[1]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -203,7 +196,9 @@ namespace Palexen.Sequences
                     currentSequence = 1;
                     break;
                 case Language.french:
-                    _subtitles.text = _dialogSequencer[2]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[2]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[2]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -220,7 +215,9 @@ namespace Palexen.Sequences
                     break;
 
                 case Language.german:
-                    _subtitles.text = _dialogSequencer[3]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[3]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[3]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -236,7 +233,9 @@ namespace Palexen.Sequences
                     currentSequence = 3;
                     break;
                 case Language.japanese:
-                    _subtitles.text = _dialogSequencer[4]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[4]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[4]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -252,7 +251,9 @@ namespace Palexen.Sequences
                     currentSequence = 4;
                     break;
                 case Language.chinese:
-                    _subtitles.text = _dialogSequencer[5]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[5]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[5]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -268,7 +269,9 @@ namespace Palexen.Sequences
                     currentSequence = 5;
                     break;
                 case Language.korean:
-                    _subtitles.text = _dialogSequencer[6]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[6]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[6]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -284,7 +287,9 @@ namespace Palexen.Sequences
                     currentSequence = 6;
                     break;
                 case Language.russian:
-                    _subtitles.text = _dialogSequencer[7]._sequence[playback]._dialogContainer._dialogText;
+                    _subtitles.text = $"<color={"#" + _dialogSequencer[7]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[7]._sequence[playback]._dialogContainer._actorName + "</color>" + 
+                        _dialogSequencer[7]._sequence[playback]._dialogContainer._dialogText;
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -304,6 +309,20 @@ namespace Palexen.Sequences
                     Debug.LogWarning("Language not supported.");
                     break;
             }
+        }
+
+        #endregion
+
+        #region API
+
+        /// <summary>
+        /// This method initiates the playback of a dialog sequence based on the selected language. It retrieves the
+        /// appropriate dialog text and audio clip from the dialog sequencer and plays them.
+        /// </summary>
+        [ContextMenu("Play Dialog")]
+        public void PlayDialog()
+        {
+            InterPlay();
         }
 
         /// <summary>

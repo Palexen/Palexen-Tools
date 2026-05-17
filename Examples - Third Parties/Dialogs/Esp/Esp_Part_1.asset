@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Esp_Part_1
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Autor: '
+  _actorColor: {r: 0.55353665, g: 1, b: 0, a: 1}
   _dialogText: "Hola a todos, nunca me imagin\xE9 que iba a termianr escribiendo
     c\xF3digos a lo desgraciado. jajaja! probando probando probandooo, PROBANDOO
     PROBAANDOOO, ME COPIAS ME COOOPIIIASS? "
   _langClip: {fileID: 8300000, guid: 4555f2768b04de9498bfc1a71f89aaa0, type: 3}
-  _dialogTime: 2
+  _onScreenTimeDialog: 2

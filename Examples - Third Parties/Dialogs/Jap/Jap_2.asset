@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Jap_2
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Japanese Woman: '
+  _actorColor: {r: 1, g: 0.2216981, b: 0.5000443, a: 1}
   _dialogText: "\u3053\u308C\u306F\u65E5\u672C\u8A9E\u306E\u4F1A\u8A71\u4F8B\u3067\u3059"
   _langClip: {fileID: 8300000, guid: d8e8f228c0245d24db55b5f35e9ce159, type: 3}
   _onScreenTimeDialog: 2

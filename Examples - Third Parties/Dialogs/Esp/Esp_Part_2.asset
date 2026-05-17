@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Esp_Part_2
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Autor: '
+  _actorColor: {r: 0.5529412, g: 1, b: 0, a: 1}
   _dialogText: "Continuando con la dislexia, este es un sistema de di\xE1logos, puedes
     configurarlo a tu gusto y a\xF1adir hasta 8 idiomas, entre ingl\xE9s, espa\xF1ol,
     franc\xE9s, alem\xE1n, japon\xE9s, chino, coreano o ruso."
   _langClip: {fileID: 8300000, guid: f2e491c7fb693244289769783105d5aa, type: 3}
-  _dialogTime: 2
+  _onScreenTimeDialog: 2

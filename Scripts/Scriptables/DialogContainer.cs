@@ -30,11 +30,12 @@ namespace Palexen.Scriptables
     [CreateAssetMenu(fileName = "New Dialog Container", menuName = "Palexen/Dialog/Dialog Container")]
     public class DialogContainer : ScriptableObject
     {
-        public string _dialogName;
+        public string _actorName;
+        public Color _actorColor = Color.white;
 
         [TextArea(3, 20)]
         public string _dialogText;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)] public AudioClip _langClip;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioClip _langClip;
 
         [Header("In case of not using sound")]
         public float _onScreenTimeDialog = 2;
@@ -49,7 +50,8 @@ namespace Palexen.Scriptables
     public class DialogContainerEditor : Editor
     {
         DialogContainer _container;
-        SerializedProperty _dialogName;
+        SerializedProperty _actorName;
+        SerializedProperty _actorColor;
         SerializedProperty _dialogText;
         SerializedProperty _langClip;
         SerializedProperty _onScreenTimeDialog;
@@ -57,7 +59,8 @@ namespace Palexen.Scriptables
         private void OnEnable()
         {
             _container = (DialogContainer)target;
-            _dialogName = serializedObject.FindProperty("_dialogName");
+            _actorName = serializedObject.FindProperty("_actorName");
+            _actorColor = serializedObject.FindProperty("_actorColor");
             _dialogText = serializedObject.FindProperty("_dialogText");
             _langClip = serializedObject.FindProperty("_langClip");
             _onScreenTimeDialog = serializedObject.FindProperty("_onScreenTimeDialog");
@@ -68,12 +71,17 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog Container</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            Color c = Color.cornflowerBlue;
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog Container</color> \n " +
+                $"(Closed Caption <color={"#" + c.ConvertToHex()}>CC</color>)",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize, TextAnchor.MiddleCenter, FontStyle.Bold, 60));
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_dialogName);
+            EditorGUILayout.Space(5);
+            EditorGUILayout.PropertyField(_actorName);
+            EditorGUILayout.PropertyField(_actorColor);
             EditorGUILayout.PropertyField(_dialogText);
             EditorGUILayout.PropertyField(_langClip);
             EditorGUILayout.Space(5);

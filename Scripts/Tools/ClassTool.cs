@@ -141,7 +141,19 @@ namespace Palexen.Tools
         public string _langName;
         public List<DialogScript> _sequence;
     }
-    
+
+    #endregion
+
+    #region LANG TEXT
+
+    [Serializable]
+    public class LangText
+    {
+        public string _langName;
+        [Space]
+        [TextArea(3, 20)] public string _text;
+    }
+
     #endregion
 
     #region CUSTOM INSPECTORS
@@ -1627,6 +1639,51 @@ namespace Palexen.Tools
                     lm.SetRussian();
                 }
             }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region TEXT TRANSLATOR
+
+    [CustomEditor(typeof(LangTextConversion))]
+    public class LangTextConversionEditor : Editor
+    {
+        LangTextConversion _ltc;
+        SerializedProperty _lang;
+        SerializedProperty _catchLang;
+        SerializedProperty _text;
+        SerializedProperty _conversions;
+
+        private void OnEnable()
+        {
+            _ltc = (LangTextConversion)target;
+            _lang = serializedObject.FindProperty("_lang");
+            _catchLang = serializedObject.FindProperty("_catchLang");
+            _text = serializedObject.FindProperty("_text");
+            _conversions = serializedObject.FindProperty("_conversions");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Text Translator</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Box("Translate the text into the selected language, previously configured in a subtitles component.",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_lang);
+            EditorGUILayout.PropertyField(_catchLang);
+            EditorGUILayout.PropertyField(_text);
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+            EditorGUILayout.PropertyField(_conversions);
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
 
             serializedObject.ApplyModifiedProperties();
         }

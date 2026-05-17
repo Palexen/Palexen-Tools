@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Esp_Part_4
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Autor: '
+  _actorColor: {r: 0.5529412, g: 1, b: 0, a: 1}
   _dialogText: "As\xED que ya lo sabes, si quieres a\xF1adir tus propios idiomas,
     usa una <color=green>enum (C#)</color>  propia, todo lo dem\xE1s seguir\xE1 tus
     reglas! "
   _langClip: {fileID: 8300000, guid: bddb9f511051ff04a886fa32192588e4, type: 3}
-  _dialogTime: 2
+  _onScreenTimeDialog: 2

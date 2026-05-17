@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Russ_1
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Matroshka man: '
+  _actorColor: {r: 0, g: 0.4584198, b: 1, a: 1}
   _dialogText: "\u0412\u0441\u0435\u043C \u043F\u0440\u0438\u0432\u0435\u0442!"
   _langClip: {fileID: 8300000, guid: 67a46efea53647241a40b27e2f4eb866, type: 3}
+  _onScreenTimeDialog: 2

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e56be77989b1e344bc83e16c05da3d7, type: 3}
   m_Name: Kor_1
   m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.DialogContainer
-  _dialogName: 
+  _actorName: 'Korean Woman: '
+  _actorColor: {r: 0, g: 0.4135797, b: 1, a: 1}
   _dialogText: "\uC548\uB155\uD558\uC138\uC694!"
   _langClip: {fileID: 8300000, guid: d78959658d19bb84e8edae78e6cd8d34, type: 3}
+  _onScreenTimeDialog: 2
