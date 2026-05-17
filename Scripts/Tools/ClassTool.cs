@@ -1491,7 +1491,7 @@ namespace Palexen.Tools
             GUILayout.Box("Dialogue system for all your contexts, whether for narration or NPCs. It supports " +
                 "multiple languages, and you can also use audio for the dialogue system.\r\n\r\nTip: Make sure to manage your " +
                 "project well when configuring all your dialogues, whether they are text, " +
-                "voice, or both!", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 120));
+                "voice, or both!", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 170));
 
             Color c = setting.contextSeparatorColor;
 

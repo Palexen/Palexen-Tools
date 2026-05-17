@@ -71,7 +71,7 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            Color c = Color.cornflowerBlue;
+            Color c = new (.392f, .584f, .929f, 1);
 
             GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog Container</color> \n " +
                 $"(Closed Caption <color={"#" + c.ConvertToHex()}>CC</color>)",
