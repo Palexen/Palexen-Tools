@@ -153,6 +153,21 @@ namespace Palexen.Gameplay
             }
         }
 
+        public void MeleeDamage(int damageAmount)
+        {
+            _totalHealth -= damageAmount;
+
+            if (_totalHealth < 0)
+            {
+                Die();
+
+                if (_totalHealth <= _exceededOn)
+                {
+                    Exceeded();
+                }
+            }
+        }
+
         /// <summary>
         /// Marks the object as no longer alive and triggers any registered post-death actions.
         /// </summary>

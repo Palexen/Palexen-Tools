@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 8b00cd04dfc1a374bb8009bea21697c8
+guid: e23ceb5d68b4eeb4797a3bfaf6ffb101
 labels:
+- Level
 - Manager
-- System
-- Triggers
+- Scene
 PrefabImporter:
   externalObjects: {}
   userData: 

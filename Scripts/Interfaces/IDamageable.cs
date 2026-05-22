@@ -41,6 +41,12 @@ namespace Palexen.Gameplay
         void TakeDamage(int damageAmount);
 
         /// <summary>
+        /// Apply damage to the object, secondary function.
+        /// </summary>
+        /// <param name="damageAmount"></param>
+        void MeleeDamage(int damageAmount);
+
+        /// <summary>
         /// Performs any actions required to terminate or deactivate the current instance.
         /// </summary>
         /// <remarks>Call this method to signal that the object should cease functioning or be removed from use.

@@ -1,5 +1,10 @@
 fileFormatVersion: 2
 guid: 0dcee209d5606db469c803ff46d4c587
+labels:
+- Audio
+- Footsteps
+- Sfx
+- System
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -52,11 +52,17 @@ namespace Palexen.Gameplay
         [MyHeader("Actions on Take Damage")]
         public UnityEvent _onTakeDamage;
 
+        [MyHeader("Actions on Melee")]
+        public UnityEvent _onMelee;
+
         [MyHeader("Actions on Die")]
         public UnityEvent _atDie;
 
         [MyHeader("Actions on Exceeded")]
         public UnityEvent _atExceeded;
+
+        [MyHeader("Actions on Add Health")]
+        public UnityEvent _onAddHealth;
 
         [SerializeField][FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public Transform _healthParent;
 
@@ -171,7 +177,19 @@ namespace Palexen.Gameplay
         /// <param name="health">The amount of health to add. Must be a positive integer.</param>
         public void AddHealth(int health)
         {
+            try
+            {
+                _healthParent.TryGetComponent(out IDamageable damageable);
+                damageable.AddHealth(health);
 
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("No parent with IDamageable found to add health to. Exception: " + e);
+            }
+
+            _healt += health;
+            _onAddHealth.Invoke();
         }
 
         /// <summary>
@@ -213,6 +231,50 @@ namespace Palexen.Gameplay
             }
 
             if(_healt <= _exceededOn)
+            {
+                Exceeded();
+            }
+        }
+
+        /// <summary>
+        /// Applies damage to the current object, reducing its health by the specified amount. If configured, also
+        /// propagates the damage to a parent object implementing IDamageable.
+        /// </summary>
+        /// <remarks>If the object's health falls below zero, the object is considered dead and the Die
+        /// method is called. If the health falls below or equals a configured threshold, the Exceeded method is
+        /// invoked. When HealthCondition is set to parent, the method attempts to propagate the damage to a parent
+        /// object that implements IDamageable. If no such parent exists, a warning is logged.</remarks>
+        /// <param name="damage">The amount of damage to apply. Must be a non-negative integer.</param>
+        public void MeleeDamage(int damage)
+        {
+            _healt -= damage;
+
+            if (_affectsOn == HealthCondition.parent)
+            {
+                try
+                {
+                    _healthParent.TryGetComponent(out IDamageable damageable);
+                    damageable.TakeDamage(damage);
+
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning("No parent with IDamageable found to add health to. Exception: " + e);
+                }
+            }
+
+            if (isAlive)
+            {
+                _onMelee.Invoke();
+            }
+
+            if (_healt < 0)
+            {
+                Die();
+                isAlive = false;
+            }
+
+            if (_healt <= _exceededOn)
             {
                 Exceeded();
             }

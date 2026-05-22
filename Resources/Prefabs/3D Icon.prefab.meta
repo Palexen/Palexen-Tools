@@ -1,5 +1,9 @@
 fileFormatVersion: 2
 guid: d7def8807eeb4a74cb91bd8144a5401a
+labels:
+- 3d
+- Layout
+- Ui
 PrefabImporter:
   externalObjects: {}
   userData: 

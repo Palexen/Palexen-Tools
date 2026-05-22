@@ -1,5 +1,9 @@
 fileFormatVersion: 2
 guid: 347f6acf67dc01740b7c23f1d3d5e139
+labels:
+- Interactable
+- Interaction
+- System
 PrefabImporter:
   externalObjects: {}
   userData: 

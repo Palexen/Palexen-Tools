@@ -20,6 +20,7 @@
 */
 using System;
 using UnityEngine;
+using Palexen.Levels;
 using Palexen.Gameplay;
 using Palexen.Sequences;
 using UnityEngine.Events;
@@ -60,6 +61,8 @@ namespace Palexen.Tools
     public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
     public enum DialogAudioFeature { useAudio, noAudio }
     public enum Initializer { auto, manual }
+    public enum LevelLoadMode { catchAndLoad, loadOnly }
+    public enum LoadingBarMode { none, slider, fill }
 
     #endregion
 
@@ -1292,8 +1295,10 @@ namespace Palexen.Tools
         SerializedProperty _importanceLevel;
         SerializedProperty _atStart;
         SerializedProperty _onTakeDamage;
+        SerializedProperty _onMelee;
         SerializedProperty _atDie;
         SerializedProperty _atExceeded;
+        SerializedProperty _onAddHealth;
         SerializedProperty _healthParent;
         SerializedProperty _animator;
         SerializedProperty triggerNames;
@@ -1307,8 +1312,10 @@ namespace Palexen.Tools
             _importanceLevel = serializedObject.FindProperty("_importanceLevel");
             _atStart = serializedObject.FindProperty("_atStart");
             _onTakeDamage = serializedObject.FindProperty("_onTakeDamage");
+            _onMelee = serializedObject.FindProperty("_onMelee");
             _atDie = serializedObject.FindProperty("_atDie");
             _atExceeded = serializedObject.FindProperty("_atExceeded");
+            _onAddHealth = serializedObject.FindProperty("_onAddHealth");
             _healthParent = serializedObject.FindProperty("_healthParent");
             _animator = serializedObject.FindProperty("_animator");
             triggerNames = serializedObject.FindProperty("triggerNames");
@@ -1320,7 +1327,7 @@ namespace Palexen.Tools
             GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Health Component</color>",
                 PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
             GUILayout.Box("It manages the HP of this object and handles events that occur when it is affected", 
-                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
 
             Color c = setting.contextSeparatorColor;
 
@@ -1372,8 +1379,10 @@ namespace Palexen.Tools
             {
                 EditorGUILayout.PropertyField(_atStart);
                 EditorGUILayout.PropertyField(_onTakeDamage);
+                EditorGUILayout.PropertyField(_onMelee);
                 EditorGUILayout.PropertyField(_atDie);
                 EditorGUILayout.PropertyField(_atExceeded);
+                EditorGUILayout.PropertyField(_onAddHealth);
             }
 
             EditorGUI.indentLevel--;
@@ -1751,6 +1760,133 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_color);
 
             serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region LEVELS
+
+    [CustomEditor(typeof(LevelLoader))]
+    public class LevelLoaderEditor : Editor
+    {
+        LevelLoader ll;
+        SerializedProperty _loadMode;
+        SerializedProperty _loadSceneMode;
+        SerializedProperty loadingSceneName;
+        SerializedProperty _delayTimer;
+        SerializedProperty _delayScreen;
+        SerializedProperty _loadingBar;
+        SerializedProperty _slider;
+        SerializedProperty _imageToFill;
+        SerializedProperty _fadeScreen;
+        SerializedProperty _eventsAfterFinish;
+        SerializedProperty _useRootActivation;
+
+        void OnEnable()
+        {
+            ll = (LevelLoader)target;
+            _loadMode = serializedObject.FindProperty("_loadMode");
+            _loadSceneMode = serializedObject.FindProperty("_loadSceneMode");
+            loadingSceneName = serializedObject.FindProperty("loadingSceneName");
+            _delayTimer = serializedObject.FindProperty("_delayTimer");
+            _delayScreen = serializedObject.FindProperty("_delayScreen");
+            _loadingBar = serializedObject.FindProperty("_loadingBar");
+            _slider = serializedObject.FindProperty("_slider");
+            _imageToFill = serializedObject.FindProperty("_imageToFill");
+            _fadeScreen = serializedObject.FindProperty("_fadeScreen");
+            _eventsAfterFinish = serializedObject.FindProperty("_eventsAfterFinish");
+            _useRootActivation = serializedObject.FindProperty("_useRootActivation");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Level Loader</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            
+            GUILayout.Box("Load scenes via the loading scene, or from here",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_loadMode);
+            EditorGUILayout.PropertyField(_loadSceneMode);
+
+            if (ll._loadMode != LevelLoadMode.catchAndLoad)
+            {
+                EditorGUILayout.PropertyField(loadingSceneName);
+                GUILayout.Box("Enter the scene name you want to load.\r\n" +
+                    "\n<b>Note:</b> It is recommended to only perform an additive load on the scene that is used exclusively to load other scenes.", 
+                    PalexenEditorStyles.CoolBox(10, TextAnchor.MiddleLeft, FontStyle.Normal, 80));
+            }
+            EditorGUILayout.PropertyField(_delayTimer);
+            EditorGUILayout.PropertyField(_delayScreen);
+
+            EditorGUILayout.PropertyField(_loadingBar);
+            if (ll._loadingBar != LoadingBarMode.none)
+            {
+                if (ll._loadingBar == LoadingBarMode.slider)
+                {
+                    EditorGUILayout.PropertyField(_slider);
+                }
+
+                if (ll._loadingBar == LoadingBarMode.fill)
+                {
+                    EditorGUILayout.PropertyField(_imageToFill);
+                }
+            }
+
+            EditorGUILayout.PropertyField(_fadeScreen);
+            if (ll._fadeScreen == null)
+            {
+                EditorGUILayout.HelpBox("This field is optional; however, to enhance the loading effect " +
+                    "between scenes, consider adding a screen that creates a fade effect, or a screen that " +
+                    "notifies the player that a loading cycle is about to begin.", MessageType.Warning);
+            }
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+            EditorGUILayout.PropertyField(_eventsAfterFinish);
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+            EditorGUILayout.PropertyField(_useRootActivation);
+            GUILayout.Box("In root activation, by setting it to true, you will need to put all your objects inside a " +
+                "parent object and deactivate them completely. This helps manage loading times well, but you may need " +
+                "to further optimize how things are processed, especially dynamic objects.",
+                PalexenEditorStyles.CoolBox(10, TextAnchor.MiddleLeft, FontStyle.Normal, 90));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    [CustomEditor(typeof(LevelManager))]
+    public class LevelManagerEditor : Editor
+    {
+        LevelManager lm;
+        SerializedProperty sceneName;
+        SerializedProperty _delayTimer;
+        SerializedProperty _rootActivation;
+
+        private void OnEnable()
+        {
+            lm = (LevelManager)target;
+            sceneName = serializedObject.FindProperty("sceneName");
+            _delayTimer = serializedObject.FindProperty("_delayTimer");
+            _rootActivation = serializedObject.FindProperty("_rootActivation");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Level Manager</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Catch and load levels",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
         }
     }
 

@@ -60,11 +60,18 @@ namespace Palexen.Gameplay.UI
 
         void CalculateSize()
         {
-            float distance = Vector3.Distance(transform.position, target.position);
+            if (target != null)
+            {
+                float distance = Vector3.Distance(transform.position, target.position);
 
-            float scaleFactor = Mathf.Clamp(sizeControl.x + (distance / maxDistance), sizeControl.x, sizeControl.y);
+                float scaleFactor = Mathf.Clamp(sizeControl.x + (distance / maxDistance), sizeControl.x, sizeControl.y);
 
-            transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+                transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+            }
+            else
+            {
+                target = Camera.main.transform;
+            }
         }
 
         void UpdateUI()

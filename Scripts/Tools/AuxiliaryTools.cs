@@ -1141,6 +1141,28 @@ namespace Palexen.Tools
         }
 
         #endregion
+
+        #region LEVELS
+
+        [MenuItem("GameObject/Palexen/Levels/Level Manager", false, 0)]
+        static void CreateLevelManager()
+        {
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Level Manager");
+
+            if (prefabAsset != null)
+            {
+                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefabAsset);
+                Selection.activeGameObject = clone;
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                Debug.LogError("Can't Find prefab in the <color=yellow>Prefabs/ </color> folder, " +
+                    "create new prefab and put in there, or <color=cyan>Reimport</color> the package");
+            }
+        }
+
+        #endregion
     }
 #endif
 
