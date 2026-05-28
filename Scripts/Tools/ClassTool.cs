@@ -1556,17 +1556,20 @@ namespace Palexen.Tools
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
 
-            if (GUILayout.Button("Play", PalexenEditorStyles.BigButton))
+            if (EditorApplication.isPlaying)
             {
-                _dialog.PlayDialog();
-            }
-            if (GUILayout.Button("Replay", PalexenEditorStyles.BigButton))
-            {
-                _dialog.RePlay();
-            }
-            if (GUILayout.Button("Break", PalexenEditorStyles.BigButton))
-            {
-                _dialog.BreakIntoDialogue();
+                if (GUILayout.Button("Play", PalexenEditorStyles.BigButton))
+                {
+                    _dialog.PlayDialog();
+                }
+                if (GUILayout.Button("Replay", PalexenEditorStyles.BigButton))
+                {
+                    _dialog.RePlay();
+                }
+                if (GUILayout.Button("Break", PalexenEditorStyles.BigButton))
+                {
+                    _dialog.BreakIntoDialogue();
+                }
             }
 
             serializedObject.ApplyModifiedProperties();

@@ -378,6 +378,25 @@ namespace Palexen.Sequences
             }
         }
 
+        /// <summary>
+        /// Set a new text on the screen, if you prefer to set and display text on a specific screen.
+        /// </summary>
+        /// <remarks> When you call the method, it sets a new text element TMP_Text</remarks>
+        /// <param name="newText"></param>
+        public void SetTextUI(TMP_Text newText)
+        {
+            _subtitles = newText;
+        }
+
+        /// <summary>
+        /// Call this method when you need to change the audio source.
+        /// </summary>
+        /// <param name="newAudioSource"></param>
+        public void SetAudioSource(AudioSource newAudioSource)
+        {
+            _langAudioSource = newAudioSource;
+        }
+
         #endregion
     }
 }
