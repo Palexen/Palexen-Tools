@@ -22,6 +22,7 @@ MonoBehaviour:
   contextGizmoForm: 0
   gizmosColor: {r: 1, g: 0.8795767, b: 0, a: 1}
   inactiveGizmosColor: {r: 1, g: 0, b: 0.084195614, a: 1}
+  gizmoSize: 0.1
   physicsSimulationLayer:
     serializedVersion: 2
     m_Bits: 1

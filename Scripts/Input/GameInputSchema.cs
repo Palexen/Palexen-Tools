@@ -18,6 +18,7 @@
 
 * -----------------------------------------------------------------------------
 */
+using System;
 using UnityEngine;
 using Palexen.Tools;
 using Palexen.Scriptables;
@@ -87,10 +88,17 @@ namespace Palexen.Gameplay.Input
         /// Sets the input schema used by the current instance.
         /// </summary>
         /// <param name="newSchema">The new input schema to apply. Cannot be null.</param>
+        [Obsolete("This method is obsolete, although it still works and can perform its assigned function, it will be " +
+            "removed in the future and you should use the Schema property instead.")]
         public void SetSchema(InputSchema newSchema)
         {
             schema = newSchema;
         }
+
+        /// <summary>
+        /// Sets the input schema used by the current instance.
+        /// </summary>
+        public InputSchema Schema { get { return schema; }  set { schema = value; } }
 
         #endregion
     }

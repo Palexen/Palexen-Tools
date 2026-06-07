@@ -370,11 +370,15 @@ namespace Palexen.Sequences
             Restore();
         }
 
+        /// <summary>
+        /// This method updates the language of the dialog system based on the selected language in the LangManager. If the
+        /// LangManager's language changes, this method should be called to reflect the new language in the dialog system.
+        /// </summary>
         public void UpdateLang()
         {
             if (_catchLang == Initializer.auto)
             {
-                _lang = LangManager.instance.GetLang();
+                _lang = LangManager.instance.Lang;
             }
         }
 

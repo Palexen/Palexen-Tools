@@ -18,6 +18,7 @@
 
 * -----------------------------------------------------------------------------
 */
+using System;
 using UnityEngine;
 #if PALEXEN_TOOLS
 using Palexen.Tools;
@@ -34,9 +35,9 @@ namespace Palexen.Levels
         #region VARIABLES
 
         public static LevelManager instance;
-        public string sceneName;
-        public float _delayTimer = 5f;
-        public bool _rootActivation;
+        private string _sceneName;
+        private float _delayTimer;
+        private bool _rootActivation;
 
         #endregion
 
@@ -67,30 +68,39 @@ namespace Palexen.Levels
 
         public void SetScene(string scene, float delay = 5f, bool ra = false)
         {
-            sceneName = scene;
-            _delayTimer = delay;
-            _rootActivation = ra;
+            SceneName = scene;
+            Delay = delay;
+            IsRootActivation = ra;
         }
 
-        public string GetScene()
-        {
-            return sceneName;
-        }
+        #region OBSOLETE
+        [Obsolete("Use SceneName instead.")]
+        public string GetScene() => SceneName;
 
-        public void SetDelay(float delay)
-        {
-            _delayTimer = delay;
-        }
+        [Obsolete("Use Delay instead.")]
+        public void SetDelay(float delay) => Delay = delay;
 
-        public float GetDelay()
-        {
-            return _delayTimer;
-        }
+        [Obsolete("Use Delay instead.")]
+        public float GetDelay() => Delay;
 
-        public bool CheckRootActivation()
-        {
-            return _rootActivation;
-        }
+        [Obsolete("Use IsRootActivation instead.")]
+        public bool CheckRootActivation() => IsRootActivation;
+        #endregion
+
+        /// <summary>
+        /// Gets and sets the scene name
+        /// </summary>
+        public string SceneName { get => _sceneName;  set => _sceneName = value; }
+
+        /// <summary>
+        /// Gets and sets a timer
+        /// </summary>
+        public float Delay { get => _delayTimer;  set => _delayTimer = value; }
+
+        /// <summary>
+        /// Checks and sets whether or not a root object is used at the next level.
+        /// </summary>
+        public bool IsRootActivation { get => _rootActivation; set => _rootActivation = value; }
 
         #endregion
     }

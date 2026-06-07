@@ -98,7 +98,7 @@ namespace Palexen.Gameplay.UI
         {
             if (_catchLang == Initializer.auto)
             {
-                _lang = LangManager.instance.GetLang();
+                _lang = LangManager.instance.Lang;
                 SwitchLang();
             }
         }
