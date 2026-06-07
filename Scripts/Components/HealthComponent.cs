@@ -355,12 +355,6 @@ namespace Palexen.Gameplay
             }
         }
 
-        /// <summary>
-        /// Indicates whether the current object is considered alive based on its health status. An object is
-        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
-        /// </summary>
-        public bool IsAlive { get { return isAlive; } }
-
         #endregion
 
         #region EXAMPLES
@@ -376,7 +370,6 @@ namespace Palexen.Gameplay
         {
             _health.x = 25; _health.y = 52;
             _exceededThreshold.x = -170; _exceededThreshold.y = -129;
-            _importanceLevel = HealthImportance.important;
         }
 
         /// <summary>
@@ -403,7 +396,6 @@ namespace Palexen.Gameplay
         {
             _health.x = 200; _health.y = 400;
             _exceededThreshold.x = -946; _exceededThreshold.y = -786;
-            _importanceLevel = HealthImportance.important;
         }
 
         #endregion

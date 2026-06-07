@@ -437,7 +437,6 @@ namespace Palexen.Tools
 
     #region TRIGGER OBJECT MANAGER
     [CustomEditor(typeof(TriggerObjectsManager))]
-    [CanEditMultipleObjects]
     public class TriggerObjectsManagerEditor : Editor
     {
 
@@ -574,7 +573,6 @@ namespace Palexen.Tools
     #region GENERAL AMBIENCE
 
     [CustomEditor(typeof(GeneralAmbience))]
-    [CanEditMultipleObjects]
     public class GeneralAmbienceEditor : Editor
     {
         SerializedProperty _transition;
@@ -653,7 +651,6 @@ namespace Palexen.Tools
 
     #region AMBIENCE ZONE
     [CustomEditor(typeof(AmbienceZone))]
-    [CanEditMultipleObjects]
     public class AmbienceZoneEditor : Editor
     {
         AmbienceZone ga;
@@ -804,7 +801,6 @@ namespace Palexen.Tools
     #region TRIGGER EVENT
 
     [CustomEditor(typeof(TriggerEvent))]
-    [CanEditMultipleObjects]
     public class TriggerEventEditor : Editor
     {
         TriggerEvent te;
@@ -921,7 +917,6 @@ namespace Palexen.Tools
     #region FOOTSTEPS SYSTEM
 
     [CustomEditor(typeof(FootstepsSystem))]
-    [CanEditMultipleObjects]
     public class FootstepsSystemEditor : Editor
     {
         FootstepsSystem fs;
@@ -1013,7 +1008,6 @@ namespace Palexen.Tools
     #region ASYNC LOADER
 
     [CustomEditor(typeof(AsyncResourcesLoader))]
-    [CanEditMultipleObjects]
     public class AsyncLoaderEditor : Editor
     {
         AsyncResourcesLoader async;
@@ -1052,7 +1046,6 @@ namespace Palexen.Tools
     #region HEALTH SYSTEM
 
     [CustomEditor(typeof(HealthSystem))]
-    [CanEditMultipleObjects]
     public class HealthGOEditor : Editor
     {
         HealthSystem hg;
@@ -1189,7 +1182,7 @@ namespace Palexen.Tools
                     hg.FetchRigidbodies();
                 }
 
-                if(hg._rigidbodies.Length > 1)
+                if(hg._rigidbodies.Length >= 1)
                 {
                     if (GUILayout.Button("Draw Gizmos on physics"))
                     {
@@ -1293,7 +1286,6 @@ namespace Palexen.Tools
     #region HEALTH COMPONENT
 
     [CustomEditor(typeof(HealthComponent))]
-    [CanEditMultipleObjects]
     public class HealthComponentEditor : Editor
     {
         HealthComponent hc;
@@ -1461,7 +1453,6 @@ namespace Palexen.Tools
     #region DIALOG SYSTEM
 
     [CustomEditor(typeof(DialogSystem))]
-    [CanEditMultipleObjects]
     public class DialogSystemEditor : Editor
     {
         DialogSystem _dialog;
@@ -1590,7 +1581,6 @@ namespace Palexen.Tools
     #region LANG
 
     [CustomEditor(typeof(LangManager))]
-    [CanEditMultipleObjects]
     public class LangManagerEditor : Editor
     {
         LangManager lm;
@@ -1671,7 +1661,6 @@ namespace Palexen.Tools
     #region TEXT TRANSLATOR
 
     [CustomEditor(typeof(LangTextConversion))]
-    [CanEditMultipleObjects]
     public class LangTextConversionEditor : Editor
     {
         LangTextConversion _ltc;
@@ -1717,7 +1706,6 @@ namespace Palexen.Tools
     #region RIGIDBODY LIMITER
 
     [CustomEditor(typeof(RigidbodyVelocityLimitation))]
-    [CanEditMultipleObjects]
     public class RigidbodyVelocityLimitationEditor : Editor
     {
         RigidbodyVelocityLimitation rb;
@@ -1747,7 +1735,6 @@ namespace Palexen.Tools
     #region SHAPE VISUALIZER
 
     [CustomEditor(typeof(ShapeVisualizer))]
-    [CanEditMultipleObjects]
     public class ShapeVisualizerEditor : Editor
     {
         ShapeVisualizer sp;
@@ -1784,7 +1771,6 @@ namespace Palexen.Tools
     #region LEVELS
 
     [CustomEditor(typeof(LevelLoader))]
-    [CanEditMultipleObjects]
     public class LevelLoaderEditor : Editor
     {
         LevelLoader ll;

@@ -179,7 +179,6 @@ namespace Palexen.Gameplay
             isAlive = false;
             _afterKillObject.Invoke();
         }
-
         #endregion
 
         #region FEATURES
@@ -256,16 +255,6 @@ namespace Palexen.Gameplay
                 _rigidbodies[i].isKinematic = true;
             }
         }
-
-        #endregion
-
-        #region UTILITIES
-
-        /// <summary>
-        /// Indicates whether the current object is considered alive based on its health status. An object is
-        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
-        /// </summary>
-        public bool IsAlive { get { return isAlive; } }
 
         #endregion
 
