@@ -24,6 +24,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+
 #if PALEXEN_TOOLS
 using Palexen.Tools;
 #endif
@@ -66,7 +67,7 @@ namespace Palexen.Levels
         {
             if (_loadMode == LevelLoadMode.catchAndLoad)
             {
-                LevelManager.instance.Delay = _delayTimer;
+                LevelManager.instance.SetDelay(_delayTimer);
                 loadingSceneTarget = SceneManager.GetActiveScene().name;
                 StartCoroutine(LoadLevelFromManager());
             }
@@ -76,7 +77,7 @@ namespace Palexen.Levels
         {
             if (isSliderOperation)
             {
-                _slider.value = Mathf.MoveTowards(_slider.value, LevelManager.instance.Delay, 1 * Time.deltaTime);
+                _slider.value = Mathf.MoveTowards(_slider.value, LevelManager.instance.GetDelay(), 1 * Time.deltaTime);
             }
         }
 
@@ -103,7 +104,7 @@ namespace Palexen.Levels
                     {
                         _fadeScreen.SetActive(true);
                     }
-                    yield return new WaitForSeconds(LevelManager.instance.Delay);
+                    yield return new WaitForSeconds(LevelManager.instance.GetDelay());
                     _eventsAfterFinish.Invoke();
                     AsyncOperation asyncNone = SceneManager.LoadSceneAsync(loadingSceneName, _loadSceneMode);
 
@@ -119,10 +120,10 @@ namespace Palexen.Levels
                     break;
 
                 case LoadingBarMode.slider:
-                    _slider.maxValue = LevelManager.instance.Delay + 1f;
+                    _slider.maxValue = LevelManager.instance.GetDelay() + 1f;
                     isSliderOperation = true;
 
-                    float delay = LevelManager.instance.Delay;
+                    float delay = LevelManager.instance.GetDelay();
                     yield return new WaitForSeconds(delay);
 
                     isSliderOperation = false;
@@ -198,7 +199,7 @@ namespace Palexen.Levels
 
         IEnumerator LoadLevelFromManager()
         {
-            string targetSceneName = LevelManager.instance.SceneName;
+            string targetSceneName = LevelManager.instance.GetScene();
 
             switch (_loadingBar)
             {
@@ -207,7 +208,7 @@ namespace Palexen.Levels
                     {
                         _fadeScreen.SetActive(true);
                     }
-                    yield return new WaitForSeconds(LevelManager.instance.Delay);
+                    yield return new WaitForSeconds(LevelManager.instance.GetDelay());
                     _eventsAfterFinish.Invoke();
                     AsyncOperation asyncNone = SceneManager.LoadSceneAsync(targetSceneName, _loadSceneMode);
 
@@ -223,10 +224,10 @@ namespace Palexen.Levels
                     break;
 
                 case LoadingBarMode.slider:
-                    _slider.maxValue = LevelManager.instance.Delay + 1f;
+                    _slider.maxValue = LevelManager.instance.GetDelay() + 1f;
                     isSliderOperation = true;
 
-                    float delay = LevelManager.instance.Delay;
+                    float delay = LevelManager.instance.GetDelay();
                     yield return new WaitForSeconds(delay);
 
                     isSliderOperation = false;
@@ -308,7 +309,7 @@ namespace Palexen.Levels
             {
                 SceneManager.SetActiveScene(nextScene);
 
-                if (LevelManager.instance.IsRootActivation)
+                if (LevelManager.instance.CheckRootActivation())
                 {
                     foreach (GameObject rootObj in nextScene.GetRootGameObjects())
                     {

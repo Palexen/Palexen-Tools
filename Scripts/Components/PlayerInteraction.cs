@@ -71,12 +71,18 @@ namespace Palexen.Gameplay.Player
         /// <summary>
         /// Enable input for this component
         /// </summary>
-        private void OnEnable() => ii.Enable();
+        private void OnEnable()
+        {
+            ii.Enable();
+        }
 
         /// <summary>
         /// Disable input for this component
         /// </summary>
-        private void OnDisable() => ii.Disable();
+        private void OnDisable()
+        {
+            ii.Disable();
+        }
 
         /// <summary>
         /// Update the scaner raycast
