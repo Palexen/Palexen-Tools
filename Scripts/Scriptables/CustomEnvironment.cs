@@ -48,7 +48,8 @@ namespace Palexen.Scriptables
         public GizmoForm contextGizmoForm = GizmoForm.sphere;
         public Color gizmosColor = Color.white;
         public Color inactiveGizmosColor = Color.red;
-        
+        public float gizmoSize = .25f;
+
         [MyHeader("<color=green>Physics</color> Simulation")]
         public LayerMask physicsSimulationLayer = 1;
 

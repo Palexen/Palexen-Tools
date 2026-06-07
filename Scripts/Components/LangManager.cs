@@ -18,9 +18,10 @@
 
 * -----------------------------------------------------------------------------
 */
-using Palexen.Gameplay.UI;
-using Palexen.Sequences;
+using System;
 using UnityEngine;
+using Palexen.Sequences;
+using Palexen.Gameplay.UI;
 
 namespace Palexen.Tools
 {
@@ -87,35 +88,35 @@ namespace Palexen.Tools
 
         public void SetEnglish()
         {
-            SetLang(Language.english);
+            Lang = Language.english;
         }
         public void SetSpanish()
         {
-            SetLang(Language.spanish);
+            Lang = Language.spanish;
         }
         public void SetFrench()
         {
-            SetLang(Language.french);
+            Lang = Language.french;
         }
         public void SetGerman()
         {
-            SetLang(Language.german);
+            Lang = Language.german;
         }
         public void SetJapanese()
         {
-            SetLang(Language.japanese);
+            Lang = Language.japanese;
         }
         public void SetChinese()
         {
-            SetLang(Language.chinese);
+            Lang = Language.chinese;
         }
         public void SetKorean()
         {
-            SetLang(Language.korean);
+            Lang = Language.korean;
         }
         public void SetRussian()
         {
-            SetLang(Language.russian);
+            Lang = Language.russian;
         }
 
         #endregion
@@ -128,6 +129,8 @@ namespace Palexen.Tools
         /// </summary>
         /// <param name="newLang"> It will establish a new language; you will be able to select it when setting it up. </param>
         /// <remarks>Note: You'll need to create a system that saves the language state, either by saving to PlayerPrefs or something more complex.</remarks>
+        [Obsolete("This method is obsolete, although it still works and you can use it, it will be removed in the future " +
+            "and you will need to use the Lang property instead.")]
         public void SetLang(Language newLang)
         {
             _lang = newLang;
@@ -135,11 +138,29 @@ namespace Palexen.Tools
             UpdateCC();
         }
 
+
+        /// <summary>
+        /// Set the language using the enum, this will update all dialog systems and text conversions in the scene to reflect the new language setting.
+        /// </summary>
+        public Language Lang
+        {
+            get { return _lang; }
+
+            set
+            {
+                _lang = value;
+                UpdateDialogSystems();
+                UpdateCC();
+            }
+        }
+
         /// <summary>
         /// Gets the current language
         /// If the language manager singleton exists, it retrieves it and sets it for use in the dialog system.
         /// </summary>
         /// <returns>Language enum</returns>
+        [Obsolete("This method is obsolete, although it still works and you can use it, it will be removed in the future " +
+                "and you will need to use the Lang property instead.")]
         public Language GetLang()
         {
             return _lang;

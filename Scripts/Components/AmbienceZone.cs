@@ -91,7 +91,7 @@ namespace Palexen.Audio.Atmos
                         if(affectToGeneralAmbience == AffectGeneralAmbience.yes)
                         {
                             GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.AtmosFadeOut(AudioTransitionState.fadeOut);
+                            ga.TransitionTo = AudioTransitionState.fadeOut;
                         }
                     }
 
@@ -106,7 +106,7 @@ namespace Palexen.Audio.Atmos
                         if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                         {
                             GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.AtmosFadeOut(AudioTransitionState.fadeOut);
+                            ga.TransitionTo = AudioTransitionState.fadeOut;
                         }
                     }
 
@@ -127,7 +127,7 @@ namespace Palexen.Audio.Atmos
                         if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                         {
                             GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.AtmosFadeOut(AudioTransitionState.fadeIn);
+                            ga.TransitionTo = AudioTransitionState.fadeIn;
                         }
                     }
 
@@ -142,7 +142,7 @@ namespace Palexen.Audio.Atmos
                         if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                         {
                             GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.AtmosFadeOut(AudioTransitionState.fadeIn);
+                            ga.TransitionTo = AudioTransitionState.fadeIn;
                         }
                     }
 
