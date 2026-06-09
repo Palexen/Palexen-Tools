@@ -20,6 +20,7 @@
 */
 #if UNITY_EDITOR
 #if UNITY_2021_1_OR_NEWER
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.Toolbars;
@@ -39,10 +40,10 @@ namespace Palexen.Overlays
         {
             text = "Load Scene";
             icon = EditorGUIUtility.isProSkin ? AssetDatabase.LoadAssetAtPath<Texture2D>
-                ("Packages/com.palexen.tools/Editor Default Resources/Scenes_Icon.png") : 
+                ("Packages/com.palexen.tools/Editor Default Resources/Scenes_Icon.png") :
                 AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.palexen.tools/Editor Default Resources/Scenes_Icon_2.png");
 
-            tooltip = "Load a scene from Build Settings.";
+            tooltip = "Load or add scenes to Build Settings.";
 
             dropdownClicked += ShowSceneMenu;
         }
@@ -51,15 +52,59 @@ namespace Palexen.Overlays
         {
             var menu = new GenericMenu();
 
+            menu.AddItem(new GUIContent("➕ Add this Scene to the current build settings"), false, AddCurrentSceneToBuild);
+
+            menu.AddSeparator("");
+
             EditorBuildSettingsScene[] scenes = EditorBuildSettings.scenes;
 
-            foreach (var scene in scenes)
+            if (scenes.Length == 0)
             {
-                string sceneName = System.IO.Path.GetFileNameWithoutExtension(scene.path);
-                menu.AddItem(new GUIContent(sceneName), false, () => LoadScene(scene.path));
+                menu.AddDisabledItem(new GUIContent("(No active Scenes in build settings, add one or this scene!)"));
+            }
+            else
+            {
+                foreach (var scene in scenes)
+                {
+                    string sceneName = System.IO.Path.GetFileNameWithoutExtension(scene.path);
+
+                    if (string.IsNullOrEmpty(sceneName)) continue;
+
+                    menu.AddItem(new GUIContent(sceneName), false, () => LoadScene(scene.path));
+                }
             }
 
             menu.ShowAsContext();
+        }
+
+        void AddCurrentSceneToBuild()
+        {
+            var activeScene = EditorSceneManager.GetActiveScene();
+            string scenePath = activeScene.path;
+
+            if (string.IsNullOrEmpty(scenePath))
+            {
+                EditorUtility.DisplayDialog("Error", "Save your scene before you add!", "Ok");
+                return;
+            }
+
+            List<EditorBuildSettingsScene> buildScenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
+
+            bool exists = buildScenes.Exists(s => s.path == scenePath);
+
+            if (!exists)
+            {
+                buildScenes.Add(new EditorBuildSettingsScene(scenePath, true));
+                EditorBuildSettings.scenes = buildScenes.ToArray();
+
+                Debug.Log($"[SceneLoader] Scene added to Build Settings: {activeScene.name}");
+
+                EditorApplication.delayCall += ShowSceneMenu;
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Warning", $"The scene '{activeScene.name}' is already in the Build Settings.", "Ok");
+            }
         }
 
         void LoadScene(string scenePath)

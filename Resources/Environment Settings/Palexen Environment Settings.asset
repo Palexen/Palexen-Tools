@@ -27,6 +27,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   scriptablesFolderPath: Assets
+  currentQuickPrefab: 1
+  quickPrefabs:
+  - _label: Prop
+    _icon: "\U0001F4E6"
+  - _label: Character
+    _icon: "\U0001F464"
+  - _label: Vehicle
+    _icon: "\U0001F697"
+  - _label: Npc
+    _icon: "\U0001F465"
+  - _label: Managers
+    _icon: "\u2699\uFE0F"
   infoString: The object can be called automatically
   warningString: The object is optional here!
   errorString: The object does not contain any references, before entering play mode,

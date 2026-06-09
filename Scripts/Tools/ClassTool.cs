@@ -159,6 +159,17 @@ namespace Palexen.Tools
 
     #endregion
 
+    #region QUICK PREFABS
+
+    [Serializable]
+    public class QuickPrefab
+    {
+        public string _label = "Prop";
+        public string _icon = "📦";
+    }
+
+    #endregion
+
     #region CUSTOM INSPECTORS
 
 #if UNITY_EDITOR

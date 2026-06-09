@@ -20,6 +20,7 @@
 */
 using UnityEngine;
 using Palexen.Tools;
+using System.Collections.Generic;
 
 namespace Palexen.Scriptables
 {
@@ -56,6 +57,10 @@ namespace Palexen.Scriptables
         [MyHeader("Scriptables Folder Path: <size=10>(The scriptables generated from the toolbar.)</size>")]
         public string scriptablesFolderPath = "Assets/";
 
+        [MyHeader("Quick Prefabs Settings")]
+        public int currentQuickPrefab = 1;
+        public List<QuickPrefab> quickPrefabs = new();
+
         [Space(12)]
 
         [MyHeader("Messages to Show in inspector")]
@@ -89,10 +94,6 @@ namespace Palexen.Scriptables
         [FieldColor(FieldPropertyColor.pink)] public GameObject pinkObject;
         [FieldColor(FieldPropertyColor.neonGreen)] public GameObject neonGreenObject;
         [FieldColor(FieldPropertyColor.salmon)] public GameObject salmonObject;
-
-        /// Deprecated, will be removed in future updates, use the new message system instead
-        /*[MyHeader("Other Colors")]
-		public Color[] colors = { Color.white };*/
 
         #endregion
 
