@@ -27,7 +27,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   scriptablesFolderPath: Assets
-  currentQuickPrefab: 1
+  prefabIndex: Prop
   quickPrefabs:
   - _label: Prop
     _icon: "\U0001F4E6"
@@ -37,7 +37,7 @@ MonoBehaviour:
     _icon: "\U0001F697"
   - _label: Npc
     _icon: "\U0001F465"
-  - _label: Managers
+  - _label: Manager
     _icon: "\u2699\uFE0F"
   infoString: The object can be called automatically
   warningString: The object is optional here!

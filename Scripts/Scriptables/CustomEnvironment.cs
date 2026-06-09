@@ -58,7 +58,7 @@ namespace Palexen.Scriptables
         public string scriptablesFolderPath = "Assets/";
 
         [MyHeader("Quick Prefabs Settings")]
-        public int currentQuickPrefab = 1;
+        [EasyDropdown("Prefab Collection")] public string prefabIndex;
         public List<QuickPrefab> quickPrefabs = new();
 
         [Space(12)]
@@ -108,6 +108,15 @@ namespace Palexen.Scriptables
             scriptablesFolderPath = path;
         }
         
+        public int currentPrefab
+        {
+            get {  return currentPrefab; }
+            set
+            {
+                currentPrefab = value;
+            }
+        }
+
         #endregion
     }
 }

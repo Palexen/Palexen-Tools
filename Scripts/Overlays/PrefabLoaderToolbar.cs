@@ -65,10 +65,18 @@ namespace Palexen.Overlays
 
             Clear();
 
+            // Protección si el archivo de configuración no existe en Resources
+            if (setting == null)
+            {
+                Label errorLabel = new Label(" [Palexen] Config asset not found in Resources. ");
+                errorLabel.style.color = Color.red;
+                Add(errorLabel);
+                return;
+            }
+
             EditorToolbarButton updateBtn = new EditorToolbarButton();
             updateBtn.text = $"📥 Update";
             updateBtn.tooltip = $"Update if not updated yet!";
-
             updateBtn.clicked += () =>
             {
                 LoadPrefabsFromProject();
@@ -77,7 +85,6 @@ namespace Palexen.Overlays
 
             updateBtn.style.marginBottom = 2;
             updateBtn.style.marginRight = 2;
-
             Add(updateBtn);
 
             if (prefabList.Count == 0)
@@ -93,10 +100,18 @@ namespace Palexen.Overlays
                 return;
             }
 
+            int currentIndex = setting.quickPrefabs.FindIndex(p => p != null && p._label == setting.prefabIndex);
+            if (currentIndex == -1) currentIndex = 0;
+
+            string iconStr = setting.quickPrefabs.Count > currentIndex && setting.quickPrefabs[currentIndex] != null
+                ? setting.quickPrefabs[currentIndex]._icon
+                : "📦";
+
             foreach (var prefab in prefabList)
             {
-                EditorToolbarButton characterButton = new EditorToolbarButton();
-                characterButton.text = $"{setting.quickPrefabs[setting.currentQuickPrefab]._icon} {prefab.name}";
+                EditorToolbarButton characterButton = new();
+
+                characterButton.text = $"{iconStr} {prefab.name}";
                 characterButton.clicked += () => InstantiatePrefabInScene(prefab);
                 characterButton.tooltip = $"Click to Instantiate: {prefab.name}.";
 
@@ -109,6 +124,41 @@ namespace Palexen.Overlays
             UpdateLayoutOrientation();
         }
 
+        void LoadPrefabsFromProject()
+        {
+            string pathT = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
+
+            prefabList.Clear();
+            if (setting == null) return;
+
+            int currentIndex = setting.quickPrefabs.FindIndex(p => p != null && p._label == setting.prefabIndex);
+            if (currentIndex == -1) currentIndex = 0;
+
+            if (currentIndex >= 0 && setting.quickPrefabs.Count > currentIndex && setting.quickPrefabs[currentIndex] != null)
+            {
+                string[] guids = AssetDatabase.FindAssets($"l:{setting.quickPrefabs[currentIndex]._label}", new[] { "Assets" });
+                HashSet<string> processedPaths = new();
+
+                foreach (string guid in guids)
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+                    if (processedPaths.Contains(path)) continue;
+                    processedPaths.Add(path);
+
+                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                    if (prefab != null)
+                    {
+                        var assetType = PrefabUtility.GetPrefabAssetType(prefab);
+                        if (assetType == PrefabAssetType.Regular || assetType == PrefabAssetType.Variant)
+                        {
+                            prefabList.Add(prefab);
+                        }
+                    }
+                }
+            }
+        }
 
         private void UpdateLayoutOrientation()
         {
@@ -124,41 +174,6 @@ namespace Palexen.Overlays
             }
         }
 
-        void LoadPrefabsFromProject()
-        {
-            string pathT = "Environment Settings/Palexen Environment Settings";
-
-            CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
-
-            prefabList.Clear();
-
-            string[] guids = AssetDatabase.FindAssets($"l:{setting.quickPrefabs[setting.currentQuickPrefab]._label}", new[] { "Assets" });
-
-            /*if (guids == null || guids.Length == 0)
-            {
-                guids = AssetDatabase.FindAssets("Character t:GameObject", new[] { "Assets" });
-            }*/
-
-            HashSet<string> processedPaths = new();
-
-            foreach (string guid in guids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (processedPaths.Contains(path)) continue;
-                processedPaths.Add(path);
-
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-
-                if (prefab != null)
-                {
-                    var assetType = PrefabUtility.GetPrefabAssetType(prefab);
-                    if (assetType == PrefabAssetType.Regular || assetType == PrefabAssetType.Variant)
-                    {
-                        prefabList.Add(prefab);
-                    }
-                }
-            }
-        }
 
         void InstantiatePrefabInScene(GameObject prefab)
         {

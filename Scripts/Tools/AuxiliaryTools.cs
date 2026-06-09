@@ -870,6 +870,66 @@ namespace Palexen.Tools
 
     #endregion
 
+    #region EASYDROPDOWN
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class EasyDropdownAttribute : PropertyAttribute
+    {
+        public string dataAssetName;
+
+        public EasyDropdownAttribute(string dataAssetName)
+        {
+            this.dataAssetName = dataAssetName;
+        }
+    }
+
+#if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(EasyDropdownAttribute))]
+    public class EasyDropDownDrawer : PropertyDrawer
+    {
+        private string[] cachedOptions;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (property.propertyType != SerializedPropertyType.String)
+            {
+                EditorGUI.LabelField(position, label.text, "Use [EasyDropdown] in only string variables");
+                return;
+            }
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
+
+            if (setting != null && setting.quickPrefabs != null && setting.quickPrefabs.Count > 0)
+            {
+                cachedOptions = new string[setting.quickPrefabs.Count];
+
+                for (int i = 0; i < setting.quickPrefabs.Count; i++)
+                {
+                    if (setting.quickPrefabs[i] != null)
+                    {
+                        cachedOptions[i] = setting.quickPrefabs[i]._label;
+                    }
+                    else
+                    {
+                        cachedOptions[i] = "Null Element";
+                    }
+                }
+
+                int index = Array.IndexOf(cachedOptions, property.stringValue);
+                if (index == -1) index = 0;
+
+                index = EditorGUI.Popup(position, label.text, index, cachedOptions);
+                property.stringValue = cachedOptions[index];
+                return;
+            }
+
+            EditorGUI.LabelField(position, label.text, $"No Entities yet, click + button to Add new one!");
+        }
+    }
+#endif
+
+    #endregion
+
     #endregion
 
     #region UTILITY
