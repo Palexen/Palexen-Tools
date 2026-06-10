@@ -117,7 +117,13 @@ namespace Palexen.Overlays
     [Overlay(typeof(SceneView), "Scene Loader")]
     public class SceneLoaderOverlay : ToolbarOverlay
     {
-        SceneLoaderOverlay() : base(SceneLoaderToolbar.id) { }
+        SceneLoaderOverlay() : base(SceneLoaderToolbar.id)
+        {
+            displayName = "Scene Loader";
+            this.collapsedIcon = EditorGUIUtility.isProSkin ? AssetDatabase.LoadAssetAtPath<Texture2D>
+                ("Packages/com.palexen.tools/Editor Default Resources/Scenes_Icon.png") :
+                AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.palexen.tools/Editor Default Resources/Scenes_Icon_2.png");
+        }
     }
 }
 #endif

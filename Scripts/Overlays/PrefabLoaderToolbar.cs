@@ -54,9 +54,22 @@ namespace Palexen.Overlays
         public PrefabButtonContainer()
         {
             LoadPrefabsFromProject();
+            RefreshButtons();
 
+            PrefabLoaderEvents.OnPrefabCategoryChanged += OnCategoryChanged;
+
+            RegisterCallback<DetachFromPanelEvent>(_ =>
+            {
+                PrefabLoaderEvents.OnPrefabCategoryChanged -= OnCategoryChanged;
+            });
+        }
+
+        void OnCategoryChanged()
+        {
+            LoadPrefabsFromProject();
             RefreshButtons();
         }
+
 
         public void RefreshButtons()
         {
@@ -65,7 +78,6 @@ namespace Palexen.Overlays
 
             Clear();
 
-            // Protección si el archivo de configuración no existe en Resources
             if (setting == null)
             {
                 Label errorLabel = new Label(" [Palexen] Config asset not found in Resources. ");
@@ -192,8 +204,85 @@ namespace Palexen.Overlays
     [Overlay(typeof(SceneView), "Quick Prefabs")]
     public class PrefabLoaderOverlay : ToolbarOverlay
     {
-        PrefabLoaderOverlay() : base(PrefabButtonContainer.id) { }
+        PrefabLoaderOverlay() : base(PrefabButtonContainer.id)
+        {
+            displayName = "Quick Prefabs";
+            this.collapsedIcon = EditorGUIUtility.isProSkin ? AssetDatabase.LoadAssetAtPath<Texture2D>
+                ("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon_quick.png") :
+                AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon_quick_2.png");
+        }
+    }
+
+
+
+    [EditorToolbarElement(id, typeof(SceneView))]
+    public class EntityLoaderToolbar : EditorToolbarDropdownToggle, IAccessContainerWindow
+    {
+        public const string id = "PrefabLoaderToolbar/DropdownToggle";
+
+        public EditorWindow containerWindow { get; set; }
+
+        EntityLoaderToolbar()
+        {
+            text = "Entities";
+            icon = EditorGUIUtility.isProSkin ? AssetDatabase.LoadAssetAtPath<Texture2D>
+                ("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon.png") :
+                AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon_2.png");
+
+            tooltip = "Load Entities in this Scene";
+
+            dropdownClicked += ShowOptions;
+        }
+
+        void ShowOptions()
+        {
+           var menu = new GenericMenu();
+
+            string pathT = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
+
+            foreach (var entity in setting.quickPrefabs)
+            {
+                menu.AddItem(
+                    new GUIContent(entity._label),
+                    setting.CurrentPrefab == entity._label,
+                    () => SetEntity(entity._label)
+                );
+            }
+
+            menu.ShowAsContext();
+        }
+
+        void SetEntity(string value)
+        {
+            string pathT = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
+
+            setting.CurrentPrefab = value;
+
+            EditorUtility.SetDirty(setting);
+
+            PrefabLoaderEvents.OnPrefabCategoryChanged?.Invoke();
+        }
+    }
+
+    public static class PrefabLoaderEvents
+    {
+        public static System.Action OnPrefabCategoryChanged;
+    }
+
+    [Overlay(typeof(SceneView), "Entity Loader")]
+    public class EntityLoaderOverlay : ToolbarOverlay
+    {
+        EntityLoaderOverlay() : base(EntityLoaderToolbar.id)
+        {
+            displayName = "Entity Loader";
+            this.collapsedIcon = EditorGUIUtility.isProSkin ? AssetDatabase.LoadAssetAtPath<Texture2D>
+                ("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon.png") :
+                AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.palexen.tools/Editor Default Resources/Prefab_Icon_2.png");
+        }
     }
 }
+
 #endif
 #endif

@@ -108,12 +108,12 @@ namespace Palexen.Scriptables
             scriptablesFolderPath = path;
         }
         
-        public int currentPrefab
+        public string CurrentPrefab
         {
-            get {  return currentPrefab; }
+            get {  return prefabIndex; }
             set
             {
-                currentPrefab = value;
+                prefabIndex = value;
             }
         }
 
