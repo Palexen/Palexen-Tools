@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7f5b9e29efea845b60cb0317201dfc, type: 3}
+  m_Name: Default Entity Manager
+  m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.EntityManager
+  entities:
+  - _label: Prop
+    _icon: "\U0001F4E6"
+  - _label: Character
+    _icon: "\U0001F464"
+  - _label: Vehicle
+    _icon: "\U0001F697"
+  - _label: Npc
+    _icon: "\U0001F465"
+  - _label: Manager
+    _icon: "\u2699\uFE0F"

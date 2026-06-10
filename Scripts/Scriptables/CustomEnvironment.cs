@@ -20,7 +20,6 @@
 */
 using UnityEngine;
 using Palexen.Tools;
-using System.Collections.Generic;
 
 namespace Palexen.Scriptables
 {
@@ -59,7 +58,7 @@ namespace Palexen.Scriptables
 
         [MyHeader("Quick Prefabs Settings")]
         [EasyDropdown("Prefab Collection")] public string prefabIndex;
-        public List<QuickPrefab> quickPrefabs = new();
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.warningMessage)] public EntityManager _entities;
 
         [Space(12)]
 
@@ -107,7 +106,10 @@ namespace Palexen.Scriptables
         {
             scriptablesFolderPath = path;
         }
-        
+
+        /// <summary>
+        /// This method is used to get the current prefab index.
+        /// </summary>
         public string CurrentPrefab
         {
             get {  return prefabIndex; }
@@ -115,6 +117,12 @@ namespace Palexen.Scriptables
             {
                 prefabIndex = value;
             }
+        }
+
+        public EntityManager Entities
+        {
+            get { return _entities; }
+            set { _entities = value; }
         }
 
         #endregion

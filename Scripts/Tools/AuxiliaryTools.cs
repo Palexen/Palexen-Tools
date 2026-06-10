@@ -899,15 +899,15 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
 
-            if (setting != null && setting.quickPrefabs != null && setting.quickPrefabs.Count > 0)
+            if (setting._entities != null && setting._entities.entities != null && setting._entities.entities.Count > 0)
             {
-                cachedOptions = new string[setting.quickPrefabs.Count];
+                cachedOptions = new string[setting._entities.entities.Count];
 
-                for (int i = 0; i < setting.quickPrefabs.Count; i++)
+                for (int i = 0; i < setting._entities.entities.Count; i++)
                 {
-                    if (setting.quickPrefabs[i] != null)
+                    if (setting._entities.entities[i] != null)
                     {
-                        cachedOptions[i] = setting.quickPrefabs[i]._label;
+                        cachedOptions[i] = setting._entities.entities[i]._label;
                     }
                     else
                     {
@@ -923,7 +923,14 @@ namespace Palexen.Tools
                 return;
             }
 
-            EditorGUI.LabelField(position, label.text, $"No Entities yet, click + button to Add new one!");
+            EditorGUI.LabelField(position, label.text, $"No Entities yet, click Create Entity button and start adding!");
+
+            if(GUILayout.Button("Create Entity", PalexenEditorStyles.BigButton))
+            {
+                CreateNewEntityManager c = new();
+                c.CreateNewEntityManagerAsset();
+                setting.Entities = c.GetCurrent();
+            }
         }
     }
 #endif

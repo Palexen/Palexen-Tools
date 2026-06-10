@@ -112,11 +112,11 @@ namespace Palexen.Overlays
                 return;
             }
 
-            int currentIndex = setting.quickPrefabs.FindIndex(p => p != null && p._label == setting.prefabIndex);
+            int currentIndex = setting._entities.entities.FindIndex(p => p != null && p._label == setting.prefabIndex);
             if (currentIndex == -1) currentIndex = 0;
 
-            string iconStr = setting.quickPrefabs.Count > currentIndex && setting.quickPrefabs[currentIndex] != null
-                ? setting.quickPrefabs[currentIndex]._icon
+            string iconStr = setting._entities.entities.Count > currentIndex && setting._entities.entities[currentIndex] != null
+                ? setting._entities.entities[currentIndex]._icon
                 : "📦";
 
             foreach (var prefab in prefabList)
@@ -144,28 +144,31 @@ namespace Palexen.Overlays
             prefabList.Clear();
             if (setting == null) return;
 
-            int currentIndex = setting.quickPrefabs.FindIndex(p => p != null && p._label == setting.prefabIndex);
-            if (currentIndex == -1) currentIndex = 0;
-
-            if (currentIndex >= 0 && setting.quickPrefabs.Count > currentIndex && setting.quickPrefabs[currentIndex] != null)
+            if (setting._entities != null)
             {
-                string[] guids = AssetDatabase.FindAssets($"l:{setting.quickPrefabs[currentIndex]._label}", new[] { "Assets" });
-                HashSet<string> processedPaths = new();
+                int currentIndex = setting._entities.entities.FindIndex(p => p != null && p._label == setting.prefabIndex);
+                if (currentIndex == -1) currentIndex = 0;
 
-                foreach (string guid in guids)
+                if (currentIndex >= 0 && setting._entities.entities.Count > currentIndex && setting._entities.entities[currentIndex] != null)
                 {
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-                    if (processedPaths.Contains(path)) continue;
-                    processedPaths.Add(path);
+                    string[] guids = AssetDatabase.FindAssets($"l:{setting._entities.entities[currentIndex]._label}", new[] { "Assets" });
+                    HashSet<string> processedPaths = new();
 
-                    GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-
-                    if (prefab != null)
+                    foreach (string guid in guids)
                     {
-                        var assetType = PrefabUtility.GetPrefabAssetType(prefab);
-                        if (assetType == PrefabAssetType.Regular || assetType == PrefabAssetType.Variant)
+                        string path = AssetDatabase.GUIDToAssetPath(guid);
+                        if (processedPaths.Contains(path)) continue;
+                        processedPaths.Add(path);
+
+                        GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                        if (prefab != null)
                         {
-                            prefabList.Add(prefab);
+                            var assetType = PrefabUtility.GetPrefabAssetType(prefab);
+                            if (assetType == PrefabAssetType.Regular || assetType == PrefabAssetType.Variant)
+                            {
+                                prefabList.Add(prefab);
+                            }
                         }
                     }
                 }
@@ -241,13 +244,16 @@ namespace Palexen.Overlays
             string pathT = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
 
-            foreach (var entity in setting.quickPrefabs)
+            if (setting._entities != null)
             {
-                menu.AddItem(
-                    new GUIContent(entity._label),
-                    setting.CurrentPrefab == entity._label,
-                    () => SetEntity(entity._label)
-                );
+                foreach (var entity in setting._entities.entities)
+                {
+                    menu.AddItem(
+                        new GUIContent(entity._label),
+                        setting.CurrentPrefab == entity._label,
+                        () => SetEntity(entity._label)
+                    );
+                }
             }
 
             menu.ShowAsContext();
