@@ -121,9 +121,10 @@ namespace Palexen.Overlays
 
             foreach (var prefab in prefabList)
             {
-                EditorToolbarButton characterButton = new();
-
-                characterButton.text = $"{iconStr} {prefab.name}";
+                EditorToolbarButton characterButton = new()
+                {
+                    text = $"{iconStr} {prefab.name}"
+                };
                 characterButton.clicked += () => InstantiatePrefabInScene(prefab);
                 characterButton.tooltip = $"Click to Instantiate: {prefab.name}.";
 

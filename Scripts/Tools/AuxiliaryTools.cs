@@ -686,13 +686,13 @@ namespace Palexen.Tools
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-
             var minMaxAttribute = (VectorSliderAttribute)attribute;
             var propertyType = property.propertyType;
 
-            label.tooltip = minMaxAttribute.min.ToString("F2") + " to " + minMaxAttribute.max.ToString("F2");
+            GUIContent myLabel = new GUIContent(label);
+            myLabel.tooltip = $"{minMaxAttribute.min:F2} to {minMaxAttribute.max:F2}";
 
-            Rect controlRect = EditorGUI.PrefixLabel(position, label);
+            Rect controlRect = EditorGUI.PrefixLabel(position, myLabel);
 
             Rect[] splittedRect = SplitRect(controlRect, 3);
 

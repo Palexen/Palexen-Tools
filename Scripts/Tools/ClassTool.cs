@@ -22,6 +22,7 @@ using System;
 using UnityEngine;
 using Palexen.Levels;
 using Palexen.Gameplay;
+using UnityEngine.Audio;
 using Palexen.Sequences;
 using UnityEngine.Events;
 using Palexen.Scriptables;
@@ -31,6 +32,7 @@ using Palexen.CustomPhysics;
 using Palexen.Gameplay.Input;
 using Palexen.Gameplay.Player;
 using System.Collections.Generic;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -63,6 +65,8 @@ namespace Palexen.Tools
     public enum Initializer { auto, manual }
     public enum LevelLoadMode { catchAndLoad, loadOnly }
     public enum LoadingBarMode { none, slider, fill }
+
+    public enum AmbienceZoneBehaviour { ambience, snapshots }
 
     #endregion
 
@@ -166,6 +170,19 @@ namespace Palexen.Tools
     {
         public string _label = "Prop";
         public string _icon = "📦";
+    }
+
+    #endregion
+
+    #region AUDIO SNAPSHOT
+
+    [Serializable]
+    public class AudioSnapshot
+    {
+        public string _SnapshotName;
+        [FieldColor(FieldPropertyColor.yellow)] public AudioMixerSnapshot _snapshot;
+        [Range(0, 1)] public float _weightEnter;
+        [Range(0, 1)] public float _weightExit;
     }
 
     #endregion
@@ -668,6 +685,7 @@ namespace Palexen.Tools
     public class AmbienceZoneEditor : Editor
     {
         AmbienceZone ga;
+        SerializedProperty _behaviour;
         SerializedProperty _via;
         SerializedProperty _tagName;
         SerializedProperty _layer;
@@ -676,10 +694,19 @@ namespace Palexen.Tools
         SerializedProperty _source;
         SerializedProperty _minMax;
         SerializedProperty _speed;
+        SerializedProperty _master;
+        SerializedProperty _timeToReach;
+        SerializedProperty _snapshots;
+        SerializedProperty _weightsOnEnter;
+        SerializedProperty _weightsOnExit;
+        SerializedProperty _onTriggerEnter;
+        SerializedProperty _onTriggerExit;
+        SerializedProperty _snapshotsSetup;
 
         private void OnEnable()
         {
             ga = (AmbienceZone)target;
+            _behaviour = serializedObject.FindProperty("_behaviour");
             _via = serializedObject.FindProperty("_targetAllowedVia");
             _tagName = serializedObject.FindProperty("_tagName");
             _layer = serializedObject.FindProperty("_layerMask");
@@ -688,12 +715,18 @@ namespace Palexen.Tools
             _source = serializedObject.FindProperty("ambienceZoneSource");
             _minMax = serializedObject.FindProperty("minMaxVolume");
             _speed = serializedObject.FindProperty("updateSpeed");
+            _master = serializedObject.FindProperty("_master");
+            _timeToReach = serializedObject.FindProperty("_timeToReach");
+            _snapshots = serializedObject.FindProperty("_snapshots");
+            _weightsOnEnter = serializedObject.FindProperty("_weightsOnEnter");
+            _weightsOnExit = serializedObject.FindProperty("_weightsOnExit");
+            _onTriggerEnter = serializedObject.FindProperty("_onTriggerEnter");
+            _onTriggerExit = serializedObject.FindProperty("_onTriggerExit");
+            _snapshotsSetup = serializedObject.FindProperty("_snapshotsSetup");
         }
 
         public override void OnInspectorGUI()
         {
-            //DrawDefaultInspector();
-
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
@@ -705,6 +738,7 @@ namespace Palexen.Tools
 
             serializedObject.Update();
 
+            EditorGUILayout.PropertyField(_behaviour);
             EditorGUILayout.PropertyField(_via);
 
             EditorGUILayout.Space(5);
@@ -724,11 +758,37 @@ namespace Palexen.Tools
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
             EditorGUILayout.Space(5);
 
-            EditorGUILayout.PropertyField(_state);
-            EditorGUILayout.PropertyField(_affect);
-            EditorGUILayout.PropertyField(_source);
-            EditorGUILayout.PropertyField(_minMax);
-            EditorGUILayout.PropertyField(_speed);
+            if (ga.Behaviour == AmbienceZoneBehaviour.ambience)
+            {
+                EditorGUILayout.PropertyField(_state);
+                EditorGUILayout.PropertyField(_affect);
+                EditorGUILayout.PropertyField(_source);
+                EditorGUILayout.PropertyField(_minMax);
+                EditorGUILayout.PropertyField(_speed);
+            }
+
+            if (ga.Behaviour == AmbienceZoneBehaviour.snapshots)
+            {
+                EditorGUILayout.PropertyField(_master);
+                EditorGUILayout.PropertyField(_timeToReach);
+                /*EditorGUILayout.PropertyField(_snapshots);
+                EditorGUILayout.PropertyField(_weightsOnEnter);
+                EditorGUILayout.PropertyField(_weightsOnExit);*/
+
+                EditorGUILayout.Space(10);
+
+                EditorGUILayout.BeginHorizontal();
+
+                GUILayout.Label("Snapshot");
+                GUILayout.Label("On Enter");
+                GUILayout.Label("On Exit");
+
+                EditorGUILayout.EndHorizontal();
+
+                PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+                EditorGUILayout.PropertyField(_snapshotsSetup, true);
+            }
 
             EditorGUILayout.Separator();
             GUI.color = setting.contextSeparatorColor;
@@ -736,7 +796,30 @@ namespace Palexen.Tools
             GUI.color = Color.white;
             EditorGUILayout.Separator();
 
-            serializedObject.ApplyModifiedProperties();
+            if (!ga.AddEventsCapability)
+            {
+                if (GUILayout.Button("Add Events Capability", PalexenEditorStyles.BigButton))
+                {
+                    ga.AddEventsCapability = true;
+                }
+            }
+
+            if (ga.AddEventsCapability)
+            {
+                EditorGUILayout.PropertyField(_onTriggerEnter);
+                EditorGUILayout.PropertyField(_onTriggerExit);
+
+                if (GUILayout.Button("Remove Events Capability", PalexenEditorStyles.BigButton))
+                {
+                    ga.AddEventsCapability = false;
+                }
+            }
+
+            EditorGUILayout.Separator();
+            GUI.color = setting.contextSeparatorColor;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            EditorGUILayout.Separator();
 
             if (ga.ambienceZoneSource == null)
             {
@@ -808,8 +891,54 @@ namespace Palexen.Tools
                     DestroyImmediate(ga.gameObject.GetComponent<ShapeVisualizer>());
                 }
             }
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
+    #endregion
+
+    #region AUDIO SNAPSHOT DRAWER
+
+    [CustomPropertyDrawer(typeof(AudioSnapshot))]
+    public class AudioSnapshotEditor : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            SerializedProperty snapshot = property.FindPropertyRelative("_snapshot");
+            SerializedProperty weightEnter = property.FindPropertyRelative("_weightEnter");
+            SerializedProperty weightExit = property.FindPropertyRelative("_weightExit");
+
+            EditorGUI.BeginProperty(position, label, property);
+
+            Rect contentPos = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+
+            float halfWidth = position.width / 3f;
+
+            Rect snapshotRect = new Rect(position.x, position.y, halfWidth - 5, contentPos.height);
+            Rect weightRectEnter = new Rect(position.x + halfWidth, contentPos.y, halfWidth - 5, contentPos.height);
+            Rect weightRectExit = new Rect(position.x + (halfWidth * 2), contentPos.y, halfWidth - 5, contentPos.height);
+
+            int oldIndent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            EditorGUI.PropertyField(snapshotRect, snapshot, GUIContent.none);
+            EditorGUI.PropertyField(weightRectEnter, weightEnter, GUIContent.none);
+            EditorGUI.PropertyField(weightRectExit, weightExit, GUIContent.none);
+
+            EditorGUI.indentLevel = oldIndent;
+
+            /*weightEnter.floatValue = EditorGUI.Slider(weightRectEnter, weightEnter.floatValue, 0f, 1f);
+            weightExit.floatValue = EditorGUI.Slider(weightRectExit, weightExit.floatValue, 0f, 1f);*/
+
+            EditorGUI.EndProperty();
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUIUtility.singleLineHeight;
+        }
+    }
+
     #endregion
 
     #region TRIGGER EVENT

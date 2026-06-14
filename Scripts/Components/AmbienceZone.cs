@@ -20,6 +20,9 @@
 */
 using UnityEngine;
 using Palexen.Tools;
+using UnityEngine.Audio;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace Palexen.Audio.Atmos
 {
@@ -27,6 +30,9 @@ namespace Palexen.Audio.Atmos
     public class AmbienceZone : MonoBehaviour
     {
         #region VARIABLES
+
+        [MyHeader("Behaviour")]
+        public AmbienceZoneBehaviour _behaviour;
 
         [MyHeader("Activation Mode")]
         [Tooltip("This is the activation mode, select it according to your preference")]
@@ -49,9 +55,63 @@ namespace Palexen.Audio.Atmos
         [VectorSlider(0, 1)] public Vector2 minMaxVolume = new(0, 1);
         public float updateSpeed = 1f;
 
+        [MyHeader("Audio Mixer Settings")]
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)] public AudioMixer _master;
+        public float _timeToReach;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)] public AudioMixerSnapshot[] _snapshots;
+        [Range(0, 1)] public float[] _weightsOnEnter;
+        [Range(0, 1)] public float[] _weightsOnExit;
+
+        public AudioSnapshot[] _snapshotsSetup;
+
+        List<AudioMixerSnapshot> snapshots;
+        List<float> weightsOnEnter;
+        List<float> weightsOnExit;
+
+        [MyHeader("Events")]
+        public bool addEvents;
+        public UnityEvent _onTriggerEnter;
+        public UnityEvent _onTriggerExit;
+
         #endregion
 
         #region METHODS
+
+        /// <summary>
+        /// Get and Set state
+        /// </summary>
+        public AmbienceZoneBehaviour Behaviour { get { return _behaviour; } set { _behaviour = value; } }
+
+        public bool AddEventsCapability { get { return addEvents; } set { addEvents = value; } }
+
+        private void Start()
+        {
+            if (Behaviour == AmbienceZoneBehaviour.snapshots)
+            {
+                snapshots = new List<AudioMixerSnapshot>();
+                weightsOnEnter = new List<float>();
+                weightsOnExit = new List<float>();
+
+                foreach (var s in _snapshotsSetup)
+                {
+                    snapshots.Add(s._snapshot);
+                }
+
+                foreach(var a in _snapshotsSetup)
+                {
+                   weightsOnEnter.Add(a._weightEnter);
+                }
+
+                foreach (var b in _snapshotsSetup)
+                {
+                    weightsOnExit.Add(b._weightExit);
+                }
+
+                _snapshots = snapshots.ToArray();
+                _weightsOnEnter = weightsOnEnter.ToArray();
+                _weightsOnExit = weightsOnExit.ToArray();
+            }
+        }
 
         private void Update()
         {
@@ -67,14 +127,17 @@ namespace Palexen.Audio.Atmos
         /// fade-in or fade-out is in progress.</remarks>
         void UpdateAudio()
         {
-            if (transitionState == AudioTransitionState.fadeIn)
+            if (Behaviour == AmbienceZoneBehaviour.ambience)
             {
-                ambienceZoneSource.volume = Mathf.MoveTowards(ambienceZoneSource.volume, minMaxVolume.y, Time.deltaTime * updateSpeed);
-            }
+                if (transitionState == AudioTransitionState.fadeIn)
+                {
+                    ambienceZoneSource.volume = Mathf.MoveTowards(ambienceZoneSource.volume, minMaxVolume.y, Time.deltaTime * updateSpeed);
+                }
 
-            if (transitionState == AudioTransitionState.fadeOut)
-            {
-                ambienceZoneSource.volume = Mathf.MoveTowards(ambienceZoneSource.volume, minMaxVolume.x, Time.deltaTime * updateSpeed);
+                if (transitionState == AudioTransitionState.fadeOut)
+                {
+                    ambienceZoneSource.volume = Mathf.MoveTowards(ambienceZoneSource.volume, minMaxVolume.x, Time.deltaTime * updateSpeed);
+                }
             }
         }
 
@@ -86,12 +149,25 @@ namespace Palexen.Audio.Atmos
 
                     if (other.CompareTag(_tagName))
                     {
-                        transitionState = AudioTransitionState.fadeIn;
-
-                        if(affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                        if (Behaviour == AmbienceZoneBehaviour.ambience)
                         {
-                            GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.TransitionTo = AudioTransitionState.fadeOut;
+                            transitionState = AudioTransitionState.fadeIn;
+
+                            if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                            {
+                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                ga.TransitionTo = AudioTransitionState.fadeOut;
+                            }
+                        }
+
+                        if(Behaviour == AmbienceZoneBehaviour.snapshots)
+                        {
+                            _master.TransitionToSnapshots(_snapshots, _weightsOnEnter, _timeToReach);
+                        }
+
+                        if (AddEventsCapability)
+                        {
+                            _onTriggerEnter.Invoke();
                         }
                     }
 
@@ -101,12 +177,25 @@ namespace Palexen.Audio.Atmos
 
                     if (((1 << other.gameObject.layer) & _layerMask) != 0)
                     {
-                        transitionState = AudioTransitionState.fadeIn;
-
-                        if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                        if (Behaviour == AmbienceZoneBehaviour.ambience)
                         {
-                            GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.TransitionTo = AudioTransitionState.fadeOut;
+                            transitionState = AudioTransitionState.fadeIn;
+
+                            if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                            {
+                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                ga.TransitionTo = AudioTransitionState.fadeOut;
+                            }
+                        }
+
+                        if(Behaviour == AmbienceZoneBehaviour.snapshots)
+                        {
+                            _master.TransitionToSnapshots(_snapshots, _weightsOnEnter, _timeToReach);
+                        }
+
+                        if (AddEventsCapability)
+                        {
+                            _onTriggerEnter.Invoke();
                         }
                     }
 
@@ -122,12 +211,25 @@ namespace Palexen.Audio.Atmos
 
                     if (other.CompareTag(_tagName))
                     {
-                        transitionState = AudioTransitionState.fadeOut;
-
-                        if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                        if (Behaviour == AmbienceZoneBehaviour.ambience)
                         {
-                            GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.TransitionTo = AudioTransitionState.fadeIn;
+                            transitionState = AudioTransitionState.fadeOut;
+
+                            if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                            {
+                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                ga.TransitionTo = AudioTransitionState.fadeIn;
+                            }
+                        }
+
+                        if (Behaviour == AmbienceZoneBehaviour.snapshots)
+                        {
+                            _master.TransitionToSnapshots(_snapshots, _weightsOnExit, _timeToReach);
+                        }
+
+                        if (AddEventsCapability)
+                        {
+                            _onTriggerExit.Invoke();
                         }
                     }
 
@@ -137,12 +239,25 @@ namespace Palexen.Audio.Atmos
 
                     if (((1 << other.gameObject.layer) & _layerMask) != 0)
                     {
-                        transitionState = AudioTransitionState.fadeOut;
-
-                        if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                        if (Behaviour == AmbienceZoneBehaviour.ambience)
                         {
-                            GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
-                            ga.TransitionTo = AudioTransitionState.fadeIn;
+                            transitionState = AudioTransitionState.fadeOut;
+
+                            if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
+                            {
+                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                ga.TransitionTo = AudioTransitionState.fadeIn;
+                            }
+                        }
+
+                        if (Behaviour == AmbienceZoneBehaviour.snapshots)
+                        {
+                            _master.TransitionToSnapshots(_snapshots, _weightsOnExit, _timeToReach);
+                        }
+
+                        if (AddEventsCapability)
+                        {
+                            _onTriggerExit.Invoke();
                         }
                     }
 
