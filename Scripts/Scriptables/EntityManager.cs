@@ -98,7 +98,7 @@ namespace Palexen.Scriptables
         public static EntityManager tempAsset;
 
 #if PALEXEN_UP_TOOLBAR
-        [MenuItem("Animator Library/Create New Entity Manager")]
+        [MenuItem("Entity Manager/Create New Entity Manager")]
 #else
         [MenuItem("Palexen/Create New Entity Manager", false, 1)]
 #endif
