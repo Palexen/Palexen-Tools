@@ -2217,7 +2217,136 @@ namespace Palexen.Tools
     {
         public override void OnInspectorGUI()
         {
+            // HIDE INTERNAL
+        }
+    }
 
+    #endregion
+
+    #region PREFAB PAINTER
+
+    [CustomEditor(typeof(PrefabPainter))]
+    public class PrefabPainterEditor : Editor
+    {
+        PrefabPainter _pp;
+        SerializedProperty _targetLayer;
+        SerializedProperty _prefabs;
+        SerializedProperty _YRandomizer;
+
+        private void OnEnable()
+        {
+            _pp = (PrefabPainter)target;
+            _targetLayer = serializedObject.FindProperty("_targetLayer");
+            _prefabs = serializedObject.FindProperty("_prefabs");
+            _YRandomizer = serializedObject.FindProperty("_YRandomizer");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Prefab Painter</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Prefab Painter \n" +
+                "Hold <color=red>shift</color> + click to create <color=green>waypoint</color>",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_targetLayer);
+            GUILayout.Label($"<color={"#" + setting.headerColorValue.ConvertToHex()}>Prefabs</color>",
+                PalexenEditorStyles.CoolTitle(setting.headerSize, TextAnchor.MiddleLeft));
+            EditorGUILayout.PropertyField(_prefabs);
+            EditorGUILayout.PropertyField(_YRandomizer);
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void OnSceneGUI()
+        {
+            Paint();
+        }
+
+        void Paint()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            Handles.color = setting.gizmosColor;
+
+            Event e = Event.current;
+            int controlID = GUIUtility.GetControlID(FocusType.Passive);
+
+            if (e.shift)
+            {
+                HandleUtility.AddDefaultControl(controlID);
+
+                Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+                if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _pp._targetLayer))
+                {
+                    switch (setting.contextGizmoForm)
+                    {
+                        case GizmoForm.sphere:
+                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.cube:
+                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.cylinder:
+                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.cone:
+                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.arrow:
+                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.circle:
+                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.square:
+                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                        case GizmoForm.dot:
+                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            break;
+                    }
+                }
+
+                if (e.type == EventType.MouseDown && e.button == 0)
+                {
+                    int i = UnityEngine.Random.Range(0, _pp._prefabs.Length);
+
+                    GameObject[] prefab = _pp._prefabs;
+                    GameObject _t = prefab[i];
+
+                    Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+
+                    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _pp._targetLayer))
+                    {
+                        Undo.IncrementCurrentGroup();
+                        GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
+                        clone.transform.position = hit.point;
+
+                        Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp._YRandomizer.x, _pp._YRandomizer.y), hit.normal);
+
+                        clone.transform.rotation = randomYaw * alignToSurface;
+
+                        clone.transform.parent = _pp.transform;
+
+                        Undo.RegisterCreatedObjectUndo(clone, "Prefabs Placed!");
+                        // Other Actions
+                        EditorUtility.SetDirty(_pp.gameObject);
+
+                        e.Use();
+                    }
+                }
+            }
         }
     }
 
