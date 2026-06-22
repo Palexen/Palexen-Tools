@@ -62,6 +62,7 @@ namespace Palexen.Tools
 
     public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
     public enum DialogAudioFeature { useAudio, noAudio }
+    public enum DialogOrder { sequenced, random }
     public enum Initializer { auto, manual }
     public enum LevelLoadMode { catchAndLoad, loadOnly }
     public enum LoadingBarMode { none, slider, fill }
@@ -1611,6 +1612,7 @@ namespace Palexen.Tools
         SerializedProperty _afterComplete;
         SerializedProperty _langAudioSource;
         SerializedProperty _subtitles;
+        SerializedProperty _order;
         SerializedProperty _dialogSequencer;
 
         SerializedProperty isPlaying;
@@ -1629,6 +1631,7 @@ namespace Palexen.Tools
             _afterComplete = serializedObject.FindProperty("_afterComplete");
             _langAudioSource = serializedObject.FindProperty("_langAudioSource");
             _subtitles = serializedObject.FindProperty("_subtitles");
+            _order = serializedObject.FindProperty("_order");
             _dialogSequencer = serializedObject.FindProperty("_dialogSequencer");
 
             isPlaying = serializedObject.FindProperty("isPlaying");
@@ -1671,6 +1674,7 @@ namespace Palexen.Tools
 
             GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Sequences & Languages Setup</color>",
                 PalexenEditorStyles.CoolTitle(setting.scriptTitleSize, TextAnchor.MiddleLeft));
+            EditorGUILayout.PropertyField(_order);
             EditorGUILayout.PropertyField(_dialogSequencer);
 
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
