@@ -468,7 +468,7 @@ namespace Palexen.Tools
 
         static void PaintHierarchy(int instanceID, Rect slection)
         {
-#if UNITY_6000_0_OR_NEWER
+#if UNITY_6000_3_OR_NEWER
             GameObject obj = EditorUtility.EntityIdToObject(instanceID) as GameObject;
 #else
             GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
