@@ -25,6 +25,8 @@ using Palexen.Misc;
 using System.Reflection;
 using Palexen.Scriptables;
 using System.Collections.Generic;
+using UnityEngine.AI;
+using UnityEngine.Playables;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -38,6 +40,7 @@ namespace Palexen.Tools
     public enum ShowObjectMessage { no, message, warningMessage, errorMessage }
     public enum GizmoForm { sphere, cube, cylinder, cone, arrow, circle, square, dot }
     public enum TurnOnScriptDescription { On, Off }
+    public enum HierarchyIndentation { full, compact }
 
     #endregion
 
@@ -449,13 +452,150 @@ namespace Palexen.Tools
 
 #endif
 
+    #endregion
+
+    #region CUSTOM HIERARCHY
+
+#if UNITY_EDITOR
+
+    [InitializeOnLoad]
+    public class HierarchyColors
+    {
+        static HierarchyColors()
+        {
+            EditorApplication.hierarchyWindowItemOnGUI += PaintHierarchy;
+        }
+
+        static void PaintHierarchy(int instanceID, Rect slection)
+        {
+#if UNITY_6000_0_OR_NEWER
+            GameObject obj = EditorUtility.EntityIdToObject(instanceID) as GameObject;
+#else
+            GameObject obj = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+#endif
+
+            if (obj == null) return;
+
+            HierarchyColor thisColor = obj.GetComponentInParent<HierarchyColor>();
+            if (thisColor == null) return;
+
+            bool isSelected = Selection.Contains(instanceID);
+            if (isSelected) return;
+
+            float startX = 0f;
+            float totalWidth = 0f;
+
+            switch (thisColor.Indentation)
+            {
+                case HierarchyIndentation.full:
+                    startX = slection.x - 28;
+                    totalWidth = slection.width + slection.x - startX + 16;
+                    break;
+
+                case HierarchyIndentation.compact:
+                    startX = slection.x - 16;
+                    totalWidth = slection.width + slection.x - startX + 16;
+                    break;
+            }
+
+            Rect indentedRowRect = new Rect(startX, slection.y, totalWidth, slection.height);
+            EditorGUI.DrawRect(indentedRowRect, thisColor.MyColor);
+
+            List<Texture2D> iconsToPaint = new List<Texture2D>();
+
+            if (thisColor.Icons != null && thisColor.Icons.Length > 0)
+            {
+                foreach (var manualIcon in thisColor.Icons)
+                {
+                    if (manualIcon != null) iconsToPaint.Add(manualIcon);
+                }
+            }
+
+            if (iconsToPaint.Count == 0)
+            {
+                var tm = obj.GetComponent<Transform>();
+                if (tm != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(tm));
+
+                var rb = obj.GetComponent<Rigidbody>();
+                if (rb != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(rb));
+
+                var _as = obj.GetComponent<AudioSource>();
+                if (_as != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(_as));
+
+                var ps = obj.GetComponent<ParticleSystem>();
+                if (ps != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(ps));
+
+                var nma = obj.GetComponent<NavMeshAgent>();
+                if (nma != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(nma));
+
+                var col = obj.GetComponent<Collider>();
+                if (col != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(col));
+
+                var j = obj.GetComponent<Joint>();
+                if (j != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(j));
+
+                var w = obj.GetComponent<WheelCollider>();
+                if (w != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(w));
+
+                var p = obj.GetComponent<PlayableDirector>();
+                if (p != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(p));
+
+                var ac = obj.GetComponent<Animator>();
+                if (ac != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(ac));
+
+                var a = obj.GetComponent<Animation>();
+                if (a != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(a));
+
+                var ca = obj.GetComponent<Camera>();
+                if (ca != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(ca));
+
+                var li = obj.GetComponent<Light>();
+                if (li != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(li));
+
+                var lp = obj.GetComponent<LightProbeGroup>();
+                if (lp != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(lp));
+
+                var r = obj.GetComponent<ReflectionProbe>();
+                if (r != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(r));
+
+                var m = obj.GetComponent<MonoBehaviour>();
+                if (m != null) iconsToPaint.Add(AssetPreview.GetMiniThumbnail(m));
+            }
+
+            if (iconsToPaint.Count > 0)
+            {
+                float iconSize = slection.height - 2f;
+
+                float rightEdgeX = slection.x + slection.width - 20f;
+
+                for (int i = 0; i < iconsToPaint.Count; i++)
+                {
+                    float currentIconX = rightEdgeX - (i * 18f);
+
+                    Rect iconRect = new Rect(currentIconX, slection.y + 1f, iconSize, iconSize);
+                    GUI.DrawTexture(iconRect, iconsToPaint[i], ScaleMode.ScaleToFit, true);
+                }
+            }
+
+            GUIStyle style = new();
+            style.normal.textColor = thisColor.FontColor;
+            style.fontStyle = thisColor.MyFontStyle;
+            style.alignment = TextAnchor.MiddleLeft;
+
+            Rect textRect = new(slection.x + 18, slection.y, slection.width, slection.height);
+            EditorGUI.LabelField(textRect, obj.name, style);
+        }
+    }
+
+#endif
+
 #endregion
 
     #region CUSTOM SCRIPT
 
     #region Example Script
 #if UNITY_EDITOR
-        [CustomEditor(typeof(ExampleScript))]
+            [CustomEditor(typeof(ExampleScript))]
     public class Example : Editor
     {
         GUIStyle buttonRegionStyle;

@@ -33,7 +33,6 @@ using Palexen.Gameplay.Input;
 using Palexen.Gameplay.Player;
 using System.Collections.Generic;
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -2351,6 +2350,55 @@ namespace Palexen.Tools
                     }
                 }
             }
+        }
+    }
+
+    #endregion
+
+    #region HIERARCHY COLOR
+
+    [CustomEditor(typeof(HierarchyColor))]
+    [CanEditMultipleObjects]
+    public class HierarchyColorEditor : Editor
+    {
+        HierarchyColor _hc;
+        SerializedProperty _indentation;
+        SerializedProperty _myColor;
+        SerializedProperty _fontStyle;
+        SerializedProperty _fontColor;
+        SerializedProperty _icons;
+
+        private void OnEnable()
+        {
+            _hc = (HierarchyColor)target;
+            _indentation = serializedObject.FindProperty("_indentation");
+            _myColor = serializedObject.FindProperty("_myColor");
+            _fontStyle = serializedObject.FindProperty("_fontStyle");
+            _fontColor = serializedObject.FindProperty("_fontColor");
+            _icons = serializedObject.FindProperty("_icons");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+
+            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Custom Hierarchy</color>",
+                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+
+            GUILayout.Box("Customize the view of this object in your hierarchy!",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+
+            serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_indentation);
+            EditorGUILayout.PropertyField(_myColor);
+            EditorGUILayout.PropertyField(_fontStyle);
+            EditorGUILayout.PropertyField(_fontColor);
+            EditorGUILayout.PropertyField(_icons);
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 
