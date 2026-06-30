@@ -66,24 +66,24 @@ namespace Palexen.Tools
             EditorGUILayout.Space();
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-            for (int i = 0; i < asyncLoader.gameplayResources.Length; i++)
+            for (int i = 0; i < asyncLoader.GameplayResources.Length; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                asyncLoader.gameplayResources[i] = (GameObject)EditorGUILayout.ObjectField(asyncLoader.gameplayResources[i], typeof(GameObject), false);
-                bool isActive = EditorGUILayout.Toggle(asyncLoader.gameplayResources[i].activeSelf, GUILayout.Width(20));
-                if (isActive != asyncLoader.gameplayResources[i].activeSelf)
+                asyncLoader.GameplayResources[i] = (GameObject)EditorGUILayout.ObjectField(asyncLoader.GameplayResources[i], typeof(GameObject), false);
+                bool isActive = EditorGUILayout.Toggle(asyncLoader.GameplayResources[i].activeSelf, GUILayout.Width(20));
+                if (isActive != asyncLoader.GameplayResources[i].activeSelf)
                 {
-                    asyncLoader.gameplayResources[i].SetActive(isActive);
+                    asyncLoader.GameplayResources[i].SetActive(isActive);
                 }
 
                 if (GUILayout.Button("Activate"))
                 {
-                    asyncLoader.gameplayResources[i].SetActive(true);
+                    asyncLoader.GameplayResources[i].SetActive(true);
                 }
 
                 if (GUILayout.Button("Deactivate"))
                 {
-                    asyncLoader.gameplayResources[i].SetActive(false);
+                    asyncLoader.GameplayResources[i].SetActive(false);
                 }
                 EditorGUILayout.EndHorizontal();
             }

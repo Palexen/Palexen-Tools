@@ -34,7 +34,7 @@ namespace Palexen.Tools
         #region VARIABLES
 
         public static LangManager instance;
-        public Language _lang;
+        [SerializeField] private Language _lang;
 
         #endregion
 
@@ -121,6 +121,25 @@ namespace Palexen.Tools
 
         #endregion
 
+        #region PROPERTIES
+
+        /// <summary>
+        /// Set the language using the enum, this will update all dialog systems and text conversions in the scene to reflect the new language setting.
+        /// </summary>
+        public Language Lang
+        {
+            get { return _lang; }
+
+            set
+            {
+                _lang = value;
+                UpdateDialogSystems();
+                UpdateCC();
+            }
+        }
+
+        #endregion
+
         #region API
 
         /// <summary>
@@ -136,22 +155,6 @@ namespace Palexen.Tools
             _lang = newLang;
             UpdateDialogSystems();
             UpdateCC();
-        }
-
-
-        /// <summary>
-        /// Set the language using the enum, this will update all dialog systems and text conversions in the scene to reflect the new language setting.
-        /// </summary>
-        public Language Lang
-        {
-            get { return _lang; }
-
-            set
-            {
-                _lang = value;
-                UpdateDialogSystems();
-                UpdateCC();
-            }
         }
 
         /// <summary>

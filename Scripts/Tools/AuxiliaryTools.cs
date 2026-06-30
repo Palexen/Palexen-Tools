@@ -1159,10 +1159,10 @@ namespace Palexen.Tools
         #endregion
 
         #region AUDIO
-        [MenuItem("GameObject/Palexen/Audio/Ambience (Zone)", false, 0)]
+        [MenuItem("GameObject/Palexen/Audio/Atmos (Zone)", false, 0)]
         static void CreateAmbienceZone()
         {
-            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Ambience Zone");
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Atmos Zone");
 
             if (prefabAsset != null)
             {
@@ -1177,10 +1177,10 @@ namespace Palexen.Tools
             }
         }
 
-        [MenuItem("GameObject/Palexen/Audio/Ambience", false, 0)]
+        [MenuItem("GameObject/Palexen/Audio/Atmos", false, 0)]
         static void CreateAmbience()
         {
-            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Audio Ambience");
+            GameObject prefabAsset = Resources.Load<GameObject>("Prefabs/Atmos");
 
             if (prefabAsset != null)
             {

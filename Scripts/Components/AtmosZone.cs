@@ -26,63 +26,68 @@ using System.Collections.Generic;
 
 namespace Palexen.Audio.Atmos
 {
-    [AddComponentMenu("Palexen/Atmos/Ambience Zone")]
-    public class AmbienceZone : MonoBehaviour
+    [AddComponentMenu("Palexen/Atmos/Atmos Zone")]
+    public class AtmosZone : MonoBehaviour
     {
         #region VARIABLES
 
         [MyHeader("Behaviour")]
-        public AmbienceZoneBehaviour _behaviour;
+        [SerializeField] private AmbienceZoneBehaviour _behaviour;
 
         [MyHeader("Activation Mode")]
         [Tooltip("This is the activation mode, select it according to your preference")]
-        public TargetAllowedVia _targetAllowedVia = TargetAllowedVia.tag;
+        [SerializeField] private TargetAllowedVia _targetAllowedVia = TargetAllowedVia.tag;
 
         [MyHeader("Select Tag")]
         [Tooltip("The name of the tag that you will use to activate the trigger")]
-        [TagField] public string _tagName = "Player";
+        [TagField][SerializeField] private string _tagName = "Player";
 
         [MyHeader("Select Layer")]
         [Tooltip("Activation mode by trigger, tag or layer, subsequently configure the required parameter according to the activation mode")]
-        public LayerMask _layerMask = 1;
+        [SerializeField] private LayerMask _layerMask = 1;
 
         [MyHeader("Transitions behaviours")]
-        public AudioTransitionState transitionState = AudioTransitionState.fadeOut;
-        public AffectGeneralAmbience affectToGeneralAmbience;
+        [SerializeField] private AudioTransitionState transitionState = AudioTransitionState.fadeOut;
+        [SerializeField] private AffectGeneralAmbience affectToGeneralAmbience;
 
         [MyHeader("Audio Configuration")]
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)] public AudioSource ambienceZoneSource;
-        [VectorSlider(0, 1)] public Vector2 minMaxVolume = new(0, 1);
-        public float updateSpeed = 1f;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)][SerializeField] private AudioSource ambienceZoneSource;
+        [VectorSlider(0, 1)][SerializeField] private Vector2 minMaxVolume = new(0, 1);
+        [SerializeField] private float updateSpeed = 1f;
 
         [MyHeader("Audio Mixer Settings")]
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)] public AudioMixer _master;
-        public float _timeToReach;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)] public AudioMixerSnapshot[] _snapshots;
-        [Range(0, 1)] public float[] _weightsOnEnter;
-        [Range(0, 1)] public float[] _weightsOnExit;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)][SerializeField] private AudioMixer _master;
+        [SerializeField] private float _timeToReach;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)][SerializeField] private AudioMixerSnapshot[] _snapshots;
+        [Range(0, 1)][SerializeField] private float[] _weightsOnEnter;
+        [Range(0, 1)][SerializeField] private float[] _weightsOnExit;
 
-        public AudioSnapshot[] _snapshotsSetup;
+        [SerializeField] private AudioSnapshot[] _snapshotsSetup;
 
         List<AudioMixerSnapshot> snapshots;
         List<float> weightsOnEnter;
         List<float> weightsOnExit;
 
         [MyHeader("Events")]
-        public bool addEvents;
-        public UnityEvent _onTriggerEnter;
-        public UnityEvent _onTriggerExit;
+        [SerializeField] private bool addEvents;
+        [SerializeField] private UnityEvent _onTriggerEnter;
+        [SerializeField] private UnityEvent _onTriggerExit;
 
         #endregion
 
-        #region METHODS
+        #region PROPERTIES
 
         /// <summary>
         /// Get and Set state
         /// </summary>
         public AmbienceZoneBehaviour Behaviour { get { return _behaviour; } set { _behaviour = value; } }
-
+        public TargetAllowedVia TargetType { get { return _targetAllowedVia; } }
+        public AudioSource AmbienceZoneSource { get { return ambienceZoneSource; } set { ambienceZoneSource = value; } }
         public bool AddEventsCapability { get { return addEvents; } set { addEvents = value; } }
+
+        #endregion
+
+        #region METHODS
 
         private void Start()
         {
@@ -155,7 +160,7 @@ namespace Palexen.Audio.Atmos
 
                             if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                             {
-                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                Atmos ga = FindFirstObjectByType<Atmos>();
                                 ga.TransitionTo = AudioTransitionState.fadeOut;
                             }
                         }
@@ -183,7 +188,7 @@ namespace Palexen.Audio.Atmos
 
                             if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                             {
-                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                Atmos ga = FindFirstObjectByType<Atmos>();
                                 ga.TransitionTo = AudioTransitionState.fadeOut;
                             }
                         }
@@ -217,7 +222,7 @@ namespace Palexen.Audio.Atmos
 
                             if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                             {
-                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                Atmos ga = FindFirstObjectByType<Atmos>();
                                 ga.TransitionTo = AudioTransitionState.fadeIn;
                             }
                         }
@@ -245,7 +250,7 @@ namespace Palexen.Audio.Atmos
 
                             if (affectToGeneralAmbience == AffectGeneralAmbience.yes)
                             {
-                                GeneralAmbience ga = FindFirstObjectByType<GeneralAmbience>();
+                                Atmos ga = FindFirstObjectByType<Atmos>();
                                 ga.TransitionTo = AudioTransitionState.fadeIn;
                             }
                         }

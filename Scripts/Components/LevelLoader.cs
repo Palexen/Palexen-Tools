@@ -39,24 +39,31 @@ namespace Palexen.Levels
         #region VARIABLES
 
         [MyHeader("Scene Behaviour")]
-        public LevelLoadMode _loadMode;
-        public LoadSceneMode _loadSceneMode;
-        public string loadingSceneName = "Loading";
-        public float _delayTimer = 5f;
-        public float _delayScreen = 2f;
+        [SerializeField] private LevelLoadMode _loadMode;
+        [SerializeField] private LoadSceneMode _loadSceneMode;
+        [SerializeField] private string loadingSceneName = "Loading";
+        [SerializeField] private float _delayTimer = 5f;
+        [SerializeField] private float _delayScreen = 2f;
 
         [MyHeader("UI")]
         public LoadingBarMode _loadingBar;
-        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public Slider _slider;
-        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public Image _imageToFill;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)][SerializeField] private Slider _slider;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)][SerializeField] private Image _imageToFill;
 
         [MyHeader("Misc")]
-        [FieldColor(FieldPropertyColor.pink)] public GameObject _fadeScreen;
-        public UnityEvent _eventsAfterFinish;
+        [FieldColor(FieldPropertyColor.pink)][SerializeField] private GameObject _fadeScreen;
+        [SerializeField] private UnityEvent _eventsAfterFinish;
 
-        public bool _useRootActivation = false;
+        [SerializeField] private bool _useRootActivation = false;
         bool isSliderOperation = false;
         string loadingSceneTarget;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public LevelLoadMode LoadMode { get { return _loadMode; } }
+        public GameObject FadeScreen { get { return _fadeScreen; } }
 
         #endregion
 

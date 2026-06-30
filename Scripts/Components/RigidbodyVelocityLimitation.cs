@@ -30,8 +30,16 @@ namespace Palexen.CustomPhysics
     public class RigidbodyVelocityLimitation : MonoBehaviour
     {
         #region VARIABLES
-        public float maxVelocity = 25f;
+
+        [SerializeField] private float maxVelocity = 25f;
         Rigidbody _rigidbody;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public float MaxVelocity { get { return maxVelocity; } set { maxVelocity = value; } }
+
         #endregion
 
         #region METHODS

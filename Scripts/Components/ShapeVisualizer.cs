@@ -31,8 +31,13 @@ namespace Palexen.Tools
     {
         #region VARIABLES
 
-        public Color shapeColor = Color.cyan;
-        Collider tempCollider;
+        [SerializeField] private Color shapeColor = Color.cyan;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public Color ShapeColor { get { return shapeColor; } set { shapeColor = value; } }
 
         #endregion
 

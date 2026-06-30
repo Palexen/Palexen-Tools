@@ -431,7 +431,7 @@ namespace Palexen.Tools
 
             EditorGUILayout.PropertyField(m_3DIconMethod);
 
-            if (wi.m_3DIconMethod == Icon3DMethod.distance)
+            if (wi.IconMethod == Icon3DMethod.distance)
             {
                 EditorGUILayout.PropertyField(sizeControl);
                 EditorGUILayout.PropertyField(maxDistance);
@@ -440,7 +440,7 @@ namespace Palexen.Tools
             {
                 EditorGUILayout.PropertyField(m_UIFadeMethod);
 
-                if (wi.m_UIFadeMethod == Icon3DUIUsage.canvasGroup)
+                if (wi.FadeMethod == Icon3DUIUsage.canvasGroup)
                 {
                     GUILayout.Box("The icon will fade using the canvas group component, you need to assign it in the field below",
                         PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -509,7 +509,7 @@ namespace Palexen.Tools
 
             EditorGUILayout.Space(5);
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
-            if (tgom._targetAllowedVia == TargetAllowedVia.tag)
+            if (tgom.TargetAllowedVia == TargetAllowedVia.tag)
             {
                 GUILayout.Box("The object will be affected if the <color=green>collider</color> has the tag specified in the <color=magenta>Tag</color> Name field", 
                     PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -599,9 +599,9 @@ namespace Palexen.Tools
     }
     #endregion
 
-    #region GENERAL AMBIENCE
+    #region ATMOS
 
-    [CustomEditor(typeof(GeneralAmbience))]
+    [CustomEditor(typeof(Atmos))]
     [CanEditMultipleObjects]
     public class GeneralAmbienceEditor : Editor
     {
@@ -610,11 +610,11 @@ namespace Palexen.Tools
         SerializedProperty _minMax;
         SerializedProperty _speed;
 
-        GeneralAmbience ga;
+        Atmos ga;
 
         private void OnEnable()
         {
-            ga = (GeneralAmbience)target;
+            ga = (Atmos)target;
 
             _transition = serializedObject.FindProperty("transitionState");
             _source = serializedObject.FindProperty("ambienceSource");
@@ -650,7 +650,7 @@ namespace Palexen.Tools
 
             serializedObject.ApplyModifiedProperties();
 
-            if (ga.ambienceSource == null)
+            if (ga.AmbienceSource == null)
             {
                 if (GUILayout.Button("Create Audio Source", PalexenEditorStyles.BigButton))
                 {
@@ -658,18 +658,18 @@ namespace Palexen.Tools
                     {
                         ga.gameObject.AddComponent<AudioSource>();
                         ga.gameObject.GetComponent<AudioSource>().loop = true;
-                        ga.gameObject.GetComponent<GeneralAmbience>().ambienceSource = ga.gameObject.GetComponent<AudioSource>();
+                        ga.gameObject.GetComponent<Atmos>().AmbienceSource = ga.gameObject.GetComponent<AudioSource>();
                     }
                 }
             }
 
-            if (ga.ambienceSource != null)
+            if (ga.AmbienceSource != null)
             {
                 if (GUILayout.Button("Remove Audio Source", PalexenEditorStyles.BigButton))
                 {
                     if (ga.gameObject.GetComponent<AudioSource>() != null)
                     {
-                        ga.gameObject.GetComponent<GeneralAmbience>().ambienceSource = null;
+                        ga.gameObject.GetComponent<Atmos>().AmbienceSource = null;
                         DestroyImmediate(ga.gameObject.GetComponent<AudioSource>());
                     }
                 }
@@ -679,12 +679,12 @@ namespace Palexen.Tools
 
     #endregion
 
-    #region AMBIENCE ZONE
-    [CustomEditor(typeof(AmbienceZone))]
+    #region ATMOS ZONE
+    [CustomEditor(typeof(AtmosZone))]
     [CanEditMultipleObjects]
     public class AmbienceZoneEditor : Editor
     {
-        AmbienceZone ga;
+        AtmosZone ga;
         SerializedProperty _behaviour;
         SerializedProperty _via;
         SerializedProperty _tagName;
@@ -705,7 +705,7 @@ namespace Palexen.Tools
 
         private void OnEnable()
         {
-            ga = (AmbienceZone)target;
+            ga = (AtmosZone)target;
             _behaviour = serializedObject.FindProperty("_behaviour");
             _via = serializedObject.FindProperty("_targetAllowedVia");
             _tagName = serializedObject.FindProperty("_tagName");
@@ -743,7 +743,7 @@ namespace Palexen.Tools
 
             EditorGUILayout.Space(5);
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
-            if (ga._targetAllowedVia == TargetAllowedVia.tag)
+            if (ga.TargetType == TargetAllowedVia.tag)
             {
                 GUILayout.Box("The object will be affected if the <color=green>collider</color> has the tag specified in the <color=magenta>Tag</color> Name field",
                     PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -821,7 +821,7 @@ namespace Palexen.Tools
             GUI.color = Color.white;
             EditorGUILayout.Separator();
 
-            if (ga.ambienceZoneSource == null)
+            if (ga.AmbienceZoneSource == null)
             {
                 if (GUILayout.Button("Create Audio Source", PalexenEditorStyles.BigButton))
                 {
@@ -830,7 +830,7 @@ namespace Palexen.Tools
                         ga.gameObject.AddComponent<AudioSource>();
 
                         ga.gameObject.GetComponent<AudioSource>().loop = true;
-                        ga.gameObject.GetComponent<AmbienceZone>().ambienceZoneSource = ga.gameObject.GetComponent<AudioSource>();
+                        ga.gameObject.GetComponent<AtmosZone>().AmbienceZoneSource = ga.gameObject.GetComponent<AudioSource>();
                     }
                 }
             }
@@ -973,7 +973,7 @@ namespace Palexen.Tools
 
             EditorGUILayout.Space(5);
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
-            if (te._targetAllowedVia == TargetAllowedVia.tag)
+            if (te.TargetAllowedVia == TargetAllowedVia.tag)
             {
                 GUILayout.Box("The event will be triggered if the <color=green>collider</color> has the tag specified in the <color=magenta>Tag</color> field",
                     PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -1235,19 +1235,19 @@ namespace Palexen.Tools
             serializedObject.Update();
             EditorGUILayout.PropertyField(_behaviour);
 
-            if (hg._behaviour == HealthCondition.byChilds)
+            if (hg.Behaviour == HealthCondition.byChilds)
             {
                 EditorGUILayout.HelpBox("Configure the other health component scripts to add HP to this object, " +
                     "making sure to initialize the event with AddHealthAtParent and setting this object " +
                     "as the parent of the component.", MessageType.Info);
             }
 
-            if (hg._behaviour == HealthCondition.single)
+            if (hg.Behaviour == HealthCondition.single)
             {
                 EditorGUILayout.PropertyField(_healthRange);
             }
 
-            if (hg._behaviour == HealthCondition.parent)
+            if (hg.Behaviour == HealthCondition.parent)
             {
                 EditorGUILayout.PropertyField(_healthRange);
                 EditorGUILayout.HelpBox("Parental usage is not available for this script, so marking it as a " +
@@ -1258,11 +1258,11 @@ namespace Palexen.Tools
 
             GUILayout.Space(10);
 
-            string currentHeader1 = hg.showEventsGroup ? "Hide Events" : "Show and Setup Events";
+            string currentHeader1 = hg.EventsGroup ? "Hide Events" : "Show and Setup Events";
 
-            hg.showEventsGroup = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showEventsGroup, currentHeader1);
+            hg.EventsGroup = EditorGUILayout.BeginFoldoutHeaderGroup(hg.EventsGroup, currentHeader1);
             EditorGUI.indentLevel++;
-            if (hg.showEventsGroup)
+            if (hg.EventsGroup)
             {
                 EditorGUILayout.PropertyField(_afterKillObject);
                 EditorGUILayout.PropertyField(_afterExceeded);
@@ -1278,16 +1278,16 @@ namespace Palexen.Tools
             GUI.color = Color.white;
             GUILayout.Space(10);
 
-            if (!hg.useAnimationFeatures)
+            if (!hg.AnimationFeatures)
             {
                 if(GUILayout.Button("Enable Animation Features", PalexenEditorStyles.BigButton))
                 {
-                    hg.useAnimationFeatures = true;
+                    hg.AnimationFeatures = true;
                 }
             }
 
 
-            if (hg.useAnimationFeatures)
+            if (hg.AnimationFeatures)
             {
                 GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
                     PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
@@ -1297,7 +1297,7 @@ namespace Palexen.Tools
 
                 if (GUILayout.Button("Disable Animation Features", PalexenEditorStyles.BigButton))
                 {
-                    hg.useAnimationFeatures = false;
+                    hg.AnimationFeatures = false;
                 }
             }
 
@@ -1308,15 +1308,15 @@ namespace Palexen.Tools
             GUILayout.Space(10);
 
 
-            if (!hg.usePhysicsFeatures)
+            if (!hg.PhysicsFeatures)
             {
                 if (GUILayout.Button("Enable Physics Features", PalexenEditorStyles.BigButton))
                 {
-                    hg.usePhysicsFeatures = true;
+                    hg.PhysicsFeatures = true;
                 }
             }
 
-            if (hg.usePhysicsFeatures)
+            if (hg.PhysicsFeatures)
             {
                 GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Ragdoll or Physics Features</color>",
                     PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
@@ -1329,11 +1329,11 @@ namespace Palexen.Tools
                     hg.FetchRigidbodies();
                 }
 
-                if(hg._rigidbodies.Length > 1)
+                if(hg.Rigidbodies.Length > 1)
                 {
                     if (GUILayout.Button("Draw Gizmos on physics"))
                     {
-                        foreach (Rigidbody rb in hg._rigidbodies)
+                        foreach (Rigidbody rb in hg.Rigidbodies)
                         {
                             if (rb != null || rb.gameObject.GetComponent<ShapeVisualizer>() == null)
                             {
@@ -1347,7 +1347,7 @@ namespace Palexen.Tools
 
                     if (GUILayout.Button("Add Velocity Limiter"))
                     {
-                        foreach (Rigidbody rb in hg._rigidbodies)
+                        foreach (Rigidbody rb in hg.Rigidbodies)
                         {
                             if (rb != null)
                             {
@@ -1362,10 +1362,10 @@ namespace Palexen.Tools
                     RigidbodyVelocityLimitation[] rl;
                     rl = hg.gameObject.GetComponentsInChildren<RigidbodyVelocityLimitation>();
 
-                    hg.showVelocityLimiters = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showVelocityLimiters, "Rigidbody Velocity Limitation Settings");
+                    hg.VelocityFeatures = EditorGUILayout.BeginFoldoutHeaderGroup(hg.VelocityFeatures, "Rigidbody Velocity Limitation Settings");
                     EditorGUI.indentLevel++;
 
-                    if (hg.showVelocityLimiters)
+                    if (hg.VelocityFeatures)
                     {
                         if (rl.Length >= 1)
                         {
@@ -1373,7 +1373,7 @@ namespace Palexen.Tools
                             {
                                 if (rl[i] != null)
                                 {
-                                    rl[i].maxVelocity = EditorGUILayout.FloatField($"{rl[i].gameObject.name}", rl[i].maxVelocity);
+                                    rl[i].MaxVelocity = EditorGUILayout.FloatField($"{rl[i].gameObject.name}", rl[i].MaxVelocity);
                                 }
                             }
                         }
@@ -1384,17 +1384,17 @@ namespace Palexen.Tools
 
                     PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
 
-                    hg.showShapeSettings = EditorGUILayout.BeginFoldoutHeaderGroup(hg.showShapeSettings, "Shape Visualizer Settings");
+                    hg.ShapeFeatures = EditorGUILayout.BeginFoldoutHeaderGroup(hg.ShapeFeatures, "Shape Visualizer Settings");
 
                     EditorGUI.indentLevel++;
 
-                    if (hg.showShapeSettings)
+                    if (hg.ShapeFeatures)
                     {
                         foreach (ShapeVisualizer sv in hg.gameObject.GetComponentsInChildren<ShapeVisualizer>())
                         {
                             if (sv != null)
                             {
-                                sv.shapeColor = EditorGUILayout.ColorField($"{sv.gameObject.name}", sv.shapeColor);
+                                sv.ShapeColor = EditorGUILayout.ColorField($"{sv.gameObject.name}", sv.ShapeColor);
                             }
                         }
                     }
@@ -1414,7 +1414,7 @@ namespace Palexen.Tools
 
                 if (GUILayout.Button("Disable Physics Features", PalexenEditorStyles.BigButton))
                 {
-                    hg.usePhysicsFeatures = false;
+                    hg.PhysicsFeatures = false;
                 }
             }
 
@@ -1483,19 +1483,19 @@ namespace Palexen.Tools
 
             EditorGUILayout.PropertyField(_affectsOn);
 
-            if(hc._affectsOn == HealthCondition.parent)
+            if(hc.AffectsOn == HealthCondition.parent)
             {
                 EditorGUILayout.HelpBox("This component will affect the parent health, so make sure to set a parent with " +
                     "a HealthGO or Health System script and set it as the health parent", MessageType.Info);
                 EditorGUILayout.PropertyField(_healthParent);
             }
 
-            if (hc._affectsOn == HealthCondition.single)
+            if (hc.AffectsOn == HealthCondition.single)
             {
                 EditorGUILayout.HelpBox("This component will affect only itself, and a parent script is not necessary", MessageType.Info);
             }
 
-            if (hc._affectsOn == HealthCondition.byChilds)
+            if (hc.AffectsOn == HealthCondition.byChilds)
             {
                 EditorGUILayout.HelpBox("The `by child` option is not available because this script functions as a component, " +
                     "so marking it as `by child` will make it use the single component.", MessageType.Warning);
@@ -1506,24 +1506,24 @@ namespace Palexen.Tools
 
             EditorGUILayout.PropertyField(_importanceLevel);
 
-            if(hc._importanceLevel == HealthImportance.notImportant)
+            if(hc.ImportanceLevel == HealthImportance.notImportant)
             {
                 EditorGUILayout.HelpBox("When marked as Not Important, the object can die independently without affecting the parent.", MessageType.Info);
             }
 
-            if(hc._importanceLevel == HealthImportance.important)
+            if(hc.ImportanceLevel == HealthImportance.important)
             {
                 EditorGUILayout.HelpBox("When marked as Important, the death of the object will cause the parent to lose all its HP" +
                     " and die instantly, good for headshots or too critical damages!.", MessageType.Info);
             }
 
-            string headerText = hc.showEvents ? "Hide Events" : "Show and Setup Events";
+            string headerText = hc.ShowEvents ? "Hide Events" : "Show and Setup Events";
 
-            hc.showEvents = EditorGUILayout.BeginFoldoutHeaderGroup(hc.showEvents, headerText);
+            hc.ShowEvents = EditorGUILayout.BeginFoldoutHeaderGroup(hc.ShowEvents, headerText);
 
             EditorGUI.indentLevel++;
 
-            if (hc.showEvents)
+            if (hc.ShowEvents)
             {
                 EditorGUILayout.PropertyField(_atStart);
                 EditorGUILayout.PropertyField(_onTakeDamage);
@@ -1541,15 +1541,15 @@ namespace Palexen.Tools
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
 
-            if(!hc.animationFeatures)
+            if(!hc.AnimationFeatures)
             {
                 if (GUILayout.Button("Enable Animation Features", PalexenEditorStyles.BigButton))
                 {
-                    hc.animationFeatures = true;
+                    hc.AnimationFeatures = true;
                 }
             }
 
-            if (hc.animationFeatures)
+            if (hc.AnimationFeatures)
             {
                 GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
                     PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
@@ -1558,7 +1558,7 @@ namespace Palexen.Tools
 
                 if (GUILayout.Button("Disable Animation Features", PalexenEditorStyles.BigButton))
                 {
-                    hc.animationFeatures = false;
+                    hc.AnimationFeatures = false;
                 }
             }
             GUI.color = c;
@@ -1566,12 +1566,12 @@ namespace Palexen.Tools
             GUI.color = Color.white;
             GUILayout.Space(10);
 
-            string headerText2 = hc.showPresets ? "Hide Presets" : "Show and Setup Presets";
+            string headerText2 = hc.ShowPresets ? "Hide Presets" : "Show and Setup Presets";
 
-            hc.showPresets = EditorGUILayout.BeginFoldoutHeaderGroup(hc.showPresets, headerText2);
+            hc.ShowPresets = EditorGUILayout.BeginFoldoutHeaderGroup(hc.ShowPresets, headerText2);
             EditorGUI.indentLevel++;
 
-            if (hc.showPresets)
+            if (hc.ShowPresets)
             {
                 if(GUILayout.Button("Set Preset: Head", PalexenEditorStyles.BigButton))
                 {
@@ -1661,7 +1661,7 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_catchLang);
             EditorGUILayout.PropertyField(_dialogAudioFeature);
 
-            if (_dialog._dialogAudioFeature == DialogAudioFeature.useAudio)
+            if (_dialog.Feature == DialogAudioFeature.useAudio)
             {
                 EditorGUILayout.PropertyField(_langAudioSource);
             }
@@ -1677,11 +1677,11 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_dialogSequencer);
 
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
-            if (!_dialog.debugMode)
+            if (!_dialog.InDebug)
             {
                 if (GUILayout.Button("Enter Debug Mode"))
                 {
-                    _dialog.debugMode = true;
+                    _dialog.InDebug = true;
 
                 }
             }
@@ -1689,11 +1689,11 @@ namespace Palexen.Tools
             {
                 if (GUILayout.Button("Exit Debug Mode"))
                 {
-                    _dialog.debugMode = false;
+                    _dialog.InDebug = false;
                 }
             }
 
-            if (_dialog.debugMode)
+            if (_dialog.InDebug)
             {
                 EditorGUILayout.PropertyField(isPlaying);
                 EditorGUILayout.PropertyField(playback);
@@ -1976,7 +1976,7 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_loadMode);
             EditorGUILayout.PropertyField(_loadSceneMode);
 
-            if (ll._loadMode != LevelLoadMode.catchAndLoad)
+            if (ll.LoadMode != LevelLoadMode.catchAndLoad)
             {
                 EditorGUILayout.PropertyField(loadingSceneName);
                 GUILayout.Box("Enter the scene name you want to load.\r\n" +
@@ -2001,7 +2001,7 @@ namespace Palexen.Tools
             }
 
             EditorGUILayout.PropertyField(_fadeScreen);
-            if (ll._fadeScreen == null)
+            if (ll.FadeScreen == null)
             {
                 EditorGUILayout.HelpBox("This field is optional; however, to enhance the loading effect " +
                     "between scenes, consider adding a screen that creates a fade effect, or a screen that " +
@@ -2130,7 +2130,7 @@ namespace Palexen.Tools
                 HandleUtility.AddDefaultControl(controlID);
 
                 Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-                if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _wp._targetLayer))
+                if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _wp.TargetLayer))
                 {
                     switch (setting.contextGizmoForm)
                     {
@@ -2173,13 +2173,14 @@ namespace Palexen.Tools
 
                     Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
 
-                    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _wp._targetLayer))
+                    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _wp.TargetLayer))
                     {
                         Undo.IncrementCurrentGroup();
 
                         GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
                         clone.transform.position = hit.point;
                         clone.transform.parent = _wp.transform;
+                        _wp.FetchAndBuild();
 
                         Undo.RegisterCreatedObjectUndo(clone, "Waypoint Placed");
                         _wp.FetchAndBuild();
@@ -2197,17 +2198,17 @@ namespace Palexen.Tools
         {
             _wp = (WaypointArea)target;
 
-            if (_wp._waypoints.Length > 1)
+            if (_wp.Waypoints.Length > 1)
             {
-                foreach (var p in _wp._waypoints)
+                foreach (var p in _wp.Waypoints)
                 {
                     if (p != null)
                     {
-                        Handles.color = _wp._gizmoColor;
-                        Handles.DrawWireDisc(p.transform.position, Vector3.up, _wp._catchDistance);
+                        Handles.color = _wp.GizmoColor;
+                        Handles.DrawWireDisc(p.transform.position, Vector3.up, _wp.CatchDistance);
 
                         Handles.color = Color.white;
-                        Handles.ArrowHandleCap(0, p.transform.position, p.transform.rotation, _wp._catchDistance, EventType.Repaint);
+                        Handles.ArrowHandleCap(0, p.transform.position, p.transform.rotation, _wp.CatchDistance, EventType.Repaint);
                     }
                 }
             }
@@ -2232,16 +2233,26 @@ namespace Palexen.Tools
     public class PrefabPainterEditor : Editor
     {
         PrefabPainter _pp;
+        SerializedProperty _mouseBehaviour;
         SerializedProperty _targetLayer;
+        SerializedProperty _density;
+        SerializedProperty _radius;
         SerializedProperty _prefabs;
         SerializedProperty _YRandomizer;
+        SerializedProperty _sizeRandomizer;
+
+        float next = 0f;
 
         private void OnEnable()
         {
             _pp = (PrefabPainter)target;
             _targetLayer = serializedObject.FindProperty("_targetLayer");
+            _mouseBehaviour = serializedObject.FindProperty("_mouseBehaviour");
+            _density = serializedObject.FindProperty("_density");
+            _radius = serializedObject.FindProperty("_radius");
             _prefabs = serializedObject.FindProperty("_prefabs");
             _YRandomizer = serializedObject.FindProperty("_YRandomizer");
+            _sizeRandomizer = serializedObject.FindProperty("_sizeRandomizer");
         }
 
         public override void OnInspectorGUI()
@@ -2254,16 +2265,36 @@ namespace Palexen.Tools
                 PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
 
             GUILayout.Box("Prefab Painter \n" +
-                "Hold <color=red>shift</color> + click to create <color=green>waypoint</color>",
+                "Hold <color=red>shift</color> + click to <color=green>Paint your Prefabs</color>",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
 
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(_targetLayer);
+            EditorGUILayout.PropertyField(_mouseBehaviour);
+
+            if(_pp.MouseBehaviour == EventType.MouseDrag)
+            {
+                EditorGUILayout.PropertyField(_density);
+            }
+
+            EditorGUILayout.PropertyField(_radius);
             GUILayout.Label($"<color={"#" + setting.headerColorValue.ConvertToHex()}>Prefabs</color>",
                 PalexenEditorStyles.CoolTitle(setting.headerSize, TextAnchor.MiddleLeft));
             EditorGUILayout.PropertyField(_prefabs);
             EditorGUILayout.PropertyField(_YRandomizer);
+            EditorGUILayout.PropertyField(_sizeRandomizer);
+
+            if(_pp.transform.childCount > 0)
+            {
+                if(GUILayout.Button("Clear all content", PalexenEditorStyles.BigButton))
+                {
+                    foreach(Transform t in _pp.transform)
+                    {
+                        DestroyImmediate(t.gameObject);
+                    }
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -2279,7 +2310,9 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            Handles.color = setting.gizmosColor;
+            var correctColor = new Color(setting.gizmosColor.r, setting.gizmosColor.g, setting.gizmosColor.b, setting.gizmosColor.a / 2);
+
+            Handles.color = correctColor;
 
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
@@ -2289,64 +2322,111 @@ namespace Palexen.Tools
                 HandleUtility.AddDefaultControl(controlID);
 
                 Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-                if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _pp._targetLayer))
+                if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _pp.TargetLayer))
                 {
+                    float ra = _pp.Radius;
+
+                    if (ra <= 0)
+                    {
+                        ra = setting.gizmoSize;
+                    }
+
                     switch (setting.contextGizmoForm)
                     {
                         case GizmoForm.sphere:
-                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.cube:
-                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.cylinder:
-                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.cone:
-                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.arrow:
-                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.circle:
-                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.square:
-                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                         case GizmoForm.dot:
-                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
                             break;
                     }
                 }
 
-                if (e.type == EventType.MouseDown && e.button == 0)
+                if (e.type == _pp.MouseBehaviour && e.button == 0)
                 {
-                    int i = UnityEngine.Random.Range(0, _pp._prefabs.Length);
+                    int i = UnityEngine.Random.Range(0, _pp.Prefabs.Length);
 
-                    GameObject[] prefab = _pp._prefabs;
+                    GameObject[] prefab = _pp.Prefabs;
                     GameObject _t = prefab[i];
+
+                    float size = UnityEngine.Random.Range(_pp.SizeRandomizer.x, _pp.SizeRandomizer.y);
+                    Vector3 newSize = new(size, size, size);
 
                     Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
 
-                    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _pp._targetLayer))
+                    if(_pp.MouseBehaviour == EventType.MouseDown)
                     {
-                        Undo.IncrementCurrentGroup();
-                        GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
-                        clone.transform.position = hit.point;
+                        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _pp.TargetLayer))
+                        {
+                            Undo.IncrementCurrentGroup();
+                            GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
+                            float rad = UnityEngine.Random.Range(0, _pp.Radius);
+                            clone.transform.position = hit.point + new Vector3(UnityEngine.Random.Range(-rad, rad), 0, UnityEngine.Random.Range(-rad, rad));
 
-                        Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                        Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp._YRandomizer.x, _pp._YRandomizer.y), hit.normal);
+                            Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                            Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
 
-                        clone.transform.rotation = randomYaw * alignToSurface;
+                            clone.transform.rotation = randomYaw * alignToSurface;
 
-                        clone.transform.parent = _pp.transform;
+                            clone.transform.parent = _pp.transform;
 
-                        Undo.RegisterCreatedObjectUndo(clone, "Prefabs Placed!");
-                        // Other Actions
-                        EditorUtility.SetDirty(_pp.gameObject);
+                            clone.transform.localScale = newSize;
 
-                        e.Use();
+                            Undo.RegisterCreatedObjectUndo(clone, "Prefabs Placed!");
+                            // Other Actions
+                            EditorUtility.SetDirty(_pp.gameObject);
+
+                            e.Use();
+                        }
+                    }
+
+                    if (_pp.MouseBehaviour == EventType.MouseDrag)
+                    {
+                        if (Time.time >= next)
+                        {
+                            next = Time.time + 1 / _pp.Density;
+
+                            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _pp.TargetLayer))
+                            {
+                                Undo.IncrementCurrentGroup();
+                                GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
+                                float rad = UnityEngine.Random.Range(0, _pp.Radius);
+                                clone.transform.position = hit.point + new Vector3(UnityEngine.Random.Range(-rad, rad), 0, UnityEngine.Random.Range(-rad, rad));
+
+                                Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                                Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
+
+                                clone.transform.rotation = randomYaw * alignToSurface;
+
+                                clone.transform.parent = _pp.transform;
+
+                                clone.transform.localScale = newSize;
+
+                                Undo.RegisterCreatedObjectUndo(clone, "Prefabs Placed!");
+                                // Other Actions
+                                EditorUtility.SetDirty(_pp.gameObject);
+
+                                e.Use();
+                            }
+                        }
                     }
                 }
             }

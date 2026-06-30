@@ -36,12 +36,12 @@ namespace Palexen.Gameplay.UI
         #region VARIABLES
 
         [MyHeader("Language")]
-        public Language _lang;
-        public Initializer _catchLang;
+        [SerializeField] private Language _lang;
+        [SerializeField] private Initializer _catchLang;
 
         [MyHeader("Setup")]
-        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage) ]public TMP_Text _text;
-        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] public LangTextContainer _conversions;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage) ][SerializeField] private TMP_Text _text;
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)][SerializeField] private LangTextContainer _conversions;
 
         #endregion
 

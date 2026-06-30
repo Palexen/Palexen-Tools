@@ -24,16 +24,16 @@ using Palexen.Tools;
 
 namespace Palexen.Audio.Atmos
 {
-    [AddComponentMenu("Palexen/Atmos/Global Ambience", 1)]
-    public class GeneralAmbience : MonoBehaviour
+    [AddComponentMenu("Palexen/Atmos/Atmos", 1)]
+    public class Atmos : MonoBehaviour
     {
         #region VARIABLES
 
         [MyHeader("Audio Setup")]
-        public AudioTransitionState transitionState = AudioTransitionState.fadeIn;
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)] public AudioSource ambienceSource;
-        [VectorSlider(0, 1)] public Vector2 minMaxAudio = new(0, 1);
-        public float updateSpeed = 1f;
+        [SerializeField] private AudioTransitionState transitionState = AudioTransitionState.fadeIn;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)][SerializeField] private AudioSource ambienceSource;
+        [VectorSlider(0, 1)][SerializeField] private Vector2 minMaxAudio = new(0, 1);
+        [SerializeField] private float updateSpeed = 1f;
 
         AudioClip tempClip;
 
@@ -84,20 +84,6 @@ namespace Palexen.Audio.Atmos
         }
 
         /// <summary>
-        /// This property allows you to set the transition state for the ambience audio. You can choose between 
-        /// fade-in and fade-out states, which will control how the audio transitions when changing clips or adjusting 
-        /// volume. Setting this property will automatically trigger the appropriate audio transition behavior based on the selected state.
-        /// </summary>
-        public AudioTransitionState TransitionTo { get { return transitionState; } set { transitionState = value; } }
-
-        /// <summary>
-        /// Use this property to modify the blending speed between the old environment and the new environment you're aiming for.
-        /// </summary>
-        /// <remarks>Note: A lower number means the environment change will be slower but smoother, while a higher number 
-        /// means it will be faster and smoother, but it depends on your scene design philosophy.</remarks>
-        public float BlendSpeed { get { return updateSpeed; }  set { updateSpeed = value; } }
-
-        /// <summary>
         /// Call this method to change the ambience audio clip, it will automatically fade out the current sound, 
         /// change the clip, and then fade in the new sound.
         /// </summary>
@@ -130,6 +116,26 @@ namespace Palexen.Audio.Atmos
         {
             TransitionTo = AudioTransitionState.fadeIn;
         }
+
+        #endregion
+
+        #region PROPERTIES
+
+        public AudioSource AmbienceSource {  get { return ambienceSource; } set { ambienceSource = value; } }
+
+        /// <summary>
+        /// This property allows you to set the transition state for the ambience audio. You can choose between 
+        /// fade-in and fade-out states, which will control how the audio transitions when changing clips or adjusting 
+        /// volume. Setting this property will automatically trigger the appropriate audio transition behavior based on the selected state.
+        /// </summary>
+        public AudioTransitionState TransitionTo { get { return transitionState; } set { transitionState = value; } }
+
+        /// <summary>
+        /// Use this property to modify the blending speed between the old environment and the new environment you're aiming for.
+        /// </summary>
+        /// <remarks>Note: A lower number means the environment change will be slower but smoother, while a higher number 
+        /// means it will be faster and smoother, but it depends on your scene design philosophy.</remarks>
+        public float BlendSpeed { get { return updateSpeed; } set { updateSpeed = value; } }
 
         #endregion
     }

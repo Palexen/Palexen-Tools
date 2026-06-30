@@ -35,18 +35,27 @@ namespace Palexen.Gameplay
         #region VARIABLES
 
         [MyHeader("Prefix")]
-        public string _prefix = "Waypoint: ";
+        [SerializeField] private string _prefix = "Waypoint: ";
 
-        public LayerMask _targetLayer;
+        [SerializeField] private LayerMask _targetLayer;
 
         [MyHeader("Waypoints")]
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)] public Waypoint[] _waypoints;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)][SerializeField] private Waypoint[] _waypoints;
 
         [MyHeader("Editor Visual")]
-        public Color _gizmoColor = Color.yellow;
-        public float _catchDistance = .25f;
+        [SerializeField] private Color _gizmoColor = Color.yellow;
+        [SerializeField] private float _catchDistance = .25f;
 
         bool canPaint;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public LayerMask TargetLayer { get { return _targetLayer; } }
+        public Waypoint[] Waypoints { get { return _waypoints; } set { _waypoints = value; } }
+        public Color GizmoColor { get { return _gizmoColor; } }
+        public float CatchDistance { get { return _catchDistance; } }
 
         #endregion
 

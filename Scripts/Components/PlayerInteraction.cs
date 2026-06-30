@@ -32,12 +32,12 @@ namespace Palexen.Gameplay.Player
         #region VARIABLES
 
         [MyHeader("Interactable Objects Setup")]
-        public InteractionButton button;
+        [SerializeField] private InteractionButton button;
         InteractionButton currentObjectButton;
 
-        public LayerMask interactableLayerMask;
-        public QueryTriggerInteraction interactionMethod = QueryTriggerInteraction.Collide;
-        public float maxDistance = 1;
+        [SerializeField] private LayerMask interactableLayerMask;
+        [SerializeField] private QueryTriggerInteraction interactionMethod = QueryTriggerInteraction.Collide;
+        [SerializeField] private float maxDistance = 1;
 
         Interactable_Input ii;
         bool isInteractable;

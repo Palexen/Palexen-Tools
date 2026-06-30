@@ -29,37 +29,43 @@ namespace Palexen.Gameplay.Player
     [AddComponentMenu("Palexen/Gameplay/Footsteps System")]
     public class FootstepsSystem : MonoBehaviour
     {
+        #region VARIABLES
+
 #if PALEXEN_TOOLS
         [MyHeader("Config")]
 #else
         [Header("Config")]
 #endif
 
-        public SurfaceType surfaceBehaviour;
-        public LayerMask meshLayerMask;
-        public LayerMask terrainLayerMask;
-        public FootstepsSurface currentSurface;
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)] public AudioSource foots;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary concrete;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary grass;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary water;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary glass;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary wood;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary gravel;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary rock;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary sand;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary dirt;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary snow;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary mud;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary metal;
+        [SerializeField] private SurfaceType surfaceBehaviour;
+        [SerializeField] private LayerMask meshLayerMask;
+        [SerializeField] private LayerMask terrainLayerMask;
+        [SerializeField] private FootstepsSurface currentSurface;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)][SerializeField] private AudioSource foots;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary concrete;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary grass;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary water;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary glass;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary wood;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary gravel;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary rock;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary sand;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary dirt;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary snow;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary mud;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary metal;
 
         [MyHeader("Terrain Settings")]
-        public int terrainTextureIndex;
-        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.warningMessage)] public PlayerTerrainSurfaceSettings terrainSurfaceSettings;
+        [SerializeField] private int terrainTextureIndex;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.warningMessage)][SerializeField] private PlayerTerrainSurfaceSettings terrainSurfaceSettings;
 
         [MyHeader("Misc")]
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.warningMessage)] public AudioSource voice;
-        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] public AudioLibrary climb;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.warningMessage)][SerializeField] private AudioSource voice;
+        [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)][SerializeField] private AudioLibrary climb;
+
+        #endregion
+
+        #region UNITY METHODS
 
         private void Update()
         {
@@ -77,7 +83,11 @@ namespace Palexen.Gameplay.Player
                     break;
             }
         }
-        
+
+        #endregion
+
+        #region MECHANICS
+
         void EvaluateSurface()
         {
             RaycastHit hit;
@@ -217,6 +227,9 @@ namespace Palexen.Gameplay.Player
             currentSurface = terrainSurfaceSettings.terrainSurfaceSettings[index].surfaceType;
         }
 
+        #endregion
+
+        #region API
 
         /// <summary>
         /// Plays the footstep sound effect based on the current surface type.
@@ -373,5 +386,7 @@ namespace Palexen.Gameplay.Player
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -37,30 +37,30 @@ namespace Palexen.Sequences
         #region VARIABLES
 
         [MyHeader("Language")]
-        public Language _lang;
-        public Initializer _catchLang;
+        [SerializeField] private Language _lang;
+        [SerializeField] private Initializer _catchLang;
 
         [MyHeader("Audio Feature")]
-        public DialogAudioFeature _dialogAudioFeature = DialogAudioFeature.useAudio;
-        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.warningMessage)] public AudioSource _langAudioSource;
+        [SerializeField] private DialogAudioFeature _dialogAudioFeature = DialogAudioFeature.useAudio;
+        [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.warningMessage)][SerializeField] private AudioSource _langAudioSource;
 
         [MyHeader("Finish")]
-        public ObjectManagerInteractionMode _afterComplete = ObjectManagerInteractionMode.destroy;
+        [SerializeField] private ObjectManagerInteractionMode _afterComplete = ObjectManagerInteractionMode.destroy;
 
         [MyHeader("Subtitles UI")]
-        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public TMP_Text _subtitles;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)][SerializeField] private TMP_Text _subtitles;
 
-        public DialogOrder _order;
-        public List<DialogSequencer> _dialogSequencer;
+        [SerializeField] private DialogOrder _order;
+        [SerializeField] private List<DialogSequencer> _dialogSequencer;
 
         [Header("Debug")]
-        public bool debugMode;
-        public bool isPlaying = false;
-        public int playback;
-        public int currentSequence;
-        public bool dialogComplete;
-        public float playbackTimer;
-        public int nextToPlay;
+        [SerializeField] private bool debugMode;
+        [SerializeField] private bool isPlaying = false;
+        [SerializeField] private int playback;
+        [SerializeField] private int currentSequence;
+        [SerializeField] private bool dialogComplete;
+        [SerializeField] private float playbackTimer;
+        [SerializeField] private int nextToPlay;
 
         #endregion
 
@@ -598,9 +598,11 @@ namespace Palexen.Sequences
         #endregion
 
         #region PROPERTIES
-
+        
+        public DialogAudioFeature Feature { get { return _dialogAudioFeature; } }
         public DialogOrder Order {  get { return _order; } set { _order = value; } }
         public bool IsPlaying { get { return isPlaying; } }
+        public bool InDebug { get { return debugMode; } set { debugMode = value; } }
 
         #endregion
     }

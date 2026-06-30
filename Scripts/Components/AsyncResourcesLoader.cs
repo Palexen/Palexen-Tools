@@ -27,10 +27,22 @@ namespace Palexen.Gameplay
     [ScriptDescription("Async Loader", "Manage the spawn resources on a scene")]
     public class AsyncResourcesLoader : MonoBehaviour
     {
-        public GameObject[] gameplayResources;
-        public float activationInterval = 1.0f;
+        #region VARIABLES
+
+        [SerializeField] private GameObject[] gameplayResources;
+        [SerializeField] private float activationInterval = 1.0f;
 
         private int currentIndex = 0;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public GameObject[] GameplayResources { get { return gameplayResources; } }
+
+        #endregion
+
+        #region UNITY METHODS
 
         private void Start()
         {
@@ -41,6 +53,10 @@ namespace Palexen.Gameplay
 
             InvokeRepeating(nameof(ActivateNextResource), 0f, activationInterval);
         }
+
+        #endregion
+
+        #region MECHANICS
 
         /// <summary>
         /// Activates the next resource in the gameplayResources collection, if available.
@@ -60,5 +76,7 @@ namespace Palexen.Gameplay
                 CancelInvoke(nameof(ActivateNextResource));
             }
         }
+
+        #endregion
     }
 }

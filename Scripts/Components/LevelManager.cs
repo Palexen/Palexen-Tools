@@ -41,6 +41,25 @@ namespace Palexen.Levels
 
         #endregion
 
+        #region PROPERTIES
+
+        /// <summary>
+        /// Gets and sets the scene name
+        /// </summary>
+        public string SceneName { get => _sceneName; set => _sceneName = value; }
+
+        /// <summary>
+        /// Gets and sets a timer
+        /// </summary>
+        public float Delay { get => _delayTimer; set => _delayTimer = value; }
+
+        /// <summary>
+        /// Checks and sets whether or not a root object is used at the next level.
+        /// </summary>
+        public bool IsRootActivation { get => _rootActivation; set => _rootActivation = value; }
+
+        #endregion
+
         #region UNITY METHODS
 
         private void Awake()
@@ -66,11 +85,11 @@ namespace Palexen.Levels
 
         #region API
 
-        public void SetScene(string scene, float delay = 5f, bool ra = false)
+        public void SetScene(string scene, float delay = 5f, bool rootActivation = false)
         {
             SceneName = scene;
             Delay = delay;
-            IsRootActivation = ra;
+            IsRootActivation = rootActivation;
         }
 
         #region OBSOLETE
@@ -86,21 +105,6 @@ namespace Palexen.Levels
         [Obsolete("Use IsRootActivation instead.")]
         public bool CheckRootActivation() => IsRootActivation;
         #endregion
-
-        /// <summary>
-        /// Gets and sets the scene name
-        /// </summary>
-        public string SceneName { get => _sceneName;  set => _sceneName = value; }
-
-        /// <summary>
-        /// Gets and sets a timer
-        /// </summary>
-        public float Delay { get => _delayTimer;  set => _delayTimer = value; }
-
-        /// <summary>
-        /// Checks and sets whether or not a root object is used at the next level.
-        /// </summary>
-        public bool IsRootActivation { get => _rootActivation; set => _rootActivation = value; }
 
         #endregion
     }

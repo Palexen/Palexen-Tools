@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace Palexen.Tools
 {
-    #if PALEXEN_TOOLS
+#if PALEXEN_TOOLS
     [ScriptDescription("PrefabPainter", "Improved Monobehavior")]
 #endif
     [AddComponentMenu("Palexen/Tools/Prefab Painter")]
@@ -30,14 +30,20 @@ namespace Palexen.Tools
     {
         #region VARIABLES
 
-        [MyHeader("Layer")]
-        public LayerMask _targetLayer;
+        [MyHeader("Setup")]
+        [SerializeField] private LayerMask _targetLayer;
+        [SerializeField] private EventType _mouseBehaviour;
+        [SerializeField] private float _density = 15;
+        [SerializeField] private float _radius;
 
         [MyHeader("Prefabs")]
-        [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)] public GameObject[] _prefabs;
+        [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)][SerializeField] private GameObject[] _prefabs;
 
         [MyHeader("Random Rotation")]
-        [VectorSlider(0, 720)] public Vector2 _YRandomizer = new(0, 360);
+        [VectorSlider(0, 720)][SerializeField] private Vector2 _YRandomizer = new(0, 360);
+
+        [MyHeader("Random Size")]
+        [VectorSlider(0, 2)][SerializeField] private Vector2 _sizeRandomizer = new(.9f, 1);
 
         #endregion
 
@@ -47,13 +53,25 @@ namespace Palexen.Tools
 
         #region MECHANICS
 
-    
+
 
         #endregion
 
         #region API
 
-    
+
+
+        #endregion
+
+        #region PROPERTIES
+
+        public LayerMask TargetLayer { get { return _targetLayer; } }
+        public EventType MouseBehaviour { get { return _mouseBehaviour; } }
+        public float Density { get { return _density * 10; } }
+        public float Radius { get { return _radius; } }
+        public GameObject[] Prefabs { get { return _prefabs; } }
+        public Vector2 YRandomizer {  get { return _YRandomizer; } }
+        public Vector2 SizeRandomizer { get { return _sizeRandomizer; } }
 
         #endregion
     }

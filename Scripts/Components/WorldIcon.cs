@@ -28,20 +28,32 @@ namespace Palexen.Gameplay.UI
     [ScriptDescription("3D Icon", "Set 3D icons in your world (Mark with layer that can be rendererd with a depth camera)")]
     public class WorldIcon : MonoBehaviour
     {
+        #region VARIABLES
+
         [MyHeader("World Setup")]
-        public Icon3DMethod m_3DIconMethod;
-        [VectorSlider(1, 50)] public Vector2Int sizeControl = new(1, 50);
-        public float maxDistance = 20;
+        [SerializeField] private Icon3DMethod m_3DIconMethod;
+        [VectorSlider(1, 50)][SerializeField] private Vector2Int sizeControl = new(1, 50);
+        [SerializeField] private float maxDistance = 20;
         Transform target;
 
         [MyHeader("Fade UI Setup")]
-        public Icon3DUIUsage m_UIFadeMethod;
-        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] public CanvasGroup canvasGroup;
-        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)] public Image icon;
-        [VectorSlider(0, 1)] public Vector2 opacity = new(0, 1);
-        public float minDistance = 15;
-        public float fadeSpeed = 5;
+        [SerializeField] private Icon3DUIUsage m_UIFadeMethod;
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)][SerializeField] private CanvasGroup canvasGroup;
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)][SerializeField] private Image icon;
+        [VectorSlider(0, 1)][SerializeField] private Vector2 opacity = new(0, 1);
+        [SerializeField] private float minDistance = 15;
+        [SerializeField] private float fadeSpeed = 5;
 
+        #endregion
+
+        #region PROPERTIES
+
+        public Icon3DMethod IconMethod { get { return m_3DIconMethod; } }
+        public Icon3DUIUsage FadeMethod { get { return m_UIFadeMethod; } }
+        
+        #endregion
+
+        #region UNITY METHODS
         private void Start()
         {
             target = Camera.main.transform;
@@ -57,6 +69,10 @@ namespace Palexen.Gameplay.UI
                 UpdateUI();
             }
         }
+
+        #endregion
+
+        #region MECHANICS
 
         void CalculateSize()
         {
@@ -119,5 +135,7 @@ namespace Palexen.Gameplay.UI
         {
             transform.LookAt(Camera.main.transform.position);
         }
+
+        #endregion
     }
 }

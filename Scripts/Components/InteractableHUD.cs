@@ -30,10 +30,12 @@ namespace Palexen.Gameplay.UI
     {
         #region VARIABLES
 
-        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)] public Animator m_animator;
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)][SerializeField] private Animator m_animator;
 
-        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public Image baseImage;
-        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)] public Image baseImageButton;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)][SerializeField] private Image baseImage;
+        [FieldColor(FieldPropertyColor.pink, ShowObjectMessage.errorMessage)][SerializeField] private Image baseImageButton;
+
+        private static readonly int IsInteractableHash = Animator.StringToHash("IsInteractable");
 
         Sprite baseIcon;
         Sprite baseButton;
@@ -48,7 +50,7 @@ namespace Palexen.Gameplay.UI
         /// <param name="HUDState"></param>
         public void GetHUD(bool HUDState)
         {
-            m_animator.SetBool("IsInteractable", HUDState);
+            m_animator.SetBool(IsInteractableHash, HUDState);
         }
 
         /// <summary>

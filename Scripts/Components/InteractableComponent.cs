@@ -32,34 +32,34 @@ namespace Palexen.Gameplay
     {
         #region VARIABLES
         [MyHeader("Key Input")]
-        public InteractionButton interactButton;
+        [SerializeField] private InteractionButton interactButton;
 
         [MyHeader("Interaction System")]
-        public string[] playMethods = { "UpdateObjectManager", "PlayVibration", "ChangeLayer", "DestroyThisGameObject", "ApplyBehaviour" };
+        [SerializeField] private string[] playMethods = { "UpdateObjectManager", "PlayVibration", "ChangeLayer", "DestroyThisGameObject", "ApplyBehaviour" };
 
         [Header("Custom Scripts behaviours")]
-        public List<BehaviourSet> externalBehaviours;
+        [SerializeField] private List<BehaviourSet> externalBehaviours;
 
         [Header("Gameplay Objects Manager | Call as 'UpdateObjectManager' ")]
-        public List<ObjectManager> objectManager = new();
+        [SerializeField] private List<ObjectManager> objectManager = new();
 
         [MyHeader("Gamepad Setup")]
-        public Vector2 motorVelocity = Vector2.one;
-        public float vibrationTimer = 0.25f;
+        [SerializeField] private Vector2 motorVelocity = Vector2.one;
+        [SerializeField] private float vibrationTimer = 0.25f;
 
         [MyHeader("UI")]
-        public Sprite baseIcon;
-        public Sprite baseButton;
+        [SerializeField] private Sprite baseIcon;
+        [SerializeField] private Sprite baseButton;
 
         [Header("INPUT SCHEME")]
-        public GetInputSchemaBehaviour inputSchemaBehaviour;
+        [SerializeField] private GetInputSchemaBehaviour inputSchemaBehaviour;
         [Header("This Schema Only works From Interactable Schema (Below)")]
-        public InputSchema schema;
-        public Sprite _PCButton;
-        public Sprite _nintentdoSwitchButton;
-        public Sprite _xBOXButton;
-        public Sprite _PlayStationButton;
-        public Sprite _touchScreenButton;
+        [SerializeField] private InputSchema schema;
+        [SerializeField] private Sprite _PCButton;
+        [SerializeField] private Sprite _nintentdoSwitchButton;
+        [SerializeField] private Sprite _xBOXButton;
+        [SerializeField] private Sprite _PlayStationButton;
+        [SerializeField] private Sprite _touchScreenButton;
 
         #endregion
 

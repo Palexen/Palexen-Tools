@@ -36,16 +36,22 @@ namespace Palexen.Gameplay
         #region VARIABLES
 
         [MyHeader("Activation Via")]
-        public TargetAllowedVia _targetAllowedVia;
+        [SerializeField] private TargetAllowedVia _targetAllowedVia;
 
         [MyHeader("Select Tag")]
-        [TagField] public string _tag = "Player";
+        [TagField][SerializeField] private string _tag = "Player";
 
         [MyHeader("Select Layer")]
-        public LayerMask _layer;
+        [SerializeField] private LayerMask _layer;
 
         [MyHeader("Event to Trigger")]
-        public UnityEvent _event;
+        [SerializeField] private UnityEvent _event;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public TargetAllowedVia TargetAllowedVia { get { return _targetAllowedVia; } }
 
         #endregion
 

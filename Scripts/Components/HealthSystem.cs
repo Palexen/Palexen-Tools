@@ -38,39 +38,56 @@ namespace Palexen.Gameplay
         #region VARIABLES
 
         [MyHeader("Health Setup")]
-        public HealthCondition _behaviour = HealthCondition.byChilds;
-        [VectorSlider(0, 1000)] public Vector2Int _healthRange = new(0, 1000);
+        [SerializeField] private HealthCondition _behaviour = HealthCondition.byChilds;
+        [VectorSlider(0, 1000)][SerializeField] private Vector2Int _healthRange = new(0, 1000);
         [SerializeField] private int _totalHealth;
 
-        [VectorSlider(-1000, 0)] public Vector2Int _exceededThreshold = new(-1000, 0);
+        [VectorSlider(-1000, 0)][SerializeField] private Vector2Int _exceededThreshold = new(-1000, 0);
         [SerializeField] private int _exceededOn;
 
-        [HideInInspector] public bool showEventsGroup = false;
+        private bool showEventsGroup = false;
 
         [MyHeader("After Kill Events")]
-        public UnityEvent _afterKillObject;
+        [SerializeField] private UnityEvent _afterKillObject;
 
         [MyHeader("After Exceeded Events")]
-        public UnityEvent _afterExceeded;
+        [SerializeField] private UnityEvent _afterExceeded;
 
-        [HideInInspector] public bool useAnimationFeatures;
+        [HideInInspector][SerializeField] private bool useAnimationFeatures;
         //[MyHeader("Animation Features")]
-        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.warningMessage)] public Animator _animator;
-        public string[] dieTriggerNames = { "Die1", "Die2" };
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.warningMessage)][SerializeField] private Animator _animator;
+        [SerializeField] private string[] dieTriggerNames = { "Die1", "Die2" };
 
         [MyHeader("Disable Components on Die")]
-        public UnityEvent onFinishDieAnimations;
+        [SerializeField] private UnityEvent onFinishDieAnimations;
 
         bool isAlive = true;
         bool animationIsPlayed = false;
 
-        [HideInInspector] public bool usePhysicsFeatures;
+        [HideInInspector][SerializeField] private bool usePhysicsFeatures;
         //[Header("Ragdoll or Physics Features")]
-        [FieldColor(FieldPropertyColor.neonGreen, ShowObjectMessage.errorMessage)] public Rigidbody[] _rigidbodies;
+        [FieldColor(FieldPropertyColor.neonGreen, ShowObjectMessage.errorMessage)][SerializeField] private Rigidbody[] _rigidbodies;
 
-        [HideInInspector] public bool showVelocityLimiters = false;
-        [HideInInspector] public bool showShapeSettings = false;
+        private bool showVelocityLimiters = false;
+        private bool showShapeSettings = false;
 
+        #endregion
+
+        #region PROPERTIES
+
+        public HealthCondition Behaviour { get { return _behaviour; } set { _behaviour = value; } }
+        public Rigidbody[] Rigidbodies { get { return _rigidbodies; } set { _rigidbodies = value; } }
+        public bool VelocityFeatures { get { return showVelocityLimiters; } set { showVelocityLimiters = value; } }
+        public bool ShapeFeatures { get { return showShapeSettings; } set { showShapeSettings = value; } }
+        public bool EventsGroup { get { return showEventsGroup; } set { showEventsGroup = value; } }
+        public bool AnimationFeatures { get { return useAnimationFeatures; } set { useAnimationFeatures = value; } }
+        public bool PhysicsFeatures { get { return usePhysicsFeatures; } set { usePhysicsFeatures = value; } }
+
+        /// <summary>
+        /// Indicates whether the current object is considered alive based on its health status. An object is
+        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
+        /// </summary>
+        public bool IsAlive { get { return isAlive; } }
 
         #endregion
 
@@ -256,16 +273,6 @@ namespace Palexen.Gameplay
                 _rigidbodies[i].isKinematic = true;
             }
         }
-
-        #endregion
-
-        #region UTILITIES
-
-        /// <summary>
-        /// Indicates whether the current object is considered alive based on its health status. An object is
-        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
-        /// </summary>
-        public bool IsAlive { get { return isAlive; } }
 
         #endregion
 

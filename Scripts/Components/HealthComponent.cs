@@ -36,44 +36,60 @@ namespace Palexen.Gameplay
         #region VARIABLES
 
         [MyHeader("Health Setup")]
-        [VectorSlider(0, 1000)] public Vector2Int _health = new(0, 1000);
+        [VectorSlider(0, 1000)][SerializeField] private Vector2Int _health = new(0, 1000);
         [SerializeField] private int _healt;
 
-        [VectorSlider(-1000, 0)] public Vector2Int _exceededThreshold = new(-1000, 0);
+        [VectorSlider(-1000, 0)][SerializeField] private Vector2Int _exceededThreshold = new(-1000, 0);
         [SerializeField] private int _exceededOn;
-        public HealthCondition _affectsOn;
-        public HealthImportance _importanceLevel;
+        [SerializeField] private HealthCondition _affectsOn;
+        [SerializeField] private HealthImportance _importanceLevel;
 
-        [HideInInspector] public bool showEvents = false;
+        [HideInInspector] private bool showEvents = false;
 
         [MyHeader("Actions on start")]
-        public UnityEvent _atStart;
+        [SerializeField] private UnityEvent _atStart;
 
         [MyHeader("Actions on Take Damage")]
-        public UnityEvent _onTakeDamage;
+        [SerializeField] private UnityEvent _onTakeDamage;
 
         [MyHeader("Actions on Melee")]
-        public UnityEvent _onMelee;
+        [SerializeField] private UnityEvent _onMelee;
 
         [MyHeader("Actions on Die")]
-        public UnityEvent _atDie;
+        [SerializeField] private UnityEvent _atDie;
 
         [MyHeader("Actions on Exceeded")]
-        public UnityEvent _atExceeded;
+        [SerializeField] private UnityEvent _atExceeded;
 
         [MyHeader("Actions on Add Health")]
-        public UnityEvent _onAddHealth;
+        [SerializeField] private UnityEvent _onAddHealth;
 
-        [SerializeField][FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] public Transform _healthParent;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)][SerializeField] private Transform _healthParent;
 
-        [HideInInspector] public bool animationFeatures = false;
-        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)] public Animator _animator;
-        public string[] triggerNames = { "Trigger0", "Trigger1" };
+        [HideInInspector] private bool animationFeatures = false;
+        [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.errorMessage)][SerializeField] private Animator _animator;
+        [SerializeField] private string[] triggerNames = { "Trigger0", "Trigger1" };
 
         bool alreadyInstantiated = false;
         bool isAlive = true;
 
-        [HideInInspector] public bool showPresets = false;
+        private bool showPresets = false;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public HealthCondition AffectsOn { get { return _affectsOn; } set { _affectsOn = value; } }
+        public bool AnimationFeatures { get { return animationFeatures; } set { animationFeatures = value; } }
+        public bool ShowEvents { get { return showEvents; } set { showEvents = value; } }
+        public HealthImportance ImportanceLevel { get { return _importanceLevel; } }
+        public bool ShowPresets { get { return showPresets; } set { showPresets = value; } }
+
+        /// <summary>
+        /// Indicates whether the current object is considered alive based on its health status. An object is
+        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
+        /// </summary>
+        public bool IsAlive { get { return isAlive; } }
 
         #endregion
 
@@ -354,12 +370,6 @@ namespace Palexen.Gameplay
                 _animator.SetTrigger(triggerName);
             }
         }
-
-        /// <summary>
-        /// Indicates whether the current object is considered alive based on its health status. An object is
-        /// considered alive if its health is above zero and it has not exceeded any critical thresholds.
-        /// </summary>
-        public bool IsAlive { get { return isAlive; } }
 
         #endregion
 

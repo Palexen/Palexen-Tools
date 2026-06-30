@@ -31,20 +31,26 @@ namespace Palexen.Gameplay
 
         [MyHeader("Activation Mode")]
         [Tooltip("This is the activation mode, select it according to your preference")]
-        public TargetAllowedVia _targetAllowedVia = TargetAllowedVia.tag;
+        [SerializeField] private TargetAllowedVia _targetAllowedVia = TargetAllowedVia.tag;
 
         [MyHeader("Select Tag")]
         [Tooltip("The name of the tag that you will use to activate the trigger")]
-        [TagField] public string _tagName = "Player";
+        [TagField][SerializeField] private string _tagName = "Player";
 
         [MyHeader("Select Layer")]
         [Tooltip("Activation mode by trigger, tag or layer, subsequently configure the required parameter according to the activation mode")]
-        public LayerMask _layerMask = 1;
+        [SerializeField] private LayerMask _layerMask = 1;
 
         [Space(20)]
         [MyHeader("Objects Manager Setup")]
         [Tooltip("The collection of objects in list format, can be 1 or as many as you need")]
-        public List<ObjectManager> objects = new();
+        [SerializeField] private List<ObjectManager> objects = new();
+
+        #endregion
+
+        #region PROPERTIES
+
+        public TargetAllowedVia TargetAllowedVia { get { return _targetAllowedVia; } }
 
         #endregion
 
