@@ -19,7 +19,7 @@ MonoBehaviour:
   headerColorValue: {r: 0.6784314, g: 0.84705883, b: 0.9019608, a: 1}
   headerSize: 16
   contextSeparatorColor: {r: 0, g: 1, b: 1, a: 1}
-  contextGizmoForm: 5
+  contextGizmoForm: 0
   gizmosColor: {r: 1, g: 0.8784314, b: 0, a: 1}
   inactiveGizmosColor: {r: 1, g: 0, b: 0.084195614, a: 1}
   gizmoSize: 0.1

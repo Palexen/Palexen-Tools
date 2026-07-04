@@ -2237,11 +2237,15 @@ namespace Palexen.Tools
         SerializedProperty _targetLayer;
         SerializedProperty _density;
         SerializedProperty _radius;
+        SerializedProperty _brushColor;
         SerializedProperty _prefabs;
         SerializedProperty _YRandomizer;
         SerializedProperty _sizeRandomizer;
-
+        SerializedProperty _brush;
+        float alpha;
         float next = 0f;
+
+        GameObject tempBursh;
 
         private void OnEnable()
         {
@@ -2250,9 +2254,23 @@ namespace Palexen.Tools
             _mouseBehaviour = serializedObject.FindProperty("_mouseBehaviour");
             _density = serializedObject.FindProperty("_density");
             _radius = serializedObject.FindProperty("_radius");
+            _brushColor = serializedObject.FindProperty("_brushColor");
             _prefabs = serializedObject.FindProperty("_prefabs");
             _YRandomizer = serializedObject.FindProperty("_YRandomizer");
             _sizeRandomizer = serializedObject.FindProperty("_sizeRandomizer");
+            _brush = serializedObject.FindProperty("_brush");
+        }
+
+        private void OnDisable()
+        {
+            DestroyImmediate(tempBursh);
+            tempBursh = null;
+        }
+
+        private void OnDestroy()
+        {
+            DestroyImmediate(tempBursh);
+            tempBursh = null;
         }
 
         public override void OnInspectorGUI()
@@ -2279,15 +2297,22 @@ namespace Palexen.Tools
             }
 
             EditorGUILayout.PropertyField(_radius);
+            EditorGUILayout.PropertyField(_brushColor);
             GUILayout.Label($"<color={"#" + setting.headerColorValue.ConvertToHex()}>Prefabs</color>",
                 PalexenEditorStyles.CoolTitle(setting.headerSize, TextAnchor.MiddleLeft));
             EditorGUILayout.PropertyField(_prefabs);
             EditorGUILayout.PropertyField(_YRandomizer);
             EditorGUILayout.PropertyField(_sizeRandomizer);
+            EditorGUILayout.PropertyField(_brush);
 
             if(_pp.transform.childCount > 0)
             {
-                if(GUILayout.Button("Clear all content", PalexenEditorStyles.BigButton))
+                GUILayout.Space(10);
+                GUI.color = setting.contextSeparatorColor;
+                EditorGUILayout.HelpBox("", MessageType.None);
+                GUI.color = Color.white;
+                GUILayout.Space(10);
+                if (GUILayout.Button("Clear all content", PalexenEditorStyles.BigButton))
                 {
                     foreach(Transform t in _pp.transform)
                     {
@@ -2310,8 +2335,12 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            var correctColor = new Color(setting.gizmosColor.r, setting.gizmosColor.g, setting.gizmosColor.b, setting.gizmosColor.a / 2);
+            float colorA = _pp.BrushColor.a;
+            float wave = (Mathf.Sin(Time.time * 5f) + 1f) / 2f;
+            //alpha = Mathf.PingPong(Time.time, colorA);
+            alpha = wave * colorA;
 
+            var correctColor = new Color(_pp.BrushColor.r, _pp.BrushColor.g, _pp.BrushColor.b, alpha);
             Handles.color = correctColor;
 
             Event e = Event.current;
@@ -2319,6 +2348,13 @@ namespace Palexen.Tools
 
             if (e.shift)
             {
+                if (tempBursh == null && _pp.Brush != null)
+                {
+                    GameObject tmpBrush = (Instantiate(_pp.Brush));
+
+                    tempBursh = tmpBrush;
+                }
+
                 HandleUtility.AddDefaultControl(controlID);
 
                 Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
@@ -2331,32 +2367,43 @@ namespace Palexen.Tools
                         ra = setting.gizmoSize;
                     }
 
-                    switch (setting.contextGizmoForm)
+                    // BRUSH PREVIEW
+                    if (_pp.Brush != null)
                     {
-                        case GizmoForm.sphere:
-                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.cube:
-                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.cylinder:
-                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.cone:
-                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.arrow:
-                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.circle:
-                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.square:
-                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
-                        case GizmoForm.dot:
-                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
-                            break;
+                        tempBursh.transform.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_MainColor", correctColor);
+                        tempBursh.transform.SetPositionAndRotation(mh.point, Quaternion.LookRotation(mh.normal));
+                        tempBursh.transform.localScale = new Vector3(ra + 1f, ra + 1f, ra + 1f);
+                    }
+
+                    if (_pp.Brush == null)
+                    {
+                        switch (setting.contextGizmoForm)
+                        {
+                            case GizmoForm.sphere:
+                                Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.cube:
+                                Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.cylinder:
+                                Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.cone:
+                                Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.arrow:
+                                Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.circle:
+                                Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.square:
+                                Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                            case GizmoForm.dot:
+                                Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
+                                break;
+                        }
                     }
                 }
 
@@ -2402,7 +2449,7 @@ namespace Palexen.Tools
                     {
                         if (Time.time >= next)
                         {
-                            next = Time.time + 1 / _pp.Density;
+                            next = Time.time + 1 / _pp.Density * 2;
 
                             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _pp.TargetLayer))
                             {
@@ -2429,6 +2476,11 @@ namespace Palexen.Tools
                         }
                     }
                 }
+            }
+            else
+            {
+                DestroyImmediate(tempBursh);
+                tempBursh = null;
             }
         }
     }
