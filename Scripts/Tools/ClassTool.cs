@@ -2245,6 +2245,9 @@ namespace Palexen.Tools
         float alpha;
         float next = 0f;
 
+        bool _isPainting = false;
+        Color ppc;
+
         GameObject tempBursh;
 
         private void OnEnable()
@@ -2303,9 +2306,12 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_prefabs);
             EditorGUILayout.PropertyField(_YRandomizer);
             EditorGUILayout.PropertyField(_sizeRandomizer);
-            EditorGUILayout.PropertyField(_brush);
 
-            if(_pp.transform.childCount > 0)
+            GUI.color = _pp.BrushColor;
+            EditorGUILayout.PropertyField(_brush);
+            GUI.color = Color.white;
+
+            if (_pp.transform.childCount > 0)
             {
                 GUILayout.Space(10);
                 GUI.color = setting.contextSeparatorColor;
@@ -2335,13 +2341,26 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            float colorA = _pp.BrushColor.a;
-            float wave = (Mathf.Sin(Time.time * 5f) + 1f) / 2f;
-            //alpha = Mathf.PingPong(Time.time, colorA);
-            alpha = wave * colorA;
+            // BRUSH PULSE
+            if (!_isPainting)
+            {
+                float colorA = _pp.BrushColor.a;
+                float wave = (Mathf.Sin(Time.time * _pp.Density / 10) + 1f) / 2f;
+                //alpha = Mathf.PingPong(Time.time, colorA);
+                alpha = wave * colorA;
 
-            var correctColor = new Color(_pp.BrushColor.r, _pp.BrushColor.g, _pp.BrushColor.b, alpha);
-            Handles.color = correctColor;
+
+                var correctColor = new Color(_pp.BrushColor.r, _pp.BrushColor.g, _pp.BrushColor.b, alpha);
+                ppc = correctColor;
+
+                // BRUSH EDITOR HANDLES
+                Handles.color = correctColor;
+            }
+            else
+            {
+                ppc = _pp.BrushColor;
+                Handles.color = _pp.BrushColor;
+            }
 
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
@@ -2370,7 +2389,7 @@ namespace Palexen.Tools
                     // BRUSH PREVIEW
                     if (_pp.Brush != null)
                     {
-                        tempBursh.transform.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_MainColor", correctColor);
+                        tempBursh.transform.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_MainColor", ppc);
                         tempBursh.transform.SetPositionAndRotation(mh.point, Quaternion.LookRotation(mh.normal));
                         tempBursh.transform.localScale = new Vector3(ra + 1f, ra + 1f, ra + 1f);
                     }
@@ -2409,6 +2428,7 @@ namespace Palexen.Tools
 
                 if (e.type == _pp.MouseBehaviour && e.button == 0)
                 {
+                    _isPainting = true;
                     int i = UnityEngine.Random.Range(0, _pp.Prefabs.Length);
 
                     GameObject[] prefab = _pp.Prefabs;
@@ -2425,8 +2445,9 @@ namespace Palexen.Tools
                         {
                             Undo.IncrementCurrentGroup();
                             GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
+
                             float rad = UnityEngine.Random.Range(0, _pp.Radius);
-                            clone.transform.position = hit.point + new Vector3(UnityEngine.Random.Range(-rad, rad), 0, UnityEngine.Random.Range(-rad, rad));
+                            clone.transform.position = hit.point + GetBrushOffset(hit, rad);
 
                             Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
                             Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
@@ -2447,6 +2468,7 @@ namespace Palexen.Tools
 
                     if (_pp.MouseBehaviour == EventType.MouseDrag)
                     {
+                        _isPainting = true;
                         if (Time.time >= next)
                         {
                             next = Time.time + 1 / _pp.Density * 2;
@@ -2455,8 +2477,9 @@ namespace Palexen.Tools
                             {
                                 Undo.IncrementCurrentGroup();
                                 GameObject clone = (GameObject)PrefabUtility.InstantiatePrefab(_t);
+
                                 float rad = UnityEngine.Random.Range(0, _pp.Radius);
-                                clone.transform.position = hit.point + new Vector3(UnityEngine.Random.Range(-rad, rad), 0, UnityEngine.Random.Range(-rad, rad));
+                                clone.transform.position = hit.point + GetBrushOffset(hit, rad);
 
                                 Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
                                 Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
@@ -2481,7 +2504,26 @@ namespace Palexen.Tools
             {
                 DestroyImmediate(tempBursh);
                 tempBursh = null;
+                _isPainting = false;
             }
+        }
+
+        Vector3 GetBrushOffset(RaycastHit hit, float radius)
+        {
+            Vector3 normal = hit.normal;
+
+            Vector3 tangent = Vector3.Cross(normal, Vector3.up);
+
+            if (tangent.sqrMagnitude < 0.001f)
+                tangent = Vector3.Cross(normal, Vector3.right);
+
+            tangent.Normalize();
+
+            Vector3 bitangent = Vector3.Cross(normal, tangent);
+
+            Vector2 circle = UnityEngine.Random.insideUnitCircle * radius;
+
+            return tangent * circle.x + bitangent * circle.y;
         }
     }
 

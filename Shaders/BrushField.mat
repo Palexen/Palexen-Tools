@@ -144,6 +144,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _IntersectionPower: 0.446
+    - _Line: 1
     - _MaterialID: 1
     - _MaterialTypeMask: 2
     - _Metallic: 0
@@ -152,7 +153,7 @@ Material:
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _PerPixelSorting: 0
-    - _Power: 2
+    - _Power: 0.1
     - _QueueControl: -1
     - _QueueOffset: 0
     - _RayTracing: 0
@@ -195,7 +196,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.6529321, g: 0.6529321, b: 1, a: 0.21413481}
+    - _MainColor: {r: 0.6529321, g: 0.6529321, b: 1, a: 0.84263855}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5414346755213992168
