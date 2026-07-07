@@ -2392,6 +2392,7 @@ namespace Palexen.Tools
                         tempBursh.transform.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_MainColor", ppc);
                         tempBursh.transform.SetPositionAndRotation(mh.point, Quaternion.LookRotation(mh.normal));
                         tempBursh.transform.localScale = new Vector3(ra + 1f, ra + 1f, ra + 1f);
+                        tempBursh.transform.SetParent(_pp.transform);
                     }
 
                     if (_pp.Brush == null)
