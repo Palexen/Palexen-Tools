@@ -100,7 +100,9 @@ namespace Palexen.Tools
         {
             Collider[] tempColliders = gameObject.GetComponents<Collider>();
 
-            Gizmos.color = shapeColor;
+            Color c = new(shapeColor.r, shapeColor.g, shapeColor.b, shapeColor.a / 2f);
+
+            Gizmos.color = c;
             Gizmos.matrix = transform.localToWorldMatrix;
 
             foreach (var tempCollider in tempColliders)

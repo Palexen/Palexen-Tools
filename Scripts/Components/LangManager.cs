@@ -35,6 +35,7 @@ namespace Palexen.Tools
 
         public static LangManager instance;
         [SerializeField] private Language _lang;
+        [SerializeField] private SubtitlesUsage _subtitles;
 
         #endregion
 
@@ -137,6 +138,8 @@ namespace Palexen.Tools
                 UpdateCC();
             }
         }
+
+        public SubtitlesUsage Subtitles {  get { return _subtitles; } set { _subtitles = value; } }
 
         #endregion
 

@@ -57,13 +57,15 @@ namespace Palexen.Levels
         [SerializeField] private bool _useRootActivation = false;
         bool isSliderOperation = false;
         string loadingSceneTarget;
+        bool isLoadingComplete = false;
 
         #endregion
 
         #region PROPERTIES
 
         public LevelLoadMode LoadMode { get { return _loadMode; } }
-        public GameObject FadeScreen { get { return _fadeScreen; } }
+        public GameObject FadeScreen { get { return _fadeScreen; } set { _fadeScreen = value; } }
+        public bool LoadingComplete { get { return isLoadingComplete; } }
 
         #endregion
 
@@ -109,6 +111,7 @@ namespace Palexen.Levels
                     if (_fadeScreen != null)
                     {
                         _fadeScreen.SetActive(true);
+                        isLoadingComplete = true;
                     }
                     yield return new WaitForSeconds(LevelManager.instance.Delay);
                     _eventsAfterFinish.Invoke();
@@ -148,6 +151,7 @@ namespace Palexen.Levels
                                 if (_fadeScreen != null)
                                 {
                                     _fadeScreen.SetActive(true);
+                                    isLoadingComplete = true;
                                 }
                                 _eventsAfterFinish.Invoke();
                                 yield return new WaitForSeconds(_delayScreen);
@@ -184,6 +188,7 @@ namespace Palexen.Levels
                             if (_fadeScreen != null)
                             {
                                 _fadeScreen.SetActive(true);
+                                isLoadingComplete = true;
                                 _imageToFill.fillAmount = 1;
                             }
                             _eventsAfterFinish.Invoke();
@@ -213,6 +218,7 @@ namespace Palexen.Levels
                     if (_fadeScreen != null)
                     {
                         _fadeScreen.SetActive(true);
+                        isLoadingComplete = true;
                     }
                     yield return new WaitForSeconds(LevelManager.instance.Delay);
                     _eventsAfterFinish.Invoke();
@@ -252,6 +258,7 @@ namespace Palexen.Levels
                                 if(_fadeScreen != null)
                                 {
                                     _fadeScreen.SetActive(true);
+                                    isLoadingComplete = true;
                                 }
                                 _eventsAfterFinish.Invoke();
                                 yield return new WaitForSeconds(_delayScreen);
@@ -288,6 +295,7 @@ namespace Palexen.Levels
                             if (_fadeScreen != null)
                             {
                                 _fadeScreen.SetActive(true);
+                                isLoadingComplete = true;
                                 _imageToFill.fillAmount = 1;
                             }
                             _eventsAfterFinish.Invoke();

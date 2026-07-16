@@ -62,6 +62,7 @@ namespace Palexen.Tools
     public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
     public enum DialogAudioFeature { useAudio, noAudio }
     public enum DialogOrder { sequenced, random }
+    public enum SubtitlesUsage {yes, no}
     public enum Initializer { auto, manual }
     public enum LevelLoadMode { catchAndLoad, loadOnly }
     public enum LoadingBarMode { none, slider, fill }
@@ -1738,11 +1739,13 @@ namespace Palexen.Tools
     {
         LangManager lm;
         SerializedProperty _lang;
+        SerializedProperty _subtitles;
 
         private void OnEnable()
         {
             lm = (LangManager)target;
             _lang = serializedObject.FindProperty("_lang");
+            _subtitles = serializedObject.FindProperty("_subtitles");
         }
 
         public override void OnInspectorGUI()
@@ -1763,6 +1766,7 @@ namespace Palexen.Tools
 
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
             EditorGUILayout.PropertyField(_lang);
+            EditorGUILayout.PropertyField(_subtitles);
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
 
             if (EditorApplication.isPlaying)

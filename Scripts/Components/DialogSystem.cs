@@ -19,7 +19,9 @@
 * -----------------------------------------------------------------------------
 */
 using TMPro;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using System.Collections.Generic;
 
 #if PALEXEN_TOOLS
@@ -68,7 +70,10 @@ namespace Palexen.Sequences
 
         void Start()
         {
-            _subtitles.text = "";
+            if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+            {
+                _subtitles.text = "";
+            }
 
             UpdateLang();
         }
@@ -114,7 +119,10 @@ namespace Palexen.Sequences
             {
                 if (!_langAudioSource.isPlaying)
                 {
-                    _subtitles.text = "";
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = "";
+                    }
                 }
             }
         }
@@ -134,7 +142,11 @@ namespace Palexen.Sequences
                 nextToPlay = 0;
             }
 
-            _subtitles.text = "";
+            if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+            {
+                _subtitles.text = "";
+            }
+
             _langAudioSource.Stop();
             OnCompleteActions();
         }
@@ -170,9 +182,12 @@ namespace Palexen.Sequences
             {
                 case Language.english:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
                         _dialogSequencer[0]._sequence[playback]._dialogContainer._actorName + "</color>" +
                         _dialogSequencer[0]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -190,9 +205,12 @@ namespace Palexen.Sequences
 
                 case Language.spanish:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[1]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[1]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[1]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[1]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -210,9 +228,12 @@ namespace Palexen.Sequences
 
                 case Language.french:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[2]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[2]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[2]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[2]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -230,9 +251,12 @@ namespace Palexen.Sequences
 
                 case Language.german:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[3]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[3]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[3]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[3]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -250,9 +274,12 @@ namespace Palexen.Sequences
 
                 case Language.japanese:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[4]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[4]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[4]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[4]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -270,9 +297,12 @@ namespace Palexen.Sequences
 
                 case Language.chinese:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[5]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[5]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[5]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[5]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -290,9 +320,12 @@ namespace Palexen.Sequences
 
                 case Language.korean:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[6]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[6]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[6]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[6]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -310,9 +343,12 @@ namespace Palexen.Sequences
 
                 case Language.russian:
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[7]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                    _dialogSequencer[7]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                    _dialogSequencer[7]._sequence[playback]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[7]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                        _dialogSequencer[7]._sequence[playback]._dialogContainer._actorName + "</color>" +
+                        _dialogSequencer[7]._sequence[playback]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -343,9 +379,12 @@ namespace Palexen.Sequences
 
                     int a = Random.Range(0, _dialogSequencer[0]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[a]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[0]._sequence[a]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[0]._sequence[a]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[a]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[0]._sequence[a]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[0]._sequence[a]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -362,9 +401,12 @@ namespace Palexen.Sequences
 
                     int b = Random.Range(0, _dialogSequencer[1]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[b]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[1]._sequence[b]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[1]._sequence[b]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[b]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[1]._sequence[b]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[1]._sequence[b]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -381,9 +423,12 @@ namespace Palexen.Sequences
 
                     int c = Random.Range(0, _dialogSequencer[2]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[c]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[2]._sequence[c]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[2]._sequence[c]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[c]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[2]._sequence[c]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[2]._sequence[c]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -400,9 +445,12 @@ namespace Palexen.Sequences
 
                     int d = Random.Range(0, _dialogSequencer[3]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[d]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[3]._sequence[d]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[3]._sequence[d]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[d]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[3]._sequence[d]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[3]._sequence[d]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -419,9 +467,12 @@ namespace Palexen.Sequences
 
                     int e = Random.Range(0, _dialogSequencer[4]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[e]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[4]._sequence[e]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[4]._sequence[e]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[e]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[4]._sequence[e]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[4]._sequence[e]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -438,9 +489,12 @@ namespace Palexen.Sequences
 
                     int f = Random.Range(0, _dialogSequencer[5]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[f]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[5]._sequence[f]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[5]._sequence[f]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[f]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[5]._sequence[f]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[5]._sequence[f]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -457,9 +511,12 @@ namespace Palexen.Sequences
 
                     int g = Random.Range(0, _dialogSequencer[6]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[g]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[6]._sequence[g]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[6]._sequence[g]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[g]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[6]._sequence[g]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[6]._sequence[g]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -476,9 +533,12 @@ namespace Palexen.Sequences
 
                     int h = Random.Range(0, _dialogSequencer[7]._sequence.Count);
 
-                    _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[h]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[7]._sequence[h]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[7]._sequence[h]._dialogContainer._dialogText;
+                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
+                    {
+                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[h]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
+                            _dialogSequencer[7]._sequence[h]._dialogContainer._actorName + "</color>" +
+                            _dialogSequencer[7]._sequence[h]._dialogContainer._dialogText;
+                    }
 
                     if (_dialogAudioFeature == DialogAudioFeature.useAudio)
                     {
@@ -581,6 +641,7 @@ namespace Palexen.Sequences
         /// </summary>
         /// <remarks> When you call the method, it sets a new text element TMP_Text</remarks>
         /// <param name="newText"></param>
+        [Obsolete("Use SubtitlesText Property instead")]
         public void SetTextUI(TMP_Text newText)
         {
             _subtitles = newText;
@@ -590,6 +651,7 @@ namespace Palexen.Sequences
         /// Call this method when you need to change the audio source.
         /// </summary>
         /// <param name="newAudioSource"></param>
+        [Obsolete("Use Speaker Property instead")]
         public void SetAudioSource(AudioSource newAudioSource)
         {
             _langAudioSource = newAudioSource;
@@ -602,7 +664,10 @@ namespace Palexen.Sequences
         public DialogAudioFeature Feature { get { return _dialogAudioFeature; } }
         public DialogOrder Order {  get { return _order; } set { _order = value; } }
         public bool IsPlaying { get { return isPlaying; } }
+        public bool IsFinished { get { return dialogComplete; } }
         public bool InDebug { get { return debugMode; } set { debugMode = value; } }
+        public TMP_Text SubtitlesText { get { return _subtitles; } set { _subtitles = value; } }
+        public AudioSource Speaker { get { return _langAudioSource; } set { _langAudioSource = value; } }
 
         #endregion
     }
