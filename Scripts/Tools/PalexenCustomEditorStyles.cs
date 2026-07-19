@@ -59,9 +59,8 @@ public static class PalexenEditorStyles
             alignment = textAnchor,
             fontSize = fontSize,
             fontStyle = fontStyle,
-            fixedHeight = height,
-            fixedWidth = Screen.width * .9f,
-            stretchWidth = true
+            stretchWidth = true,
+            wordWrap = true
         };
         return style;
     }
@@ -82,7 +81,8 @@ public static class PalexenEditorStyles
             alignment = textAlignment,
             fontSize = fontSize,
             fontStyle = fontStyle,
-            fixedHeight = height
+            fixedHeight = height,
+            wordWrap = true
         };
         return style;
     }

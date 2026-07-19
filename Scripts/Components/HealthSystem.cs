@@ -75,6 +75,10 @@ namespace Palexen.Gameplay
 
         #region PROPERTIES
 
+        public int CurrentHealth { get { return _totalHealth; } }
+        public Vector2Int HealthRange { get { return _healthRange; } }
+        public int ExceededGoal { get { return _exceededOn; } }
+        public Vector2Int ExceededThreshold {  get { return _exceededThreshold; } }
         public HealthCondition Behaviour { get { return _behaviour; } set { _behaviour = value; } }
         public Rigidbody[] Rigidbodies { get { return _rigidbodies; } set { _rigidbodies = value; } }
         public bool VelocityFeatures { get { return showVelocityLimiters; } set { showVelocityLimiters = value; } }
@@ -272,6 +276,15 @@ namespace Palexen.Gameplay
             {
                 _rigidbodies[i].isKinematic = true;
             }
+        }
+
+        /// <summary>
+        /// Test your results in edit mode!
+        /// </summary>
+        [ContextMenu("Test Damage (Applies 50 DM Points!)")]
+        public void SetTestDamage()
+        {
+            TakeDamage(50);
         }
 
         #endregion

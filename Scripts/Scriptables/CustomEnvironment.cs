@@ -41,7 +41,11 @@ namespace Palexen.Scriptables
 
 		[Space(10)]
 
-		[MyHeader("Colors")]
+		[MyHeader("Separators")]
+        [Notepad("Use <color=yellow>[Separator]</color> and <color=yellow>[Line]</color> Attributes to paint your Separators " +
+            "and use <color=yellow>[Notepad]</color> attribute to place custom messages directly on your scripts", FontStyle.BoldAndItalic)]
+        [Separator]
+        [Line]
 		public Color contextSeparatorColor = Color.cyan;
 
         [MyHeader("Global Gizmos Settings")]
@@ -68,16 +72,19 @@ namespace Palexen.Scriptables
         [TextArea] public string errorString = "Error Message | Example";
 
 
-		[MyHeader("The Field Colors and messages will look like this (No need to add any reference here)" +
-            "\n Use </color>[FieldColor(FieldPropertyColor, ShowObjectMessage, bool)] to use it", 3)]
+		[MyHeader("Field Colors and messages")]
+        [Notepad("The Field Colors and messages, will look like this (No need to add any reference here)\n" +
+            "Use <color=yellow>[FieldColor(FieldPropertyColor, ShowObjectMessage, bool)]</color> to use it", FontStyle.BoldAndItalic)]
         [FieldColor(FieldPropertyColor.cyan, ShowObjectMessage.message)] [SerializeField] private GameObject infoObject;
         [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.warningMessage)] [SerializeField] private GameObject warningObject;
         [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)] [SerializeField] private GameObject errorObject;
 
-        [MyHeader("Tag Attribute, use </color>[TagField] on your string tag to use it")]
+        [MyHeader("Tag Attribute")]
+        [Notepad("Use <color=yellow>[TagField]</color> on your string tag to use it", FontStyle.BoldAndItalic)]
         [TagField] public string tagFieldAttribute;
 
-        [MyHeader("Slider Attribute, use </color>[VectorSlider(0, 1)] to use it")]
+        [MyHeader("Slider Attribute")]
+        [Notepad("Use <color=YELLOW>[VectorSlider(Min Value, Max Value)]</color> to use it", FontStyle.BoldAndItalic)]
         [VectorSlider(0, 1)] public Vector2 vector2Slider = new(0, 1);
         [VectorSlider(0, 100)] public Vector2Int vector2SliderInt = new(0, 50);
 

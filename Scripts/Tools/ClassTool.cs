@@ -1231,6 +1231,61 @@ namespace Palexen.Tools
 
             Color c = setting.contextSeparatorColor;
 
+            if (Application.isPlaying)
+            {
+                float current = hg.CurrentHealth;
+                float maxValue = hg.HealthRange.y;
+
+                float progress = Mathf.Clamp01(current / maxValue);
+
+                Rect bar = EditorGUILayout.GetControlRect(false, 22);
+
+                if (current > 0)
+                {
+                    EditorGUI.ProgressBar(bar, progress, "Current Health: " + current + "Hp");
+                } 
+                else
+                {
+                    EditorGUI.ProgressBar(bar, 0, "Your Game Object is Dead!");
+                }
+
+                //-----------------------------
+
+                float Ecurrent = hg.CurrentHealth;
+                float EmaxValue = hg.ExceededGoal;
+
+                float Eprogress = Ecurrent < 0 ? Mathf.Clamp01(Ecurrent / EmaxValue) : 0f;
+
+                Rect Ebar = EditorGUILayout.GetControlRect(false, 22);
+
+                string b;
+
+                if (Ecurrent <= EmaxValue)
+                {
+                    b = "Exceeded!";
+                }
+                else
+                {
+                    b = "Excess Goal: ";
+                }
+
+                if (Ecurrent >= EmaxValue)
+                {
+                    if(hg.CurrentHealth>0)
+                    {
+                        EditorGUI.ProgressBar(Ebar, 0, "Your Game Object Still Alive");
+                    }
+                    else
+                    {
+                        EditorGUI.ProgressBar(Ebar, Eprogress, b + hg.ExceededGoal + "Hp " + "| Current Hp: " + Ecurrent);
+                    }
+                }
+                else
+                {
+                    EditorGUI.ProgressBar(Ebar, 1, b);
+                }
+            }
+
             GUILayout.Space(10);
 
             serializedObject.Update();
@@ -1425,6 +1480,14 @@ namespace Palexen.Tools
             GUI.color = Color.white;
             GUILayout.Space(10);
 
+            if (EditorApplication.isPlaying)
+            {
+                if (GUILayout.Button("Test Damage", PalexenEditorStyles.BigButton))
+                {
+                    hg.SetTestDamage();
+                }
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
     }
@@ -1479,6 +1542,63 @@ namespace Palexen.Tools
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
 
             Color c = setting.contextSeparatorColor;
+
+            if (Application.isPlaying)
+            {
+                float current = hc.CurrentHealth;
+                float maxValue = hc.HealthRange.y;
+
+                float progress = Mathf.Clamp01(current / maxValue);
+
+                Rect bar = EditorGUILayout.GetControlRect(false, 22);
+
+                if (current > 0)
+                {
+                    EditorGUI.ProgressBar(bar, progress, "Current Health: " + current + "Hp");
+                }
+                else
+                {
+                    EditorGUI.ProgressBar(bar, 0, "Your Game Object is Dead!");
+                }
+
+                //-----------------------------
+
+                float Ecurrent = hc.CurrentHealth;
+                float EmaxValue = hc.ExceededGoal;
+
+                float Eprogress = Ecurrent < 0 ? Mathf.Clamp01(Ecurrent / EmaxValue) : 0f;
+
+                Rect Ebar = EditorGUILayout.GetControlRect(false, 22);
+
+                string b;
+
+                if (Ecurrent <= EmaxValue)
+                {
+                    b = "Exceeded!";
+                }
+                else
+                {
+                    b = "Excess Goal: ";
+                }
+
+                if (Ecurrent >= EmaxValue)
+                {
+                    if (hc.CurrentHealth > 0)
+                    {
+                        EditorGUI.ProgressBar(Ebar, 0, "Your Game Object Still Alive");
+                    }
+                    else
+                    {
+                        EditorGUI.ProgressBar(Ebar, Eprogress, b + hc.ExceededGoal + "Hp " + "| Current Hp: " + Ecurrent);
+                    }
+                }
+                else
+                {
+                    EditorGUI.ProgressBar(Ebar, 1, b);
+                }
+            }
+
+            GUILayout.Space(10);
 
             serializedObject.Update();
 
@@ -1592,6 +1712,20 @@ namespace Palexen.Tools
 
             EditorGUI.indentLevel--;
             EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(10);
+            GUI.color = c;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+            GUILayout.Space(10);
+
+            if (EditorApplication.isPlaying)
+            {
+                if (GUILayout.Button("Test Damage", PalexenEditorStyles.BigButton))
+                {
+                    hc.SetTestDamage();
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

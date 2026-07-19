@@ -79,6 +79,10 @@ namespace Palexen.Gameplay
 
         #region PROPERTIES
 
+        public int CurrentHealth { get { return _healt; } }
+        public Vector2Int HealthRange { get { return _health; } }
+        public int ExceededGoal { get { return _exceededOn; } }
+        public Vector2Int ExceededThreshold { get { return _exceededThreshold; } }
         public HealthCondition AffectsOn { get { return _affectsOn; } set { _affectsOn = value; } }
         public bool AnimationFeatures { get { return animationFeatures; } set { animationFeatures = value; } }
         public bool ShowEvents { get { return showEvents; } set { showEvents = value; } }
@@ -369,6 +373,15 @@ namespace Palexen.Gameplay
                 string triggerName = triggerNames[Random.Range(0, triggerNames.Length)];
                 _animator.SetTrigger(triggerName);
             }
+        }
+
+        /// <summary>
+        /// Test your results in edit mode!
+        /// </summary>
+        [ContextMenu("Test Damage (Applies 50 DM Points!)")]
+        public void SetTestDamage()
+        {
+            TakeDamage(50);
         }
 
         #endregion

@@ -41,6 +41,7 @@ namespace Palexen.Tools
     public enum GizmoForm { sphere, cube, cylinder, cone, arrow, circle, square, dot }
     public enum TurnOnScriptDescription { On, Off }
     public enum HierarchyIndentation { full, compact }
+    public enum DrawOn { up, bottom }
 
     #endregion
 
@@ -1073,6 +1074,235 @@ namespace Palexen.Tools
             }
         }
     }
+#endif
+
+    #endregion
+
+    #region SEPARATOR
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class SeparatorAttribute : PropertyAttribute
+    {
+        private string _message;
+        private ShowObjectMessage _type;
+
+        public SeparatorAttribute(string message = "", ShowObjectMessage type = ShowObjectMessage.no)
+        {
+            this._message = message;
+            this._type = type;
+        }
+
+        public string Message { get { return _message; } }
+        public ShowObjectMessage Type { get { return _type; } }
+    }
+
+#if UNITY_EDITOR
+
+    [CustomPropertyDrawer(typeof(SeparatorAttribute))]
+    public class SeparatorDrawer : PropertyDrawer
+    {
+        private const float HelpBoxHeight = 18f;
+        private const float HelpBoxMessageHeight = 30f;
+        private const float SpaceHeight = 2;
+
+        float h;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            SeparatorAttribute box = (SeparatorAttribute)attribute;
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
+
+            MessageType t = new();
+
+            switch (box.Type)
+            {
+                case ShowObjectMessage.errorMessage: t = MessageType.Error; break;
+                case ShowObjectMessage.warningMessage: t = MessageType.Warning; break;
+                case ShowObjectMessage.message: t = MessageType.Info; break;
+                case ShowObjectMessage.no: t = MessageType.None; break;
+            }
+
+            Rect boxRect = new(position.x, position.y, position.width, h);
+
+            if (t == MessageType.None)
+            {
+                Color originalColor = GUI.color;
+                if (setting != null) GUI.color = setting.contextSeparatorColor;
+
+                EditorGUI.HelpBox(boxRect, box.Message, t);
+
+                GUI.color = originalColor;
+            }
+            else
+            {
+                EditorGUI.HelpBox(boxRect, box.Message, t);
+            }
+
+            if(t == MessageType.None)
+            {
+                h = HelpBoxHeight;
+            }
+            else
+            {
+                h = HelpBoxMessageHeight;
+            }
+
+            float propertyY = position.y + h + SpaceHeight;
+            float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            Rect propertyRect = new(position.x, propertyY, position.width, propertyHeight);
+            EditorGUI.PropertyField(propertyRect, property, label, true);
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            float baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+
+            return baseHeight + h + SpaceHeight;
+        }
+    }
+
+#endif
+
+    #endregion
+
+    #region LINE
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class LineAttribute : PropertyAttribute
+    {
+        private DrawOn drawOn;
+        private int thickness;
+        private int padding;
+        private int margin;
+
+        public DrawOn Draw { get { return drawOn; } }
+        public int Thickness { get { return thickness; } }
+        public int Padding { get { return padding; } }
+        public int Margin { get { return margin; } }
+
+        public LineAttribute(DrawOn draw = DrawOn.up, int thickness = 2, int padding = 10, int margin = 0)
+        {
+            this.drawOn = draw;
+            this.thickness = thickness;
+            this.padding = padding;
+            this.margin = margin;
+        }
+    }
+
+#if UNITY_EDITOR
+
+    [CustomPropertyDrawer(typeof(LineAttribute))]
+    public class LineDrawer : PropertyDrawer
+    {
+        float baseHeight;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            LineAttribute line = (LineAttribute)attribute;
+
+            Rect rect = EditorGUILayout.GetControlRect(false, GUILayout.Height(line.Padding + line.Thickness));
+
+            rect.height = line.Thickness;
+
+            rect.y += line.Padding * 0.5f;
+
+            switch (line.Margin)
+            {
+                case < 0:
+                    rect.x = 0;
+                    rect.width = EditorGUIUtility.currentViewWidth;
+                    break;
+                case > 0:
+                    rect.x += line.Margin;
+                    rect.width -= line.Margin * 2;
+                    break;
+            }
+
+            float propertyY = position.y;
+            float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            Rect propertyRect = new(position.x, propertyY, position.width, propertyHeight);
+            EditorGUI.PropertyField(propertyRect, property, label, true);
+
+            EditorGUI.DrawRect(rect, Color.gray);
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+
+            baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+
+            return baseHeight;
+        }
+    }
+
+#endif
+
+    #endregion
+
+    #region NOTES
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class NotepadAttribute : PropertyAttribute
+    {
+        private string note;
+        private TextAnchor alignment;
+        private FontStyle fs; 
+
+        public string Message { get { return note; } }
+        public TextAnchor Alignment {  get { return alignment; } }
+        public FontStyle FontStyles { get { return fs; } }
+
+        public NotepadAttribute(string bloc = "", FontStyle fontStyle = FontStyle.Normal, TextAnchor alignment = TextAnchor.MiddleLeft)
+        {
+            this.note = bloc;
+            this.fs = fontStyle;
+            this.alignment = alignment;
+        }
+    }
+
+#if UNITY_EDITOR
+
+    [CustomPropertyDrawer(typeof(NotepadAttribute))]
+    public class NoteDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            NotepadAttribute note = (NotepadAttribute)attribute;
+
+            GUIStyle style = GUI.skin.box;
+            style.richText = true;
+            style.alignment = note.Alignment;
+            style.fontStyle = note.FontStyles;
+
+            GUIContent boxContent = new GUIContent(note.Message);
+            float boxHeight = style.CalcHeight(boxContent, position.width);
+
+            Rect boxRect = new(position.x, position.y, position.width, boxHeight);
+            GUI.Box(boxRect, boxContent, style);
+
+            float propertyY = position.y + boxHeight + 2;
+            float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            Rect propertyRect = new(position.x, propertyY, position.width, propertyHeight);
+
+            EditorGUI.PropertyField(propertyRect, property, label, true);
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            NotepadAttribute note = (NotepadAttribute)attribute;
+
+            GUIStyle style = new GUIStyle(GUI.skin.box);
+            GUIContent boxContent = new GUIContent(note.Message);
+
+            float currentWidth = EditorGUIUtility.currentViewWidth;
+            float boxHeight = style.CalcHeight(boxContent, currentWidth);
+
+            float baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            return boxHeight + 2 + baseHeight;
+        }
+    }
+
 #endif
 
     #endregion
