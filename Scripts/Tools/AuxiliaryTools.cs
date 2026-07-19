@@ -502,6 +502,25 @@ namespace Palexen.Tools
             Rect indentedRowRect = new Rect(startX, slection.y, totalWidth, slection.height);
             EditorGUI.DrawRect(indentedRowRect, thisColor.MyColor);
 
+            Transform[] objs = obj.GetComponentsInChildren<Transform>();
+
+            foreach (Transform go in objs)
+            {
+                if (!go.gameObject.activeInHierarchy)
+                {
+                    if (EditorGUIUtility.isProSkin)
+                    {
+                        Rect indentedRowRect2 = new Rect(startX, slection.y, totalWidth, slection.height);
+                        EditorGUI.DrawRect(indentedRowRect2, Color.gray / 2);
+                    }
+                    else
+                    {
+                        Rect indentedRowRect2 = new Rect(startX, slection.y, totalWidth, slection.height);
+                        EditorGUI.DrawRect(indentedRowRect2, Color.white / 2);
+                    }
+                }
+            }
+
             List<Texture2D> iconsToPaint = new List<Texture2D>();
 
             if (thisColor.Icons != null && thisColor.Icons.Length > 0)
