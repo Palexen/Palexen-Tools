@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 110c95cd10ecdb141bef0c591dfe625d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _behaviour: 0
   _targetAllowedVia: 0
   _tagName: Player
   _layerMask:
@@ -57,6 +58,19 @@ MonoBehaviour:
   ambienceZoneSource: {fileID: 6147036233911180817}
   minMaxVolume: {x: 0, y: 1}
   updateSpeed: 1
+  _master: {fileID: 0}
+  _timeToReach: 1
+  _snapshots: []
+  _weightsOnEnter: []
+  _weightsOnExit: []
+  _snapshotsSetup: []
+  addEvents: 0
+  _onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  _onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!82 &6147036233911180817
 AudioSource:
   m_ObjectHideFlags: 0
@@ -68,6 +82,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0
   m_Pitch: 1

@@ -93,15 +93,15 @@ namespace Palexen.Audio.Atmos
             if (newClip.name != ambienceSource.clip.name)
             {
                 tempClip = newClip;
-                BlendSpeed = transitionSpeed;
+                updateSpeed = transitionSpeed;
                 UpdatingSound();
             }
         }
 
         void UpdatingSound()
         {
-            TransitionTo = AudioTransitionState.fadeOut;
-            Invoke(nameof(Changing), 1 / BlendSpeed);
+            transitionState = AudioTransitionState.fadeOut;
+            Invoke(nameof(Changing), 1 / updateSpeed);
         }
 
         void Changing()
@@ -114,7 +114,7 @@ namespace Palexen.Audio.Atmos
 
         void UpdateComplete()
         {
-            TransitionTo = AudioTransitionState.fadeIn;
+            transitionState = AudioTransitionState.fadeIn;
         }
 
         #endregion

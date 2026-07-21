@@ -45,6 +45,8 @@ namespace Palexen.Tools
 
         [MyHeader("Random Size")]
         [VectorSlider(0, 2)][SerializeField] private Vector2 _sizeRandomizer = new(.9f, 1);
+        [SerializeField] private AlignToSurface _alingToSurface;
+        [SerializeField] private float _yOffset;
 
         [MyHeader("Brush")]
         [SerializeField] private GameObject _brush;
@@ -71,6 +73,8 @@ namespace Palexen.Tools
 
         public LayerMask TargetLayer { get { return _targetLayer; } }
         public EventType MouseBehaviour { get { return _mouseBehaviour; } }
+        public AlignToSurface Alignment { get { return _alingToSurface; } }
+        public float YOffset { get { return _yOffset; } }
         public float Density { get { return _density * 10; } }
         public float Radius { get { return _radius; } }
         public Color BrushColor { get { return _brushColor; } }

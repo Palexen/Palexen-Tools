@@ -57,7 +57,7 @@ namespace Palexen.Audio.Atmos
 
         [MyHeader("Audio Mixer Settings")]
         [FieldColor(FieldPropertyColor.orange, ShowObjectMessage.errorMessage)][SerializeField] private AudioMixer _master;
-        [SerializeField] private float _timeToReach;
+        [SerializeField] private float _timeToReach = 1;
         [FieldColor(FieldPropertyColor.yellow, ShowObjectMessage.errorMessage)][SerializeField] private AudioMixerSnapshot[] _snapshots;
         [Range(0, 1)][SerializeField] private float[] _weightsOnEnter;
         [Range(0, 1)][SerializeField] private float[] _weightsOnExit;
@@ -73,6 +73,9 @@ namespace Palexen.Audio.Atmos
         [SerializeField] private UnityEvent _onTriggerEnter;
         [SerializeField] private UnityEvent _onTriggerExit;
 
+        bool isIn;
+        AudioClip tempClip;
+
         #endregion
 
         #region PROPERTIES
@@ -84,6 +87,7 @@ namespace Palexen.Audio.Atmos
         public TargetAllowedVia TargetType { get { return _targetAllowedVia; } }
         public AudioSource AmbienceZoneSource { get { return ambienceZoneSource; } set { ambienceZoneSource = value; } }
         public bool AddEventsCapability { get { return addEvents; } set { addEvents = value; } }
+        public bool IsIn { get { return isIn; } }
 
         #endregion
 
@@ -174,6 +178,8 @@ namespace Palexen.Audio.Atmos
                         {
                             _onTriggerEnter.Invoke();
                         }
+
+                        isIn = true;
                     }
 
                     break;
@@ -202,6 +208,8 @@ namespace Palexen.Audio.Atmos
                         {
                             _onTriggerEnter.Invoke();
                         }
+
+                        isIn = true;
                     }
 
                     break;
@@ -236,6 +244,8 @@ namespace Palexen.Audio.Atmos
                         {
                             _onTriggerExit.Invoke();
                         }
+
+                        isIn = false;
                     }
 
                     break;
@@ -264,10 +274,56 @@ namespace Palexen.Audio.Atmos
                         {
                             _onTriggerExit.Invoke();
                         }
+
+                        isIn = false;
                     }
 
                     break;
             }
+        }
+
+        #endregion
+
+        #region API
+
+        public void SetAmbience(AudioClip newClip, float transitionSpeed = .2f)
+        {
+            if (isIn)
+            {
+                if (newClip.name != ambienceZoneSource.clip.name)
+                {
+                    tempClip = newClip;
+                    updateSpeed = transitionSpeed;
+                    UpdatingSound();
+                }
+            }
+            else
+            {
+                if (newClip.name != ambienceZoneSource.clip.name)
+                {
+                    tempClip = newClip;
+                    ambienceZoneSource.clip = tempClip;
+                }
+            }
+        }
+
+        void UpdatingSound()
+        {
+            transitionState = AudioTransitionState.fadeOut;
+            Invoke(nameof(Changing), 1 / updateSpeed);
+        }
+
+        void Changing()
+        {
+            ambienceZoneSource.Stop();
+            ambienceZoneSource.clip = tempClip;
+            ambienceZoneSource.Play();
+            UpdateComplete();
+        }
+
+        void UpdateComplete()
+        {
+            transitionState = AudioTransitionState.fadeIn;
         }
 
         #endregion

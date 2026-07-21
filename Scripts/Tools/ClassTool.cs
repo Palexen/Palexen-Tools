@@ -66,7 +66,7 @@ namespace Palexen.Tools
     public enum Initializer { auto, manual }
     public enum LevelLoadMode { catchAndLoad, loadOnly }
     public enum LoadingBarMode { none, slider, fill }
-
+    public enum AlignToSurface { yes, no }
     public enum AmbienceZoneBehaviour { ambience, snapshots }
 
     #endregion
@@ -638,7 +638,7 @@ namespace Palexen.Tools
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(_transition);
+            //EditorGUILayout.PropertyField(_transition);
             EditorGUILayout.PropertyField(_source);
             EditorGUILayout.PropertyField(_minMax);
             EditorGUILayout.PropertyField(_speed);
@@ -761,7 +761,7 @@ namespace Palexen.Tools
 
             if (ga.Behaviour == AmbienceZoneBehaviour.ambience)
             {
-                EditorGUILayout.PropertyField(_state);
+                //EditorGUILayout.PropertyField(_state);
                 EditorGUILayout.PropertyField(_affect);
                 EditorGUILayout.PropertyField(_source);
                 EditorGUILayout.PropertyField(_minMax);
@@ -1182,7 +1182,30 @@ namespace Palexen.Tools
             serializedObject.Update();
 
             EditorGUILayout.PropertyField(_res);
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray);
             EditorGUILayout.PropertyField(_timer);
+
+            if (EditorApplication.isPlaying)
+            {
+                GUI.color = setting.contextSeparatorColor;
+                EditorGUILayout.HelpBox("", MessageType.None);
+                GUI.color = Color.white;
+
+                if (GUILayout.Button("Load Resources Async", PalexenEditorStyles.BigButton))
+                {
+                    async.LoadResourcesAsync();
+                }
+            }
+            else
+            {
+                GUI.color = setting.inactiveGizmosColor;
+                EditorGUILayout.HelpBox("", MessageType.None);
+                GUI.color = Color.white;
+                if (GUILayout.Button("Waiting to Play Mode...", PalexenEditorStyles.BigButton))
+                {
+
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -2378,6 +2401,8 @@ namespace Palexen.Tools
         SerializedProperty _brushColor;
         SerializedProperty _prefabs;
         SerializedProperty _YRandomizer;
+        SerializedProperty _alingToSurface;
+        SerializedProperty _yOffset;
         SerializedProperty _sizeRandomizer;
         SerializedProperty _brush;
         float alpha;
@@ -2398,6 +2423,8 @@ namespace Palexen.Tools
             _brushColor = serializedObject.FindProperty("_brushColor");
             _prefabs = serializedObject.FindProperty("_prefabs");
             _YRandomizer = serializedObject.FindProperty("_YRandomizer");
+            _alingToSurface = serializedObject.FindProperty("_alingToSurface");
+            _yOffset = serializedObject.FindProperty("_yOffset");
             _sizeRandomizer = serializedObject.FindProperty("_sizeRandomizer");
             _brush = serializedObject.FindProperty("_brush");
         }
@@ -2443,6 +2470,13 @@ namespace Palexen.Tools
                 PalexenEditorStyles.CoolTitle(setting.headerSize, TextAnchor.MiddleLeft));
             EditorGUILayout.PropertyField(_prefabs);
             EditorGUILayout.PropertyField(_YRandomizer);
+            EditorGUILayout.PropertyField(_alingToSurface);
+
+            if(_pp.Alignment == AlignToSurface.no)
+            {
+                EditorGUILayout.PropertyField(_yOffset);
+            }
+
             EditorGUILayout.PropertyField(_sizeRandomizer);
 
             GUI.color = _pp.BrushColor;
@@ -2483,7 +2517,7 @@ namespace Palexen.Tools
             if (!_isPainting)
             {
                 float colorA = _pp.BrushColor.a;
-                float wave = (Mathf.Sin(Time.time * _pp.Density / 10) + 1f) / 2f;
+                float wave = (Mathf.Sin(Time.time * 15) + 1f) / 2f;
                 //alpha = Mathf.PingPong(Time.time, colorA);
                 alpha = wave * colorA;
 
@@ -2588,10 +2622,19 @@ namespace Palexen.Tools
                             float rad = UnityEngine.Random.Range(0, _pp.Radius);
                             clone.transform.position = hit.point + GetBrushOffset(hit, rad);
 
-                            Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                            Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
-
-                            clone.transform.rotation = randomYaw * alignToSurface;
+                            if (_pp.Alignment == AlignToSurface.yes)
+                            {
+                                Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                                Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
+                                clone.transform.rotation = randomYaw * alignToSurface;
+                            }
+                            else
+                            {
+                                Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), Vector3.up);
+                                clone.transform.rotation = randomYaw;
+                                clone.transform.position = new(clone.transform.position.x, 
+                                    clone.transform.position.y + _pp.YOffset, clone.transform.position.z);
+                            }
 
                             clone.transform.parent = _pp.transform;
 
@@ -2620,10 +2663,19 @@ namespace Palexen.Tools
                                 float rad = UnityEngine.Random.Range(0, _pp.Radius);
                                 clone.transform.position = hit.point + GetBrushOffset(hit, rad);
 
-                                Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                                Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
-
-                                clone.transform.rotation = randomYaw * alignToSurface;
+                                if (_pp.Alignment == AlignToSurface.yes)
+                                {
+                                    Quaternion alignToSurface = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                                    Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), hit.normal);
+                                    clone.transform.rotation = randomYaw * alignToSurface;
+                                }
+                                else
+                                {
+                                    Quaternion randomYaw = Quaternion.AngleAxis(UnityEngine.Random.Range(_pp.YRandomizer.x, _pp.YRandomizer.y), Vector3.up);
+                                    clone.transform.rotation = randomYaw;
+                                    clone.transform.position = new(clone.transform.position.x, 
+                                        clone.transform.position.y + _pp.YOffset, clone.transform.position.z);
+                                }
 
                                 clone.transform.parent = _pp.transform;
 

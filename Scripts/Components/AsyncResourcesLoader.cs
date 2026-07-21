@@ -29,7 +29,7 @@ namespace Palexen.Gameplay
     {
         #region VARIABLES
 
-        [SerializeField] private GameObject[] gameplayResources;
+        [SerializeField][FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] private GameObject[] gameplayResources;
         [SerializeField] private float activationInterval = 1.0f;
 
         private int currentIndex = 0;
@@ -38,7 +38,7 @@ namespace Palexen.Gameplay
 
         #region PROPERTIES
 
-        public GameObject[] GameplayResources { get { return gameplayResources; } }
+        public GameObject[] GameplayResources { get { return gameplayResources; } set { gameplayResources = value; } }
 
         #endregion
 
@@ -51,7 +51,10 @@ namespace Palexen.Gameplay
                 res.SetActive(false);
             }
 
-            InvokeRepeating(nameof(ActivateNextResource), 0f, activationInterval);
+            if (activationInterval > 0)
+            {
+                InvokeRepeating(nameof(ActivateNextResource), 0f, activationInterval);
+            }
         }
 
         #endregion
@@ -75,6 +78,17 @@ namespace Palexen.Gameplay
             {
                 CancelInvoke(nameof(ActivateNextResource));
             }
+        }
+
+        /// <summary>
+        /// Activates the Load Async resource in the gameplayResources collection, if available.
+        /// </summary>
+        /// <remarks>If all resources have already been activated, this method cancels further scheduled
+        /// invocations of itself. This method is intended to be called repeatedly, typically as part of a timed
+        /// sequence.</remarks>
+        public void LoadResourcesAsync(float interval = 1f)
+        {
+            InvokeRepeating(nameof(ActivateNextResource), 0f, interval);
         }
 
         #endregion

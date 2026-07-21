@@ -734,7 +734,13 @@ namespace Palexen.Tools
                         GUILayout.Space(5);
                         GUILayout.BeginHorizontal();
                         GUILayout.FlexibleSpace();
-                        GUILayout.Box(attrib.Description, GUILayout.Width(Screen.width * .8f));
+                        GUIStyle guiForDesc = new GUIStyle(GUI.skin.label);
+                        guiForDesc.fontStyle = FontStyle.Bold;
+                        guiForDesc.alignment = TextAnchor.MiddleCenter;
+                        guiForDesc.richText = true;
+                        guiForDesc.stretchWidth = true;
+                        guiForDesc.wordWrap = true;
+                        GUILayout.Box(attrib.Description, guiForDesc);
                         GUILayout.FlexibleSpace();
                         GUILayout.EndHorizontal();
 
