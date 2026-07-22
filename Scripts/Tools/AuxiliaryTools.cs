@@ -722,8 +722,6 @@ namespace Palexen.Tools
                     if (attrib != null)
                     {
                         GUILayout.Space(10);
-                        GUILayout.BeginVertical();
-                        GUILayout.FlexibleSpace();
 
                         GUIStyle guiForName = new GUIStyle(GUI.skin.label);
                         guiForName.fontStyle = FontStyle.Bold;
@@ -732,20 +730,15 @@ namespace Palexen.Tools
                         GUILayout.Label($"<color={"#" + msj.scriptTitleColor.ConvertToHex()}><size={msj.scriptTitleSize}>{attrib.Name}</size></color>", guiForName);
 
                         GUILayout.Space(5);
-                        GUILayout.BeginHorizontal();
-                        GUILayout.FlexibleSpace();
-                        GUIStyle guiForDesc = new GUIStyle(GUI.skin.label);
+
+                        GUIStyle guiForDesc = new GUIStyle(GUI.skin.box);
                         guiForDesc.fontStyle = FontStyle.Bold;
                         guiForDesc.alignment = TextAnchor.MiddleCenter;
                         guiForDesc.richText = true;
                         guiForDesc.stretchWidth = true;
                         guiForDesc.wordWrap = true;
                         GUILayout.Box(attrib.Description, guiForDesc);
-                        GUILayout.FlexibleSpace();
-                        GUILayout.EndHorizontal();
 
-                        GUILayout.FlexibleSpace();
-                        GUILayout.EndVertical();
                         GUILayout.Space(20);
                     }
                 }
