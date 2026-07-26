@@ -70,6 +70,7 @@ namespace Palexen.Misc
         [FieldColor(FieldPropertyColor.salmon)] public GameObject salmonObject;
 
         [MyHeader("Array")]
+        [Line]
         [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)] public GameObject[] arrayObjects = new GameObject[5];
 
         public void GoToOnlineManual()

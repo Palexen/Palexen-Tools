@@ -45,7 +45,7 @@ namespace Palexen.Scriptables
         [Notepad("Use <color=yellow>[Separator]</color> and <color=yellow>[Line]</color> Attributes to paint your Separators " +
             "and use <color=yellow>[Notepad]</color> attribute to place custom messages directly on your scripts", FontStyle.BoldAndItalic)]
         [Separator]
-        [Line]
+        [Line(DrawOn.bottom)]
 		public Color contextSeparatorColor = Color.cyan;
 
         [MyHeader("Global Gizmos Settings")]
@@ -58,6 +58,7 @@ namespace Palexen.Scriptables
         public LayerMask physicsSimulationLayer = 1;
 
         [MyHeader("Scriptables Folder Path: <size=10>(The scriptables generated from the toolbar.)</size>")]
+        [Line(DrawOn.bottom)]
         public string scriptablesFolderPath = "Assets/";
 
         [MyHeader("Quick Prefabs Settings")]

@@ -788,17 +788,26 @@ namespace Palexen.Tools
     /// and you can also customize the color and size of the header text from the Custom 
     /// Environment Settings asset.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.All | AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     public class MyHeaderAttribute : PropertyAttribute
     {
         public readonly string header;
         public float h;
 
+#if UNITY_6000_0_OR_NEWER
+        public MyHeaderAttribute(string header, float height = 2) :base(applyToCollection: true)
+        {
+            this.header = header;
+            this.h = height;
+        }
+#else
         public MyHeaderAttribute(string header, float height = 2)
         {
             this.header = header;
             this.h = height;
         }
+
+#endif
     }
 
 #if UNITY_EDITOR
@@ -1186,7 +1195,7 @@ namespace Palexen.Tools
 
     #region LINE
 
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class LineAttribute : PropertyAttribute
     {
         private DrawOn drawOn;
@@ -1213,44 +1222,90 @@ namespace Palexen.Tools
     [CustomPropertyDrawer(typeof(LineAttribute))]
     public class LineDrawer : PropertyDrawer
     {
-        float baseHeight;
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             LineAttribute line = (LineAttribute)attribute;
 
-            Rect rect = EditorGUILayout.GetControlRect(false, GUILayout.Height(line.Padding + line.Thickness));
-
-            rect.height = line.Thickness;
-
-            rect.y += line.Padding * 0.5f;
-
-            switch (line.Margin)
+            if (line.Draw == DrawOn.up)
             {
-                case < 0:
-                    rect.x = 0;
-                    rect.width = EditorGUIUtility.currentViewWidth;
-                    break;
-                case > 0:
-                    rect.x += line.Margin;
-                    rect.width -= line.Margin * 2;
-                    break;
+
+                Rect lineRect = new Rect(position.x, position.y + (line.Padding * 0.5f), position.width, line.Thickness);
+
+                switch (line.Margin)
+                {
+                    case < 0:
+                        lineRect.x = 0;
+                        lineRect.width = EditorGUIUtility.currentViewWidth;
+                        break;
+                    case > 0:
+                        lineRect.x += line.Margin;
+                        lineRect.width -= line.Margin * 2;
+                        break;
+                }
+
+                EditorGUI.DrawRect(lineRect, Color.gray);
+
+                float spaceUsedByLine = line.Thickness + line.Padding;
+
+                Rect propertyRect = new Rect(
+                    position.x,
+                    position.y + spaceUsedByLine,
+                    position.width,
+                    EditorGUI.GetPropertyHeight(property, label, true)
+                );
+
+                EditorGUI.PropertyField(propertyRect, property, label, true);
             }
+            else
+            {
+                Rect rect = EditorGUILayout.GetControlRect(false, GUILayout.Height(line.Padding + line.Thickness));
 
-            float propertyY = position.y;
-            float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
-            Rect propertyRect = new(position.x, propertyY, position.width, propertyHeight);
-            EditorGUI.PropertyField(propertyRect, property, label, true);
+                rect.height = line.Thickness;
 
-            EditorGUI.DrawRect(rect, Color.gray);
+                rect.y += line.Padding * 0.5f;
+
+                switch (line.Margin)
+                {
+                    case < 0:
+                        rect.x = 0;
+                        rect.width = EditorGUIUtility.currentViewWidth;
+                        break;
+                    case > 0:
+                        rect.x += line.Margin;
+                        rect.width -= line.Margin * 2;
+                        break;
+                }
+
+                float propertyY = position.y;
+                float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
+                Rect propertyRect = new(position.x, propertyY, position.width, propertyHeight);
+                EditorGUI.PropertyField(propertyRect, property, label, true);
+
+                EditorGUI.DrawRect(rect, Color.gray);
+            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            LineAttribute line = (LineAttribute)attribute;
 
-            baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            float b;
 
-            return baseHeight;
+            if (line.Draw == DrawOn.up)
+            {
+                float baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+                float extraHeight = line.Thickness + line.Padding;
+
+                b = baseHeight + extraHeight;
+            }
+            else
+            {
+                float baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
+
+                b = baseHeight;
+            }
+
+            return b;
         }
     }
 
@@ -1260,7 +1315,7 @@ namespace Palexen.Tools
 
     #region NOTES
 
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+        [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class NotepadAttribute : PropertyAttribute
     {
         private string note;
@@ -1325,7 +1380,7 @@ namespace Palexen.Tools
 
     #endregion
 
-    #endregion
+#endregion
 
     #region UTILITY
 
