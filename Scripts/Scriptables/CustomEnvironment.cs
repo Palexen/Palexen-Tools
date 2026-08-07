@@ -28,16 +28,16 @@ namespace Palexen.Scriptables
 	{
 		#region VARIABLES
 		[MyHeader("Script Description Setup")]
-		public TurnOnScriptDescription scriptDescriptionState;
-		public string scriptNameSpace = "Palexen";
-        public Color scriptTitleColor = new Color(1, .6275f, .4784f, 1);
-		[Range(14, 25)] public int scriptTitleSize = 18;
+		[SerializeField] private TurnOnScriptDescription scriptDescriptionState;
+        [SerializeField] private string scriptNameSpace = "Palexen";
+        [SerializeField] private Color scriptTitleColor = new Color(1, .6275f, .4784f, 1);
+		[Range(14, 25)][SerializeField] private int scriptTitleSize = 18;
 
 		[Space(10)]
 
 		[MyHeader("Header Setup & Color")]
-		public Color headerColorValue = new Color(.6784f, .8471f, .902f, 1);
-		[Range(12, 22)] public int headerSize = 14;
+        [SerializeField] private Color headerColorValue = new Color(.6784f, .8471f, .902f, 1);
+		[Range(12, 22)][SerializeField] private int headerSize = 14;
 
 		[Space(10)]
 
@@ -46,31 +46,35 @@ namespace Palexen.Scriptables
             "and use <color=yellow>[Notepad]</color> attribute to place custom messages directly on your scripts", FontStyle.BoldAndItalic)]
         [Separator]
         [Line(DrawOn.bottom)]
-		public Color contextSeparatorColor = Color.cyan;
+        [SerializeField] private Color contextSeparatorColor = Color.cyan;
 
         [MyHeader("Global Gizmos Settings")]
-        public GizmoForm contextGizmoForm = GizmoForm.sphere;
-        public Color gizmosColor = Color.white;
-        public Color inactiveGizmosColor = Color.red;
-        public float gizmoSize = .25f;
+        [SerializeField] private GizmoForm contextGizmoForm = GizmoForm.sphere;
+        [SerializeField] private Color gizmosColor = Color.white;
+        [SerializeField] private Color inactiveGizmosColor = Color.red;
+        [SerializeField] private float gizmoSize = .25f;
 
         [MyHeader("<color=green>Physics</color> Simulation")]
-        public LayerMask physicsSimulationLayer = 1;
+        [SerializeField] private LayerMask physicsSimulationLayer = 1;
 
         [MyHeader("Scriptables Folder Path: <size=10>(The scriptables generated from the toolbar.)</size>")]
         [Line(DrawOn.bottom)]
-        public string scriptablesFolderPath = "Assets/";
+        [SerializeField] private string scriptablesFolderPath = "Assets/";
 
         [MyHeader("Quick Prefabs Settings")]
-        [EasyDropdown("Prefab Collection")] public string prefabIndex;
-        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.warningMessage)] public EntityManager _entities;
+        [EasyDropdown("Prefab Collection")][SerializeField] private string prefabIndex;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.warningMessage)] [SerializeField] private EntityManager _entities;
+
+        [MyHeader("Language Settings")]
+        [LanguagesDropdown("Languages List")][SerializeField] private string currentLanguage;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)][SerializeField] private Languages _languages;
 
         [Space(12)]
 
         [MyHeader("Messages to Show in inspector")]
-        [TextArea] public string infoString = "Info Message | Example";
-        [TextArea] public string warningString = "Warning Message | Example";
-        [TextArea] public string errorString = "Error Message | Example";
+        [TextArea] [SerializeField] private string infoString = "Info Message | Example";
+        [TextArea] [SerializeField] private string warningString = "Warning Message | Example";
+        [TextArea] [SerializeField] private string errorString = "Error Message | Example";
 
 
 		[MyHeader("Field Colors and messages")]
@@ -82,25 +86,66 @@ namespace Palexen.Scriptables
 
         [MyHeader("Tag Attribute")]
         [Notepad("Use <color=yellow>[TagField]</color> on your string tag to use it", FontStyle.BoldAndItalic)]
-        [TagField] public string tagFieldAttribute;
+        [TagField] [SerializeField] private string tagFieldAttribute;
 
         [MyHeader("Slider Attribute")]
         [Notepad("Use <color=YELLOW>[VectorSlider(Min Value, Max Value)]</color> to use it", FontStyle.BoldAndItalic)]
-        [VectorSlider(0, 1)] public Vector2 vector2Slider = new(0, 1);
-        [VectorSlider(0, 100)] public Vector2Int vector2SliderInt = new(0, 50);
+        [VectorSlider(0, 1)] [SerializeField] private Vector2 vector2Slider = new(0, 1);
+        [VectorSlider(0, 100)] [SerializeField] private Vector2Int vector2SliderInt = new(0, 50);
 
         [MyHeader("All Field Colors")]
-        [FieldColor(FieldPropertyColor.cyan)] public GameObject cyanObject;
-        [FieldColor(FieldPropertyColor.yellow)] public GameObject yellowObject;
-        [FieldColor(FieldPropertyColor.red)] public GameObject redObject;
-        [FieldColor(FieldPropertyColor.green)] public GameObject greenObject;
-        [FieldColor(FieldPropertyColor.blue)] public GameObject blueObject;
-        [FieldColor(FieldPropertyColor.magenta)] public GameObject magentaObject;
-        [FieldColor(FieldPropertyColor.orange)] public GameObject orangeObject;
-        [FieldColor(FieldPropertyColor.clearBlue)] public GameObject clearBlueObject;
-        [FieldColor(FieldPropertyColor.pink)] public GameObject pinkObject;
-        [FieldColor(FieldPropertyColor.neonGreen)] public GameObject neonGreenObject;
-        [FieldColor(FieldPropertyColor.salmon)] public GameObject salmonObject;
+        [FieldColor(FieldPropertyColor.cyan)] [SerializeField] private GameObject cyanObject;
+        [FieldColor(FieldPropertyColor.yellow)] [SerializeField] private GameObject yellowObject;
+        [FieldColor(FieldPropertyColor.red)] [SerializeField] private GameObject redObject;
+        [FieldColor(FieldPropertyColor.green)] [SerializeField] private GameObject greenObject;
+        [FieldColor(FieldPropertyColor.blue)] [SerializeField] private GameObject blueObject;
+        [FieldColor(FieldPropertyColor.magenta)] [SerializeField] private GameObject magentaObject;
+        [FieldColor(FieldPropertyColor.orange)] [SerializeField] private GameObject orangeObject;
+        [FieldColor(FieldPropertyColor.clearBlue)] [SerializeField] private GameObject clearBlueObject;
+        [FieldColor(FieldPropertyColor.pink)] [SerializeField] private GameObject pinkObject;
+        [FieldColor(FieldPropertyColor.neonGreen)] [SerializeField] private GameObject neonGreenObject;
+        [FieldColor(FieldPropertyColor.salmon)] [SerializeField] private GameObject salmonObject;
+
+        #endregion
+
+        #region PROPERTIES
+
+        public TurnOnScriptDescription ScriptDescriptionState { get { return scriptDescriptionState; } }
+        public GizmoForm ContextGizmoForm { get { return contextGizmoForm; } }
+
+        public Color ScriptTitleColor { get { return scriptTitleColor; } }
+        public Color HeaderColor { get { return headerColorValue; } }
+        public Color ContextSeparatorColor { get { return contextSeparatorColor; } }
+        public Color GizmoColor { get { return gizmosColor; } }
+        public Color InactiveGizmosColor { get { return inactiveGizmosColor; } }
+
+        public int ScriptTitleSize { get { return scriptTitleSize; } }
+        public int HeaderSize { get { return headerSize; } }
+
+        public float GizmoSize { get { return gizmoSize; } }
+
+        public string ScriptNameSpace { get { return scriptNameSpace; } }
+        public string InfoString { get { return infoString; } }
+        public string WarningString { get { return warningString; } }
+        public string ErrorString { get { return errorString; } }
+
+        public string ScriptablesFolderPath
+        {
+            get { return scriptablesFolderPath; }
+            set { scriptablesFolderPath = value; }
+        }
+
+        public Languages Languages
+        {
+            get { return _languages; }
+            set { _languages = value; }
+        }
+
+        public string PrefabIndex
+        {
+            get { return prefabIndex; }
+            set { prefabIndex = value; }
+        }
 
         #endregion
 

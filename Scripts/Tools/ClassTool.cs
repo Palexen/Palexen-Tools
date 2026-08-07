@@ -58,8 +58,6 @@ namespace Palexen.Tools
 
     public enum HealthCondition { parent, single, byChilds }
     public enum HealthImportance { notImportant, important }
-
-    public enum Language { english, spanish, french, german, japanese, chinese, korean, russian }
     public enum DialogAudioFeature { useAudio, noAudio }
     public enum DialogOrder { sequenced, random }
     public enum SubtitlesUsage {yes, no}
@@ -212,8 +210,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Game Input Schema</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Game Input Schema</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("It globally establishes an action control scheme to change the control scheme or separate " +
                 "the platform.\r\n\r\nYou can also modify the scheme by activating a different one when calling the " +
@@ -277,8 +275,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Interactable Object</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Interactable Object</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("You can interact with (player needs <color=green>Player interaction Script</color>), mark this object as " +
                 "<color=cyan>interactable layer</color>", 
@@ -330,8 +328,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Player Interaction</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Player Interaction</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Setup the player interaction system, you can set the layer for interactable objects, " +
                 "the method to detect them and the max distance to interact", 
@@ -371,8 +369,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Interactable HUD</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Interactable HUD</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("A Representation on screen when you can interact with many objects in yout game", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -422,8 +420,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>World Icon</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>World Icon</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Create world icon in this object, you can set the method to show it and the distance to show it", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -494,8 +492,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Trigger Object Manager</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Trigger Object Manager</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -528,7 +526,7 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_object);
 
             EditorGUILayout.Separator();
-            GUI.color = setting.contextSeparatorColor;
+            GUI.color = setting.ContextSeparatorColor;
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
             EditorGUILayout.Separator();
@@ -631,8 +629,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Ambience</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Ambience</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Create global ambience in this level", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
 
@@ -644,7 +642,7 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_speed);
 
             EditorGUILayout.Separator();
-            GUI.color = setting.contextSeparatorColor;
+            GUI.color = setting.ContextSeparatorColor;
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
             EditorGUILayout.Separator();
@@ -732,8 +730,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Ambience Zone</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Ambience Zone</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Create Ambience Zone in this place", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
 
@@ -792,7 +790,7 @@ namespace Palexen.Tools
             }
 
             EditorGUILayout.Separator();
-            GUI.color = setting.contextSeparatorColor;
+            GUI.color = setting.ContextSeparatorColor;
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
             EditorGUILayout.Separator();
@@ -817,7 +815,7 @@ namespace Palexen.Tools
             }
 
             EditorGUILayout.Separator();
-            GUI.color = setting.contextSeparatorColor;
+            GUI.color = setting.ContextSeparatorColor;
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
             EditorGUILayout.Separator();
@@ -965,8 +963,8 @@ namespace Palexen.Tools
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Trigger Event</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Trigger Event</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("You can activate events by entering this collider", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
             serializedObject.Update();
 
@@ -992,7 +990,7 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_event);
 
             EditorGUILayout.Separator();
-            GUI.color = setting.contextSeparatorColor;
+            GUI.color = setting.ContextSeparatorColor;
             EditorGUILayout.HelpBox("", MessageType.None);
             GUI.color = Color.white;
             EditorGUILayout.Separator();
@@ -1117,8 +1115,8 @@ namespace Palexen.Tools
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Footsteps System</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Footsteps System</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Create footsteps system in this level, you can set different audio clips for each terrain texture", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -1174,8 +1172,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Async Loader</color>", 
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Async Loader</color>", 
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Manage the spawn resources on a scene", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
 
@@ -1187,7 +1185,7 @@ namespace Palexen.Tools
 
             if (EditorApplication.isPlaying)
             {
-                GUI.color = setting.contextSeparatorColor;
+                GUI.color = setting.ContextSeparatorColor;
                 EditorGUILayout.HelpBox("", MessageType.None);
                 GUI.color = Color.white;
 
@@ -1198,7 +1196,7 @@ namespace Palexen.Tools
             }
             else
             {
-                GUI.color = setting.inactiveGizmosColor;
+                GUI.color = setting.InactiveGizmosColor;
                 EditorGUILayout.HelpBox("", MessageType.None);
                 GUI.color = Color.white;
                 if (GUILayout.Button("Waiting to Play Mode...", PalexenEditorStyles.BigButton))
@@ -1247,12 +1245,12 @@ namespace Palexen.Tools
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Health System</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Health System</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("Manage the HP of this object; after it reaches 0, the object will handle after-kill events, implemented in an event", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
 
-            Color c = setting.contextSeparatorColor;
+            Color c = setting.ContextSeparatorColor;
 
             if (Application.isPlaying)
             {
@@ -1368,8 +1366,8 @@ namespace Palexen.Tools
 
             if (hg.AnimationFeatures)
             {
-                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
-                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+                GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Animation Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
                 EditorGUILayout.PropertyField(_animator);
                 EditorGUILayout.PropertyField(dieTriggerNames);
@@ -1397,8 +1395,8 @@ namespace Palexen.Tools
 
             if (hg.PhysicsFeatures)
             {
-                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Ragdoll or Physics Features</color>",
-                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+                GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Ragdoll or Physics Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
                 EditorGUILayout.PropertyField(_rigidbodies);
                 EditorGUILayout.Space(10);
@@ -1559,12 +1557,12 @@ namespace Palexen.Tools
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Health Component</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Health Component</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("It manages the HP of this object and handles events that occur when it is affected", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
 
-            Color c = setting.contextSeparatorColor;
+            Color c = setting.ContextSeparatorColor;
 
             if (Application.isPlaying)
             {
@@ -1695,8 +1693,8 @@ namespace Palexen.Tools
 
             if (hc.AnimationFeatures)
             {
-                GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animation Features</color>",
-                    PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+                GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Animation Features</color>",
+                    PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
                 EditorGUILayout.PropertyField(_animator);
                 EditorGUILayout.PropertyField(triggerNames);
 
@@ -1804,14 +1802,14 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog System</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Dialog System</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("Dialogue system for all your contexts, whether for narration or NPCs. It supports " +
                 "multiple languages, and you can also use audio for the dialogue system.\r\n\r\nTip: Make sure to manage your " +
                 "project well when configuring all your dialogues, whether they are text, " +
                 "voice, or both!", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 170));
 
-            Color c = setting.contextSeparatorColor;
+            Color c = setting.ContextSeparatorColor;
 
             serializedObject.Update();
 
@@ -1829,8 +1827,8 @@ namespace Palexen.Tools
 
             EditorGUILayout.Space();
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Sequences & Languages Setup</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize, TextAnchor.MiddleLeft));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Sequences & Languages Setup</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize, TextAnchor.MiddleLeft));
             EditorGUILayout.PropertyField(_order);
             EditorGUILayout.PropertyField(_dialogSequencer);
 
@@ -1895,13 +1893,15 @@ namespace Palexen.Tools
     public class LangManagerEditor : Editor
     {
         LangManager lm;
-        SerializedProperty _lang;
+        SerializedProperty _languages;
+        SerializedProperty _langName;
         SerializedProperty _subtitles;
 
         private void OnEnable()
         {
             lm = (LangManager)target;
-            _lang = serializedObject.FindProperty("_lang");
+            _languages = serializedObject.FindProperty("_languages");
+            _langName = serializedObject.FindProperty("_langName");
             _subtitles = serializedObject.FindProperty("_subtitles");
         }
 
@@ -1910,21 +1910,28 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Lang Manager</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
-            GUILayout.Box("This handles the game's language; you can update this singleton using the <color=red>SetLang();</color> method." +
-                "\r\n\r\n<color=green>Note:</color> Other scripts that natively support this system contain a method to update the language, " +
-                "but if you've already created other systems that use this singleton, you'll need to update it manually.", 
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Lang Manager</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
+            GUILayout.Box("This handles the game's language; you can update this singleton using the <color=red>LangIndex</color> Property." +
+                "\r\n\r\n<color=green>Note:</color> You can now add your own languages ​​using a container you can create!" +
+                "\r\nDon't forget to place the Scriptable Object in the <color=cyan>Environment Configuration</color> window to manage your languages!" +
+                "\r\n\r\nUpdating your languages ​​will now be much faster—and without any programming!", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 150));
 
-            Color c = setting.contextSeparatorColor;
+            Color c = setting.ContextSeparatorColor;
 
             serializedObject.Update();
 
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
-            EditorGUILayout.PropertyField(_lang);
+            EditorGUILayout.PropertyField(_languages);
+            EditorGUILayout.PropertyField(_langName);
             EditorGUILayout.PropertyField(_subtitles);
             PalexenEditorStyles.DrawHorizontalLine(Color.gray, 2);
+
+            if(GUILayout.Button("Set Languages to <color=cyan>Environment Window</color>", PalexenEditorStyles.BigButton))
+            {
+                setting.Languages = lm.LangContainer;
+            }
 
             if (EditorApplication.isPlaying)
             {
@@ -1998,8 +2005,8 @@ namespace Palexen.Tools
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Text Translator</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Text Translator</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("Translate the text into the selected language, previously configured in a subtitles component.",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 60));
 
@@ -2036,8 +2043,8 @@ namespace Palexen.Tools
         {
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Rigidbody Velocity Limiter</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Rigidbody Velocity Limiter</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("Limit the velocity of this Rigidbody", PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
 
             serializedObject.Update();
@@ -2069,8 +2076,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Shape Visualizer</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Shape Visualizer</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Allows draw gizmos to the Unity Editor, you can draw many shapes forms as you need", 
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -2126,8 +2133,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Level Loader</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Level Loader</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             
             GUILayout.Box("Load scenes via the loading scene, or from here",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -2203,8 +2210,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Level Manager</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Level Manager</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Catch and load levels",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
@@ -2243,8 +2250,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Waypoint Area</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Waypoint Area</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Waypoint Area for your NPC's \n" +
                 "Hold <color=red>shift</color> + click to create <color=green>waypoint</color>",
@@ -2281,7 +2288,7 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            Handles.color = setting.gizmosColor;
+            Handles.color = setting.GizmoColor;
 
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
@@ -2293,31 +2300,31 @@ namespace Palexen.Tools
                 Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
                 if (Physics.Raycast(r, out RaycastHit mh, Mathf.Infinity, _wp.TargetLayer))
                 {
-                    switch (setting.contextGizmoForm)
+                    switch (setting.ContextGizmoForm)
                     {
                         case GizmoForm.sphere:
-                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.cube:
-                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CubeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.cylinder:
-                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CylinderHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.cone:
-                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.ConeHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.arrow:
-                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.ArrowHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.circle:
-                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.CircleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.square:
-                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.RectangleHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                         case GizmoForm.dot:
-                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.gizmoSize, EventType.Repaint);
+                            Handles.DotHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), setting.GizmoSize, EventType.Repaint);
                             break;
                     }
                 }
@@ -2447,8 +2454,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Prefab Painter</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Prefab Painter</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Prefab Painter \n" +
                 "Hold <color=red>shift</color> + click to <color=green>Paint your Prefabs</color>",
@@ -2466,8 +2473,8 @@ namespace Palexen.Tools
 
             EditorGUILayout.PropertyField(_radius);
             EditorGUILayout.PropertyField(_brushColor);
-            GUILayout.Label($"<color={"#" + setting.headerColorValue.ConvertToHex()}>Prefabs</color>",
-                PalexenEditorStyles.CoolTitle(setting.headerSize, TextAnchor.MiddleLeft));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Prefabs</color>",
+                PalexenEditorStyles.CoolTitle(setting.HeaderSize, TextAnchor.MiddleLeft));
             EditorGUILayout.PropertyField(_prefabs);
             EditorGUILayout.PropertyField(_YRandomizer);
             EditorGUILayout.PropertyField(_alingToSurface);
@@ -2486,7 +2493,7 @@ namespace Palexen.Tools
             if (_pp.transform.childCount > 0)
             {
                 GUILayout.Space(10);
-                GUI.color = setting.contextSeparatorColor;
+                GUI.color = setting.ContextSeparatorColor;
                 EditorGUILayout.HelpBox("", MessageType.None);
                 GUI.color = Color.white;
                 GUILayout.Space(10);
@@ -2555,7 +2562,7 @@ namespace Palexen.Tools
 
                     if (ra <= 0)
                     {
-                        ra = setting.gizmoSize;
+                        ra = setting.GizmoSize;
                     }
 
                     // BRUSH PREVIEW
@@ -2569,7 +2576,7 @@ namespace Palexen.Tools
 
                     if (_pp.Brush == null)
                     {
-                        switch (setting.contextGizmoForm)
+                        switch (setting.ContextGizmoForm)
                         {
                             case GizmoForm.sphere:
                                 Handles.SphereHandleCap(controlID, mh.point, Quaternion.LookRotation(mh.normal), ra, EventType.Repaint);
@@ -2749,8 +2756,8 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Custom Hierarchy</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Custom Hierarchy</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Customize the view of this object in your hierarchy!",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));

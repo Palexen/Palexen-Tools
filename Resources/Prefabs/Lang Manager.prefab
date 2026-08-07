@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9537724f8506545a8d1bfe94a8dbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Palexen Core::Palexen.Tools.LangManager
-  _lang: 0
+  _languages: {fileID: 11400000, guid: 449bdefc528465b4d9c63d508093ecec, type: 2}
+  _langName: English
   _subtitles: 0

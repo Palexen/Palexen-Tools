@@ -39,7 +39,7 @@ namespace Palexen.Sequences
         #region VARIABLES
 
         [MyHeader("Language")]
-        [SerializeField] private Language _lang;
+        [SerializeField] [LanguagesDropdown("Language")] private string _lang;
         [SerializeField] private Initializer _catchLang;
 
         [MyHeader("Audio Feature")]
@@ -178,384 +178,45 @@ namespace Palexen.Sequences
         {
             isPlaying = true;
 
-            switch (_lang)
-            {
-                case Language.english:
+            ExecuteDialogPlayback(playback);
 
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[0]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[0]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[0]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[0]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 0;
-                    break;
-
-                case Language.spanish:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[1]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[1]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[1]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[1]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 1;
-                    break;
-
-                case Language.french:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[2]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[2]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[2]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[2]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 2;
-                    break;
-
-                case Language.german:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[3]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[3]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[3]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[3]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 3;
-                    break;
-
-                case Language.japanese:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[4]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[4]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[4]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[4]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 4;
-                    break;
-
-                case Language.chinese:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[5]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[5]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[5]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[5]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 5;
-                    break;
-
-                case Language.korean:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[6]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[6]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[6]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[6]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 6;
-                    break;
-
-                case Language.russian:
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[7]._sequence[playback]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                        _dialogSequencer[7]._sequence[playback]._dialogContainer._actorName + "</color>" +
-                        _dialogSequencer[7]._sequence[playback]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[7]._sequence[playback]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[7]._sequence[playback]._dialogContainer._onScreenTimeDialog;
-                        PlayNextDialogQueue();
-                    }
-
-                    currentSequence = 7;
-                    break;
-
-                default:
-                    Debug.LogWarning("Language not supported.");
-                    break;
-            }
+            currentSequence = LangManager.instance.LangIndex;
         }
-
 
         void InterRandomPlay()
         {
-            switch (_lang)
+            int randomIndex = Random.Range(0, _dialogSequencer[LangManager.instance.LangIndex]._sequence.Count);
+
+            ExecuteDialogPlayback(randomIndex);
+        }
+
+        private void ExecuteDialogPlayback(int sequenceIndex)
+        {
+            int langIndex = LangManager.instance.LangIndex; //
+            var currentContainer = _dialogSequencer[langIndex]._sequence[sequenceIndex]._dialogContainer;
+
+            if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
             {
-                case Language.english:
+                string actorHexColor = currentContainer._actorColor.ConvertToHex();
+                _subtitles.text = $"<color=#{actorHexColor}>{currentContainer._actorName}</color>{currentContainer._dialogText}";
+            }
 
-                    int a = Random.Range(0, _dialogSequencer[0]._sequence.Count);
+            if (_dialogAudioFeature == DialogAudioFeature.useAudio)
+            {
+                _langAudioSource.clip = currentContainer._langClip;
+                _langAudioSource.Play();
+            }
+            else
+            {
+                playbackTimer = currentContainer._onScreenTimeDialog;
 
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[a]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[0]._sequence[a]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[0]._sequence[a]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[0]._sequence[a]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[0]._sequence[a]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.spanish:
-
-                    int b = Random.Range(0, _dialogSequencer[1]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[1]._sequence[b]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[1]._sequence[b]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[1]._sequence[b]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[1]._sequence[b]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[1]._sequence[b]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.french:
-
-                    int c = Random.Range(0, _dialogSequencer[2]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[2]._sequence[c]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[2]._sequence[c]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[2]._sequence[c]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[2]._sequence[c]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[2]._sequence[c]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.german:
-
-                    int d = Random.Range(0, _dialogSequencer[3]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[3]._sequence[d]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[3]._sequence[d]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[3]._sequence[d]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[3]._sequence[d]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[3]._sequence[d]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.japanese:
-
-                    int e = Random.Range(0, _dialogSequencer[4]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[4]._sequence[e]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[4]._sequence[e]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[4]._sequence[e]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[4]._sequence[e]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[4]._sequence[e]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.chinese:
-
-                    int f = Random.Range(0, _dialogSequencer[5]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[5]._sequence[f]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[5]._sequence[f]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[5]._sequence[f]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[5]._sequence[f]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[5]._sequence[f]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.korean:
-
-                    int g = Random.Range(0, _dialogSequencer[6]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[6]._sequence[g]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[6]._sequence[g]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[6]._sequence[g]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[6]._sequence[g]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[6]._sequence[g]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                case Language.russian:
-
-                    int h = Random.Range(0, _dialogSequencer[7]._sequence.Count);
-
-                    if (LangManager.instance.Subtitles == SubtitlesUsage.yes)
-                    {
-                        _subtitles.text = $"<color={"#" + _dialogSequencer[0]._sequence[h]._dialogContainer._actorColor.ConvertToHex() + ">"}" +
-                            _dialogSequencer[7]._sequence[h]._dialogContainer._actorName + "</color>" +
-                            _dialogSequencer[7]._sequence[h]._dialogContainer._dialogText;
-                    }
-
-                    if (_dialogAudioFeature == DialogAudioFeature.useAudio)
-                    {
-                        _langAudioSource.clip = _dialogSequencer[7]._sequence[h]._dialogContainer._langClip;
-                        _langAudioSource.Play();
-                    }
-                    else
-                    {
-                        playbackTimer = _dialogSequencer[7]._sequence[h]._dialogContainer._onScreenTimeDialog;
-                    }
-                    break;
-
-                default:
-                    Debug.LogWarning("Language not supported.");
-                    break;
+                if (Order == DialogOrder.sequenced) 
+                {
+                    PlayNextDialogQueue();
+                }
             }
         }
+
 
         #endregion
 
@@ -632,7 +293,7 @@ namespace Palexen.Sequences
         {
             if (_catchLang == Initializer.auto)
             {
-                _lang = LangManager.instance.Lang;
+                _lang = LangManager.instance.LangName;
             }
         }
 

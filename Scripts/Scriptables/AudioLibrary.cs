@@ -76,8 +76,8 @@ namespace Palexen.Audio
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Audio Library</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Audio Library</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Add audio clips here, and then you can call them in your scripts, or you can randomly select one from " +
                 "here using the <color=yellow>GetRandomClip();</color> method.\r\n\r\nThis is great for sound effects in your game.",
@@ -106,7 +106,7 @@ namespace Palexen.Audio
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

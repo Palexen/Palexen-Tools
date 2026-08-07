@@ -73,9 +73,9 @@ namespace Palexen.Scriptables
 
             Color c = new (.392f, .584f, .929f, 1);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Dialog Container</color> \n " +
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Dialog Container</color> \n " +
                 $"(Closed Caption <color={"#" + c.ConvertToHex()}>CC</color>)",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize, TextAnchor.MiddleCenter, FontStyle.Bold, 60));
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize, TextAnchor.MiddleCenter, FontStyle.Bold, 60));
 
             serializedObject.Update();
 
@@ -106,7 +106,7 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

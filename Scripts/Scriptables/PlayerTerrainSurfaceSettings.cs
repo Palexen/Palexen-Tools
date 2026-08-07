@@ -54,8 +54,8 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Terrain Surface Settings</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Terrain Surface Settings</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Edit the terrain surface settings for player footsteps. " +
                 "Each entry defines a terrain surface type and its associated footstep sounds." +
@@ -84,7 +84,7 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

@@ -77,8 +77,8 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Input Schema</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Input Schema</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Configure a button scheme for your main actions, then you can invoke the result by creating a connection " +
                 "between this scheme and the <color=green>GetSchema(int);</color> method to get an on-screen " +
@@ -110,7 +110,7 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

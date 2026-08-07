@@ -112,11 +112,11 @@ namespace Palexen.Overlays
                 return;
             }
 
-            int currentIndex = setting._entities.entities.FindIndex(p => p != null && p._label == setting.prefabIndex);
+            int currentIndex = setting.Entities.entities.FindIndex(p => p != null && p._label == setting.PrefabIndex);
             if (currentIndex == -1) currentIndex = 0;
 
-            string iconStr = setting._entities.entities.Count > currentIndex && setting._entities.entities[currentIndex] != null
-                ? setting._entities.entities[currentIndex]._icon
+            string iconStr = setting.Entities.entities.Count > currentIndex && setting.Entities.entities[currentIndex] != null
+                ? setting.Entities.entities[currentIndex]._icon
                 : "📦";
 
             foreach (var prefab in prefabList)
@@ -145,14 +145,14 @@ namespace Palexen.Overlays
             prefabList.Clear();
             if (setting == null) return;
 
-            if (setting._entities != null)
+            if (setting.Entities != null)
             {
-                int currentIndex = setting._entities.entities.FindIndex(p => p != null && p._label == setting.prefabIndex);
+                int currentIndex = setting.Entities.entities.FindIndex(p => p != null && p._label == setting.PrefabIndex);
                 if (currentIndex == -1) currentIndex = 0;
 
-                if (currentIndex >= 0 && setting._entities.entities.Count > currentIndex && setting._entities.entities[currentIndex] != null)
+                if (currentIndex >= 0 && setting.Entities.entities.Count > currentIndex && setting.Entities.entities[currentIndex] != null)
                 {
-                    string[] guids = AssetDatabase.FindAssets($"l:{setting._entities.entities[currentIndex]._label}", new[] { "Assets" });
+                    string[] guids = AssetDatabase.FindAssets($"l:{setting.Entities.entities[currentIndex]._label}", new[] { "Assets" });
                     HashSet<string> processedPaths = new();
 
                     foreach (string guid in guids)
@@ -245,9 +245,9 @@ namespace Palexen.Overlays
             string pathT = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(pathT);
 
-            if (setting._entities != null)
+            if (setting.Entities != null)
             {
-                foreach (var entity in setting._entities.entities)
+                foreach (var entity in setting.Entities.entities)
                 {
                     menu.AddItem(
                         new GUIContent(entity._label),

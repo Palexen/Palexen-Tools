@@ -36,7 +36,7 @@ namespace Palexen.Gameplay.UI
         #region VARIABLES
 
         [MyHeader("Language")]
-        [SerializeField] private Language _lang;
+        [SerializeField] [LanguagesDropdown("Language")] private string _lang;
         [SerializeField] private Initializer _catchLang;
 
         [MyHeader("Setup")]
@@ -58,33 +58,7 @@ namespace Palexen.Gameplay.UI
 
         void SwitchLang()
         {
-            switch ( _lang )
-            {
-                case Language.english:
-                    _text.text = _conversions._conversions[0]._text;
-                    break;
-                case Language.spanish:
-                    _text.text = _conversions._conversions[1]._text;
-                    break;
-                case Language.french:
-                    _text.text = _conversions._conversions[2]._text;
-                    break;
-                case Language.german:
-                    _text.text = _conversions._conversions[3]._text;
-                    break;
-                case Language.japanese:
-                    _text.text = _conversions._conversions[4]._text;
-                    break;
-                case Language.chinese:
-                    _text.text = _conversions._conversions[5]._text;
-                    break;
-                case Language.korean:
-                    _text.text = _conversions._conversions[6]._text;
-                    break;
-                case Language.russian:
-                    _text.text = _conversions._conversions[7]._text;
-                    break;
-            }
+            _text.text = _conversions._conversions[LangManager.instance.LangIndex]._text;
         }
 
         #endregion
@@ -98,7 +72,7 @@ namespace Palexen.Gameplay.UI
         {
             if (_catchLang == Initializer.auto)
             {
-                _lang = LangManager.instance.Lang;
+                _lang = LangManager.instance.LangName;
                 SwitchLang();
             }
         }

@@ -73,8 +73,8 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Animator Library</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Animator Library</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
             GUILayout.Box("Add your animators here, and call them in your scripts, or choose a random one from here using " +
                 "the <color=cyan>GetRandomAnimator();</color> method.\r\n\r\nThis is great when you need many NPCs that share the same structure but have different animations.",
@@ -103,7 +103,7 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

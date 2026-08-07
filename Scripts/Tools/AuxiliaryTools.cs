@@ -97,9 +97,9 @@ namespace Palexen.Tools
                         else if (field.toShow == ShowObjectMessage.errorMessage)
                             type = MessageType.Error;
 
-                        string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
-                                         field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
-                                         msj.errorString;
+                        string message = field.toShow == ShowObjectMessage.message ? msj.InfoString :
+                                         field.toShow == ShowObjectMessage.warningMessage ? msj.WarningString :
+                                         msj.ErrorString;
 
                         EditorGUI.HelpBox(helpBoxRect, message, type);
                     }
@@ -133,9 +133,9 @@ namespace Palexen.Tools
                         else if (field.toShow == ShowObjectMessage.errorMessage)
                             type = MessageType.Error;
 
-                        string message = field.toShow == ShowObjectMessage.message ? msj.infoString :
-                                         field.toShow == ShowObjectMessage.warningMessage ? msj.warningString :
-                                         msj.errorString;
+                        string message = field.toShow == ShowObjectMessage.message ? msj.InfoString :
+                                         field.toShow == ShowObjectMessage.warningMessage ? msj.WarningString :
+                                         msj.ErrorString;
                         EditorGUI.HelpBox(helpBoxRect, message, type);
                     }
                     else
@@ -295,12 +295,12 @@ namespace Palexen.Tools
             if (environmentAsset != null)
             {
                 scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-                EditorGUILayout.LabelField($"<color={"#" + environmentAsset.scriptTitleColor.ConvertToHex()}>Current Environment</color>", 
+                EditorGUILayout.LabelField($"<color={"#" + environmentAsset.ScriptTitleColor.ConvertToHex()}>Current Environment</color>", 
                     PalexenEditorStyles.CoolTitle(25, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
                 DisplayScriptableObjectInfo(environmentAsset);
                 EditorGUILayout.Space(20);
 
-                EditorGUILayout.LabelField($"<color={"#" + environmentAsset.scriptTitleColor.ConvertToHex()}>Toolbar Settings</color>",
+                EditorGUILayout.LabelField($"<color={"#" + environmentAsset.ScriptTitleColor.ConvertToHex()}>Toolbar Settings</color>",
                     PalexenEditorStyles.CoolTitle(25, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
                 EditorGUILayout.Space(20);
 
@@ -364,7 +364,7 @@ namespace Palexen.Tools
             CustomEnvironment environmentAsset = (CustomEnvironment)target;
 
             EditorGUILayout.LabelField("Script Name", environmentAsset.GetType().Name);
-            EditorGUILayout.LabelField("Namespace", environmentAsset.scriptNameSpace);
+            EditorGUILayout.LabelField("Namespace", environmentAsset.ScriptNameSpace);
             EditorGUILayout.Space();
 
             DisplayScriptableObjectInfo(environmentAsset);
@@ -693,7 +693,7 @@ namespace Palexen.Tools
             {
                 if (msj != null)
                 {
-                    isPalexenScript = targetNamespace.StartsWith(msj.scriptNameSpace);
+                    isPalexenScript = targetNamespace.StartsWith(msj.ScriptNameSpace);
                 }
             }
 
@@ -717,7 +717,7 @@ namespace Palexen.Tools
 
             if (msj != null)
             {
-                if (msj.scriptDescriptionState == TurnOnScriptDescription.On)
+                if (msj.ScriptDescriptionState == TurnOnScriptDescription.On)
                 {
                     if (attrib != null)
                     {
@@ -727,7 +727,7 @@ namespace Palexen.Tools
                         guiForName.fontStyle = FontStyle.Bold;
                         guiForName.alignment = TextAnchor.UpperCenter;
                         guiForName.richText = true;
-                        GUILayout.Label($"<color={"#" + msj.scriptTitleColor.ConvertToHex()}><size={msj.scriptTitleSize}>{attrib.Name}</size></color>", guiForName);
+                        GUILayout.Label($"<color={"#" + msj.ScriptTitleColor.ConvertToHex()}><size={msj.ScriptTitleSize}>{attrib.Name}</size></color>", guiForName);
 
                         GUILayout.Space(5);
 
@@ -837,7 +837,8 @@ namespace Palexen.Tools
 
             if (msj != null)
             {
-                GUIContent label = new GUIContent($"<color={"#" + msj.headerColorValue.ConvertToHex()}><size={msj.headerSize}>{(attribute as MyHeaderAttribute)?.header}</size></color>");
+                GUIContent label = new GUIContent
+                    ($"<color={"#" + msj.HeaderColor.ConvertToHex()}><size={msj.HeaderSize}>{(attribute as MyHeaderAttribute)?.header}</size></color>");
                 GUI.Label(position, label, style);
             }
         }
@@ -1067,15 +1068,15 @@ namespace Palexen.Tools
 
             CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
 
-            if (setting._entities != null && setting._entities.entities != null && setting._entities.entities.Count > 0)
+            if (setting.Entities != null && setting.Entities.entities != null && setting.Entities.entities.Count > 0)
             {
-                cachedOptions = new string[setting._entities.entities.Count];
+                cachedOptions = new string[setting.Entities.entities.Count];
 
-                for (int i = 0; i < setting._entities.entities.Count; i++)
+                for (int i = 0; i < setting.Entities.entities.Count; i++)
                 {
-                    if (setting._entities.entities[i] != null)
+                    if (setting.Entities.entities[i] != null)
                     {
-                        cachedOptions[i] = setting._entities.entities[i]._label;
+                        cachedOptions[i] = setting.Entities.entities[i]._label;
                     }
                     else
                     {
@@ -1099,6 +1100,73 @@ namespace Palexen.Tools
                 c.CreateNewEntityManagerAsset();
                 setting.Entities = c.GetCurrent();
             }
+        }
+    }
+#endif
+
+    #endregion
+
+    #region LANGUAGES DROPDOWN
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class LanguagesDropdownAttribute : PropertyAttribute
+    {
+        public string dataAssetName;
+
+        public LanguagesDropdownAttribute(string dataAssetName)
+        {
+            this.dataAssetName = dataAssetName;
+        }
+    }
+
+#if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(LanguagesDropdownAttribute))]
+    public class LanguagesDropDownDrawer : PropertyDrawer
+    {
+        private string[] cachedOptions;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            if (property.propertyType != SerializedPropertyType.String)
+            {
+                EditorGUI.LabelField(position, label.text, "Use [LanguagesDropdown] in only string variables");
+                return;
+            }
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
+
+            if (setting.Languages != null && setting.Languages.LanguagesList != null && setting.Languages.LanguagesList.Length > 0)
+            {
+                cachedOptions = new string[setting.Languages.LanguagesList.Length];
+
+                for (int i = 0; i < setting.Languages.LanguagesList.Length; i++)
+                {
+                    if (setting.Languages.LanguagesList[i] != null)
+                    {
+                        cachedOptions[i] = setting.Languages.LanguagesList[i];
+                    }
+                    else
+                    {
+                        cachedOptions[i] = "Null Element";
+                    }
+                }
+
+                int index = Array.IndexOf(cachedOptions, property.stringValue);
+                if (index == -1) index = 0;
+
+                index = EditorGUI.Popup(position, label.text, index, cachedOptions);
+                property.stringValue = cachedOptions[index];
+                return;
+            }
+
+            EditorGUI.LabelField(position, label.text, $"No Languages available");
+
+            /*if (GUILayout.Button("Create Entity", PalexenEditorStyles.BigButton))
+            {
+                CreateNewEntityManager c = new();
+                c.CreateNewEntityManagerAsset();
+                setting.Entities = c.GetCurrent();
+            }*/
         }
     }
 #endif
@@ -1155,7 +1223,7 @@ namespace Palexen.Tools
             if (t == MessageType.None)
             {
                 Color originalColor = GUI.color;
-                if (setting != null) GUI.color = setting.contextSeparatorColor;
+                if (setting != null) GUI.color = setting.ContextSeparatorColor;
 
                 EditorGUI.HelpBox(boxRect, box.Message, t);
 

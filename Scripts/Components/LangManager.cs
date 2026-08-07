@@ -22,6 +22,7 @@ using System;
 using UnityEngine;
 using Palexen.Sequences;
 using Palexen.Gameplay.UI;
+using Palexen.Scriptables;
 
 namespace Palexen.Tools
 {
@@ -34,8 +35,11 @@ namespace Palexen.Tools
         #region VARIABLES
 
         public static LangManager instance;
-        [SerializeField] private Language _lang;
+        [FieldColor(FieldPropertyColor.salmon, ShowObjectMessage.errorMessage)] [SerializeField] private Languages _languages;
+        [SerializeField] [LanguagesDropdown("Languages")] private string _langName;
         [SerializeField] private SubtitlesUsage _subtitles;
+
+        int langIndex = 0;
 
         #endregion
 
@@ -89,88 +93,73 @@ namespace Palexen.Tools
 
         public void SetEnglish()
         {
-            Lang = Language.english;
+            LangIndex = 0;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetSpanish()
         {
-            Lang = Language.spanish;
+            LangIndex = 1;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetFrench()
         {
-            Lang = Language.french;
+            LangIndex = 2;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetGerman()
         {
-            Lang = Language.german;
+            LangIndex = 3;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetJapanese()
         {
-            Lang = Language.japanese;
+            LangIndex = 4;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetChinese()
         {
-            Lang = Language.chinese;
+            LangIndex = 5;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetKorean()
         {
-            Lang = Language.korean;
+            LangIndex = 6;
+            _langName = _languages.LanguagesList[langIndex];
         }
         public void SetRussian()
         {
-            Lang = Language.russian;
+            LangIndex = 7;
+            _langName = _languages.LanguagesList[langIndex];
         }
 
         #endregion
 
         #region PROPERTIES
 
-        /// <summary>
-        /// Set the language using the enum, this will update all dialog systems and text conversions in the scene to reflect the new language setting.
-        /// </summary>
-        public Language Lang
+        public SubtitlesUsage Subtitles {  get { return _subtitles; } set { _subtitles = value; } }
+        public int LangIndex
         {
-            get { return _lang; }
+            get { return langIndex; }
 
-            set
+            set 
             {
-                _lang = value;
-                UpdateDialogSystems();
-                UpdateCC();
+                if (value >= 0 && value < _languages.LanguagesList.Length)
+                {
+                    langIndex = value;
+                    _langName = _languages.LanguagesList[langIndex];
+                    UpdateDialogSystems();
+                    UpdateCC();
+                }
             }
         }
-
-        public SubtitlesUsage Subtitles {  get { return _subtitles; } set { _subtitles = value; } }
+        public string LangName { get { return _languages.LanguagesList[langIndex]; } }
+        public Languages LangContainer { get { return _languages; } set { _languages = value; } }
 
         #endregion
 
         #region API
 
-        /// <summary>
-        /// Set a new language entry; the singleton will update, but you'll still need to update all your other 
-        /// objects that use the singleton to get the language, or wait to reload/load a scene. 
-        /// </summary>
-        /// <param name="newLang"> It will establish a new language; you will be able to select it when setting it up. </param>
-        /// <remarks>Note: You'll need to create a system that saves the language state, either by saving to PlayerPrefs or something more complex.</remarks>
-        [Obsolete("This method is obsolete, although it still works and you can use it, it will be removed in the future " +
-            "and you will need to use the Lang property instead.")]
-        public void SetLang(Language newLang)
-        {
-            _lang = newLang;
-            UpdateDialogSystems();
-            UpdateCC();
-        }
 
-        /// <summary>
-        /// Gets the current language
-        /// If the language manager singleton exists, it retrieves it and sets it for use in the dialog system.
-        /// </summary>
-        /// <returns>Language enum</returns>
-        [Obsolete("This method is obsolete, although it still works and you can use it, it will be removed in the future " +
-                "and you will need to use the Lang property instead.")]
-        public Language GetLang()
-        {
-            return _lang;
-        }
 
         #endregion
     }

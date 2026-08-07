@@ -29,6 +29,8 @@ MonoBehaviour:
   scriptablesFolderPath: Assets
   prefabIndex: Prop
   _entities: {fileID: 11400000, guid: 44b883679fae5ce42ba6004fc9f1fe47, type: 2}
+  currentLanguage: English
+  _languages: {fileID: 11400000, guid: 449bdefc528465b4d9c63d508093ecec, type: 2}
   infoString: The object can be called automatically
   warningString: The object is optional here!
   errorString: The object does not contain any references, before entering play mode,

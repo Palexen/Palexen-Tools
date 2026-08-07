@@ -57,8 +57,8 @@ namespace Palexen.Gameplay.UI
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.scriptTitleColor.ConvertToHex()}>Text Translator Container</color>",
-                PalexenEditorStyles.CoolTitle(setting.scriptTitleSize));
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Text Translator Container</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
             GUILayout.Box("Configure all translations; if you don't use them all, you can duplicate your default value, " +
                 "or simply leave it blank as long as you don't use more than you set.",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 80));
@@ -87,7 +87,7 @@ namespace Palexen.Gameplay.UI
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            string folderPath = setting.scriptablesFolderPath;
+            string folderPath = setting.ScriptablesFolderPath;
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {

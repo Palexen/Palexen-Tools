@@ -424,12 +424,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe490a642baa4a54d9435680f9ffd249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Palexen Core::Palexen.LangSystem
-  _lang: 1
+  _lang: English
   _catchLang: 0
   _dialogAudioFeature: 0
   _langAudioSource: {fileID: 4242375421792493712}
   _afterComplete: 0
   _subtitles: {fileID: 7190303130993568417}
+  _order: 0
   _dialogSequencer:
   - _langName: English
     _sequence:
