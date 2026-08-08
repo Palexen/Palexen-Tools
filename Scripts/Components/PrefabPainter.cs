@@ -25,7 +25,7 @@ namespace Palexen.Tools
 #if PALEXEN_TOOLS
     [ScriptDescription("PrefabPainter", "Improved Monobehavior")]
 #endif
-    [AddComponentMenu("Palexen/Tools/Prefab Painter")]
+    [AddComponentMenu("Palexen/Level Design/Prefab Painter")]
     public class PrefabPainter : MonoBehaviour
     {
         #region VARIABLES

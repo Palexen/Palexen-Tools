@@ -28,7 +28,7 @@ namespace Palexen.Gameplay
     #if PALEXEN_TOOLS
     [ScriptDescription("Waypoint", "Reference")]
 #endif
-    [AddComponentMenu("Palexen/Gameplay/Waypoint (Reference)")]
+    [AddComponentMenu("Palexen/Level Design/Waypoint (Reference)")]
     public class Waypoint : MonoBehaviour
     {
 

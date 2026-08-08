@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9de7a6a125cf35c4faad6bfade1d16a7, type: 3}
-  m_Name: New Lang Text Container
-  m_EditorClassIdentifier: Palexen Core::Palexen.Gameplay.UI.LangTextContainer
-  _conversions:
-  - _langName: 
-    _text: 
-  - _langName: 
-    _text: 
+  m_Script: {fileID: 11500000, guid: 8e13e0a2ac293004c9b0abe6bc7c5035, type: 3}
+  m_Name: New Prefab Collection
+  m_EditorClassIdentifier: Palexen Core::Palexen.Scriptables.PrefabCollection
+  _prefabs:
+  - {fileID: 0}
+  - {fileID: 0}

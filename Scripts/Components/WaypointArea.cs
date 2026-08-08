@@ -29,7 +29,7 @@ namespace Palexen.Gameplay
     #if PALEXEN_TOOLS
     [ScriptDescription("Waypoint Area", "Waypoint Area for your NPC's")]
 #endif
-    [AddComponentMenu("Palexen/Gameplay/Waypoint Area")]
+    [AddComponentMenu("Palexen/Level Design/Waypoint Area")]
     public class WaypointArea : MonoBehaviour
     {
         #region VARIABLES

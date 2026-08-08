@@ -27,7 +27,7 @@ using Palexen.Tools;
 
 namespace Palexen.Gameplay
 {
-    [AddComponentMenu("Palexen/Gameplay/Trigger Event")]
+    [AddComponentMenu("Palexen/Level Design/Trigger Event")]
     #if PALEXEN_TOOLS
     [ScriptDescription("Trigger Event", "You can activate events by entering this collider")]
     #endif

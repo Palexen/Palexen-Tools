@@ -35,6 +35,7 @@ using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 #endif
 
 namespace Palexen.Tools
@@ -66,6 +67,8 @@ namespace Palexen.Tools
     public enum LoadingBarMode { none, slider, fill }
     public enum AlignToSurface { yes, no }
     public enum AmbienceZoneBehaviour { ambience, snapshots }
+    public enum RegionInstancerBehaviour { volume, ground, up, left, right, forward, backward }
+    public enum RotationRandomizerBehaviour { all, up, no }
 
     #endregion
 
@@ -2771,6 +2774,108 @@ namespace Palexen.Tools
             EditorGUILayout.PropertyField(_icons);
 
             serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    #endregion
+
+    #region REGION INSTANCER
+
+    [CustomEditor(typeof(RegionInstancer))]
+    public class RegionInstancerEditor : Editor
+    {
+        RegionInstancer _ri;
+        SerializedProperty _behaviour;
+        SerializedProperty _randomizeRotation;
+        SerializedProperty _maxInstances;
+        SerializedProperty _prefabs;
+        SerializedProperty _bounds;
+
+        private BoxBoundsHandle _boundsHandle = new BoxBoundsHandle();
+        bool editing;
+
+        private void OnEnable()
+        {
+            _ri = (RegionInstancer)target;
+            _behaviour = serializedObject.FindProperty("_behaviour");
+            _randomizeRotation = serializedObject.FindProperty("_randomizeRotation");
+            _maxInstances = serializedObject.FindProperty("_maxInstances");
+            _prefabs = serializedObject.FindProperty("_prefabs");
+            _bounds = serializedObject.FindProperty("_bounds");
+        }
+        public override void OnInspectorGUI()
+        {
+            string customMessagePath = "Environment Settings/Palexen Environment Settings";
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Region Instancer</color>",
+                PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
+            GUILayout.Box("Automatically instantiate prefabs within a defined region.",
+                PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_behaviour);
+            EditorGUILayout.PropertyField(_randomizeRotation);
+            EditorGUILayout.PropertyField(_maxInstances);
+            EditorGUILayout.PropertyField(_prefabs);
+
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray);
+
+            GUI.backgroundColor = editing ? Color.gray : Color.white;
+            GUIContent content = new GUIContent(" Edit Bounds", EditorGUIUtility.IconContent("EditCollider").image);
+            if (GUILayout.Button(content, PalexenEditorStyles.BigButton))
+            {
+                editing = !editing;
+                SceneView.RepaintAll();
+            }
+
+            EditorGUILayout.PropertyField(_bounds);
+
+            PalexenEditorStyles.DrawHorizontalLine(Color.gray);
+
+            GUI.backgroundColor = Color.white;
+
+            GUILayout.Space(10);
+
+            GUI.color = setting.ContextSeparatorColor;
+            EditorGUILayout.HelpBox("", MessageType.None);
+            GUI.color = Color.white;
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Generate", PalexenEditorStyles.BigButton))
+            {
+                _ri.VolumeInstancing();
+            }
+
+            if(_ri.CurrentInstances > 0)
+            {
+                if (GUILayout.Button("Delete", PalexenEditorStyles.BigButton))
+                {
+                    _ri.DeleteInstances();
+                }
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void OnSceneGUI()
+        {
+            if (!editing) return;
+
+            using (new Handles.DrawingScope(_ri.transform.localToWorldMatrix))
+            {
+                _boundsHandle.center = _ri.Bounds.center;
+                _boundsHandle.size = _ri.Bounds.size;
+                _boundsHandle.SetColor(Color.white);
+
+                EditorGUI.BeginChangeCheck();
+                _boundsHandle.DrawHandle();
+
+                if(EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(_ri, "Change Bounds");
+                    _ri.Bounds = new Bounds(_boundsHandle.center, _boundsHandle.size);
+                }
+            }
         }
     }
 

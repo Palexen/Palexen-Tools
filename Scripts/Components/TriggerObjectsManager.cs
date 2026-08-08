@@ -24,7 +24,7 @@ using System.Collections.Generic;
 
 namespace Palexen.Gameplay
 {
-    [AddComponentMenu("Palexen/Gameplay/Trigger Objects Manager")]
+    [AddComponentMenu("Palexen/Level Design/Trigger Objects Manager")]
     public class TriggerObjectsManager : MonoBehaviour
     {
         #region VARIABLES

@@ -19,35 +19,33 @@
 * -----------------------------------------------------------------------------
 */
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 #if PALEXEN_TOOLS
 using Palexen.Tools;
 #endif
 
 namespace Palexen.Scriptables
 {
-#if PALEXEN_TOOLS
-    [ScriptDescription("Languages", "Improved Monobehavior")]
+    #if PALEXEN_TOOLS
+    [ScriptDescription("PrefabCollection", "Improved Monobehavior")]
 #endif
-    [CreateAssetMenu(fileName = "Languages", menuName = "Palexen/Languages")]
-    public class Languages : ScriptableObject
+    [CreateAssetMenu(fileName = "New Prefab Collection", menuName = "Palexen/PrefabCollection")]
+    public class PrefabCollection : ScriptableObject
     {
         #region VARIABLES
 
-        [SerializeField] private string[] languages;
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] [SerializeField] private GameObject[] _prefabs;
 
         #endregion
 
         #region PROPERTIES
 
-        public string[] LanguagesList
-        {
-            get { return languages; }
-            set { languages = value; }
-        }
-
+        public GameObject[] Prefabs { get { return _prefabs; }  set { _prefabs = value; } }
+        
         #endregion
 
         #region UNITY METHODS
@@ -64,7 +62,12 @@ namespace Palexen.Scriptables
 
         #region API
 
+        public GameObject GetRandomPrefab()
+        {
+            int randomIndex = Random.Range(0, _prefabs.Length);
 
+            return _prefabs[randomIndex];
+        }
 
         #endregion
     }
@@ -72,15 +75,15 @@ namespace Palexen.Scriptables
     #region CUSTOM EDITOR
 #if UNITY_EDITOR
 
-    [CustomEditor(typeof(Languages))]
+    [CustomEditor(typeof(PrefabCollection))]
     [CanEditMultipleObjects]
-    public class LanguagesEditor : Editor
+    public class PrefabCollectionEditor : Editor
     {
-        SerializedProperty languages;
+        SerializedProperty _prefabs;
 
         private void OnEnable()
         {
-            languages = serializedObject.FindProperty("languages");
+            _prefabs = serializedObject.FindProperty("_prefabs");
         }
 
         public override void OnInspectorGUI()
@@ -88,39 +91,34 @@ namespace Palexen.Scriptables
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
 
-            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Languages</color>",
+            GUILayout.Label($"<color={"#" + setting.ScriptTitleColor.ConvertToHex()}>Prefab Collection</color>",
                 PalexenEditorStyles.CoolTitle(setting.ScriptTitleSize));
 
-            GUILayout.Box("Add your Languages here, it will appear in the <color=green>LangManager</color>",
+            GUILayout.Box("Add your prefabs here!",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic, 90));
 
             GUILayout.Space(10);
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(languages, new GUIContent("Languages"), true);
-
-            if(GUILayout.Button("Add to <color=cyan>Environment Window</color>", PalexenEditorStyles.BigButton))
-            {
-                setting.Languages = (Languages)target;
-            }
+            EditorGUILayout.PropertyField(_prefabs, new GUIContent("Prefabs"), true);
 
             serializedObject.ApplyModifiedProperties();
         }
     }
 
-    public class CreateNewLanguageAsset
+    public class CreatePrefabCollectionAsset
     {
-        public static Languages tempAsset;
+        public static PrefabCollection tempAsset;
 
 #if PALEXEN_UP_TOOLBAR
-        [MenuItem("Languages/Create New Language")]
+        [MenuItem("Prefabs/Create New Prefab Collection")]
 #else
-        [MenuItem("Palexen/Create New Language", false, 1)]
+        [MenuItem("Palexen/Create New Prefab Collection", false, 1)]
 #endif
         public static void CreateAsset()
         {
-            Languages asset = ScriptableObject.CreateInstance<Languages>();
+            PrefabCollection asset = ScriptableObject.CreateInstance<PrefabCollection>();
 
             string customMessagePath = "Environment Settings/Palexen Environment Settings";
             CustomEnvironment setting = Resources.Load<CustomEnvironment>(customMessagePath);
@@ -129,10 +127,10 @@ namespace Palexen.Scriptables
 
             if (!AssetDatabase.IsValidFolder(folderPath))
             {
-                AssetDatabase.CreateFolder($"{folderPath}", "Languages");
+                AssetDatabase.CreateFolder($"{folderPath}", "Prefabs");
             }
 
-            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Language.asset");
+            string assetPath = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Prefab Collection.asset");
 
             AssetDatabase.CreateAsset(asset, assetPath);
 
@@ -144,15 +142,15 @@ namespace Palexen.Scriptables
             Selection.activeObject = asset;
             tempAsset = asset;
 
-            Debug.Log($"<color=green>Language created at: </color><color=cyan>{assetPath}</color>");
+            Debug.Log($"<color=green>Prefab Collection created at: </color><color=cyan>{assetPath}</color>");
         }
 
-        public void CreateNewLanguagesAsset()
+        public void CreateNewPrefabCollectionsAsset()
         {
             CreateAsset();
         }
 
-        public Languages GetCurrent()
+        public PrefabCollection GetCurrent()
         {
             return tempAsset;
         }
