@@ -2786,6 +2786,8 @@ namespace Palexen.Tools
     {
         RegionInstancer _ri;
         SerializedProperty _behaviour;
+        SerializedProperty _alignment;
+        SerializedProperty _layerMask;
         SerializedProperty _randomizeRotation;
         SerializedProperty _maxInstances;
         SerializedProperty _prefabs;
@@ -2798,6 +2800,8 @@ namespace Palexen.Tools
         {
             _ri = (RegionInstancer)target;
             _behaviour = serializedObject.FindProperty("_behaviour");
+            _alignment = serializedObject.FindProperty("_alignment");
+            _layerMask = serializedObject.FindProperty("_layerMask");
             _randomizeRotation = serializedObject.FindProperty("_randomizeRotation");
             _maxInstances = serializedObject.FindProperty("_maxInstances");
             _prefabs = serializedObject.FindProperty("_prefabs");
@@ -2813,6 +2817,22 @@ namespace Palexen.Tools
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
             serializedObject.Update();
             EditorGUILayout.PropertyField(_behaviour);
+
+            if (_ri.Alignment == AlignToSurface.no)
+            {
+                EditorGUILayout.PropertyField(_alignment);
+            }
+
+            if (_ri.Alignment == AlignToSurface.yes)
+            {
+                PalexenEditorStyles.DrawHorizontalLine(Color.gray);
+                GUI.backgroundColor = new Color(.68f, 1, .18f, 1);
+                EditorGUILayout.PropertyField(_alignment);
+                EditorGUILayout.PropertyField(_layerMask);
+                GUI.backgroundColor = Color.white;
+                PalexenEditorStyles.DrawHorizontalLine(Color.gray);
+            }
+
             EditorGUILayout.PropertyField(_randomizeRotation);
             EditorGUILayout.PropertyField(_maxInstances);
             EditorGUILayout.PropertyField(_prefabs);

@@ -38,6 +38,8 @@ namespace Palexen.Levels
         #region VARIABLES
 
         [SerializeField] private RegionInstancerBehaviour _behaviour;
+        [SerializeField] private AlignToSurface _alignment = AlignToSurface.no;
+        [SerializeField] private LayerMask _layerMask;
         [SerializeField] private RotationRandomizerBehaviour _randomizeRotation;
         [SerializeField] private int _maxInstances;
         [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] [SerializeField] private PrefabCollection _prefabs;
@@ -50,8 +52,11 @@ namespace Palexen.Levels
         #endregion
 
         #region PROPERTIES
+
         public Bounds Bounds { get { return new Bounds(_bounds.center, _bounds.size); } set { _bounds = value; } }
         public int CurrentInstances { get { return transform.childCount; } }
+        public AlignToSurface Alignment { get { return _alignment; } set { _alignment = value; } }
+        public LayerMask TargetLayer { get { return _layerMask; } set { _layerMask = value; } }
 
         #endregion
 
@@ -83,13 +88,17 @@ namespace Palexen.Levels
                 return;
             }
 
-            while (currentInstances < _maxInstances)
+            int attempts = 0;
+            int maxAttempts = _maxInstances * 10;
+
+            while (currentInstances < _maxInstances && attempts < maxAttempts)
             {
                 foreach (GameObject prefab in _prefabs.Prefabs)
                 {
                     if (currentInstances >= _maxInstances) break;
-
                     if (prefab == null) continue;
+
+                    attempts++;
 
                     Vector3 spawnPosition = _behaviour switch
                     {
@@ -103,13 +112,76 @@ namespace Palexen.Levels
                         _ => transform.position
                     };
 
-                    GameObject clone = Instantiate(prefab, spawnPosition, RotationHandler(), transform);
+                    if (_alignment == AlignToSurface.no)
+                    {
+                        GameObject clone = Instantiate(prefab, spawnPosition, RotationHandler(), transform);
+                        _instancedObjects.Add(clone);
+                        currentInstances++;
+                    }
 
-                    _instancedObjects.Add(clone);
-                    currentInstances++;
+                    if (_alignment == AlignToSurface.yes)
+                    {
+                        RaycastHit hit;
+                        Vector3 origin = spawnPosition;
+                        Vector3 direction = Vector3.down;
+                        float rayDistance = _bounds.size.y;
+
+                        switch (_behaviour)
+                        {
+                            case RegionInstancerBehaviour.ground:
+                                origin = spawnPosition + Vector3.up * _bounds.max.y;
+                                direction = Vector3.down;
+                                rayDistance = _bounds.size.y;
+                                break;
+
+                            case RegionInstancerBehaviour.up:
+                                origin = spawnPosition + Vector3.down * _bounds.min.y;
+                                direction = Vector3.up;
+                                rayDistance = _bounds.size.y;
+                                break;
+
+                            case RegionInstancerBehaviour.left:
+                                origin = spawnPosition + Vector3.right * _bounds.max.x;
+                                direction = Vector3.left;
+                                rayDistance = _bounds.size.x;
+                                break;
+
+                            case RegionInstancerBehaviour.right:
+                                origin = spawnPosition + Vector3.right * _bounds.min.x;
+                                direction = Vector3.right;
+                                rayDistance = _bounds.size.x;
+                                break;
+
+                            case RegionInstancerBehaviour.forward:
+                                origin = spawnPosition + Vector3.forward * _bounds.min.z;
+                                direction = Vector3.forward;
+                                rayDistance = _bounds.size.z;
+                                break;
+
+                            case RegionInstancerBehaviour.backward:
+                                origin = spawnPosition + Vector3.forward * _bounds.max.z;
+                                direction = Vector3.back;
+                                rayDistance = _bounds.size.z;
+                                break;
+                        }
+
+                        if (Physics.Raycast(origin, direction, out hit, rayDistance, _layerMask))
+                        {
+                            GameObject clone = Instantiate(prefab, hit.point, Quaternion.FromToRotation
+                                (Vector3.up, hit.normal) * RotationHandler(), transform);
+                            _instancedObjects.Add(clone);
+                            currentInstances++;
+                        }
+                    }
                 }
             }
+
+            if (attempts >= maxAttempts && currentInstances < _maxInstances)
+            {
+                Debug.LogWarning($"No surface detected in place");
+            }
         }
+
 
 
         Vector3 RandomPosition()
