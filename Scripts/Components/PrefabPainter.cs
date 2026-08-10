@@ -44,7 +44,7 @@ namespace Palexen.Tools
         [VectorSlider(0, 720)][SerializeField] private Vector2 _YRandomizer = new(0, 360);
 
         [MyHeader("Random Size")]
-        [VectorSlider(0, 2)][SerializeField] private Vector2 _sizeRandomizer = new(.9f, 1);
+        [VectorSlider(.1f, 10)][SerializeField] private Vector2 _sizeRandomizer = new(.9f, 1);
         [SerializeField] private AlignToSurface _alingToSurface;
         [SerializeField] private float _yOffset;
 

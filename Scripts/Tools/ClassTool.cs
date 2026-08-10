@@ -2785,10 +2785,12 @@ namespace Palexen.Tools
     public class RegionInstancerEditor : Editor
     {
         RegionInstancer _ri;
+        SerializedProperty _function;
         SerializedProperty _behaviour;
         SerializedProperty _alignment;
         SerializedProperty _layerMask;
         SerializedProperty _randomizeRotation;
+        SerializedProperty _randomSize;
         SerializedProperty _maxInstances;
         SerializedProperty _prefabs;
         SerializedProperty _bounds;
@@ -2799,10 +2801,12 @@ namespace Palexen.Tools
         private void OnEnable()
         {
             _ri = (RegionInstancer)target;
+            _function = serializedObject.FindProperty("_function");
             _behaviour = serializedObject.FindProperty("_behaviour");
             _alignment = serializedObject.FindProperty("_alignment");
             _layerMask = serializedObject.FindProperty("_layerMask");
             _randomizeRotation = serializedObject.FindProperty("_randomizeRotation");
+            _randomSize = serializedObject.FindProperty("_randomSize");
             _maxInstances = serializedObject.FindProperty("_maxInstances");
             _prefabs = serializedObject.FindProperty("_prefabs");
             _bounds = serializedObject.FindProperty("_bounds");
@@ -2816,6 +2820,8 @@ namespace Palexen.Tools
             GUILayout.Box("Automatically instantiate prefabs within a defined region.",
                 PalexenEditorStyles.CoolBox(12, TextAnchor.MiddleCenter, FontStyle.BoldAndItalic));
             serializedObject.Update();
+
+            EditorGUILayout.PropertyField(_function);
             EditorGUILayout.PropertyField(_behaviour);
 
             if (_ri.Alignment == AlignToSurface.no)
@@ -2834,6 +2840,7 @@ namespace Palexen.Tools
             }
 
             EditorGUILayout.PropertyField(_randomizeRotation);
+            EditorGUILayout.PropertyField(_randomSize);
             EditorGUILayout.PropertyField(_maxInstances);
             EditorGUILayout.PropertyField(_prefabs);
 

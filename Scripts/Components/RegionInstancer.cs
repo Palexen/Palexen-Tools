@@ -37,10 +37,12 @@ namespace Palexen.Levels
     {
         #region VARIABLES
 
+        [SerializeField] private Function _function;
         [SerializeField] private RegionInstancerBehaviour _behaviour;
         [SerializeField] private AlignToSurface _alignment = AlignToSurface.no;
         [SerializeField] private LayerMask _layerMask;
         [SerializeField] private RotationRandomizerBehaviour _randomizeRotation;
+        [VectorSlider(0.1f, 10)][SerializeField] private Vector2 _randomSize = new(0.8f, 1f);
         [SerializeField] private int _maxInstances;
         [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)] [SerializeField] private PrefabCollection _prefabs;
         [SerializeField] private Bounds _bounds = new(Vector3.zero, Vector3.one);
@@ -48,15 +50,21 @@ namespace Palexen.Levels
         List<GameObject> _instancedObjects = new List<GameObject>();
         int currentInstances;
         bool instancing;
+        GameObject clone;
 
         #endregion
 
         #region PROPERTIES
 
-        public Bounds Bounds { get { return new Bounds(_bounds.center, _bounds.size); } set { _bounds = value; } }
-        public int CurrentInstances { get { return transform.childCount; } }
+        public RegionInstancerBehaviour Behaviour { get { return _behaviour; } set { _behaviour = value; } }
         public AlignToSurface Alignment { get { return _alignment; } set { _alignment = value; } }
         public LayerMask TargetLayer { get { return _layerMask; } set { _layerMask = value; } }
+        public RotationRandomizerBehaviour RotationRandomizer { get { return _randomizeRotation; } set { _randomizeRotation = value; } }
+        public Vector2 RandomSize { get { return _randomSize; } set { _randomSize = value; } }
+        public int MaxInstances { get { return _maxInstances; } set { _maxInstances = value; } }
+        public PrefabCollection Prefabs { get { return _prefabs; } set { _prefabs = value; } }
+        public Bounds Bounds { get { return new Bounds(_bounds.center, _bounds.size); } set { _bounds = value; } }
+        public int CurrentInstances { get { return transform.childCount; } }
 
         #endregion
 
@@ -167,8 +175,24 @@ namespace Palexen.Levels
 
                         if (Physics.Raycast(origin, direction, out hit, rayDistance, _layerMask))
                         {
-                            GameObject clone = Instantiate(prefab, hit.point, Quaternion.FromToRotation
-                                (Vector3.up, hit.normal) * RotationHandler(), transform);
+                            if (_function == Function.levelDesign) 
+                            {
+#if UNITY_EDITOR
+                                clone = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab);
+                                clone.transform.SetPositionAndRotation(hit.point, Quaternion.FromToRotation
+                                    (Vector3.up, hit.normal) * RotationHandler());
+                                clone.transform.parent = transform;
+#endif
+                            }
+
+                            if(_function == Function.runtime)
+                            {
+                                clone = Instantiate(prefab, hit.point, Quaternion.FromToRotation
+                                    (Vector3.up, hit.normal) * RotationHandler(), transform);
+                            }
+
+                            float size = Random.Range(_randomSize.x, _randomSize.y);
+                            clone.transform.localScale = new Vector3(size, size, size);
                             _instancedObjects.Add(clone);
                             currentInstances++;
                         }

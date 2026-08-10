@@ -36,12 +36,14 @@ using UnityEditor.Build;
 namespace Palexen.Tools
 {
     #region ENUMS
+
     public enum FieldPropertyColor { red, green, blue, yellow, cyan, magenta, orange, clearBlue, pink, neonGreen, salmon }
     public enum ShowObjectMessage { no, message, warningMessage, errorMessage }
     public enum GizmoForm { sphere, cube, cylinder, cone, arrow, circle, square, dot }
     public enum TurnOnScriptDescription { On, Off }
     public enum HierarchyIndentation { full, compact }
     public enum DrawOn { up, bottom }
+    public enum Function { runtime, levelDesign }
 
     #endregion
 
