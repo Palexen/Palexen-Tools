@@ -18,6 +18,7 @@
 
 * -----------------------------------------------------------------------------
 */
+using Palexen.Scriptables;
 using UnityEngine;
 
 namespace Palexen.Tools
@@ -38,7 +39,7 @@ namespace Palexen.Tools
         [SerializeField][ColorUsage(true, true)] private Color _brushColor = new(0.6529321f, 0.6529321f, 1, 1f);
 
         [MyHeader("Prefabs")]
-        [FieldColor(FieldPropertyColor.red, ShowObjectMessage.errorMessage)][SerializeField] private GameObject[] _prefabs;
+        [FieldColor(FieldPropertyColor.clearBlue, ShowObjectMessage.errorMessage)][SerializeField] private PrefabCollection _prefabs;
 
         [MyHeader("Random Rotation")]
         [VectorSlider(0, 720)][SerializeField] private Vector2 _YRandomizer = new(0, 360);
@@ -78,7 +79,7 @@ namespace Palexen.Tools
         public float Density { get { return _density * 10; } }
         public float Radius { get { return _radius; } }
         public Color BrushColor { get { return _brushColor; } }
-        public GameObject[] Prefabs { get { return _prefabs; } }
+        public PrefabCollection Collection { get { return _prefabs; } }
         public Vector2 YRandomizer {  get { return _YRandomizer; } }
         public Vector2 SizeRandomizer { get { return _sizeRandomizer; } }
         public GameObject Brush { get { return _brush; } }

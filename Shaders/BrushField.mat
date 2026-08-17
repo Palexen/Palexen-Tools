@@ -196,7 +196,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.6529321, g: 0.6529321, b: 1, a: 0.7424004}
+    - _MainColor: {r: 0.6529321, g: 0.6529321, b: 1, a: 0.15851757}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5414346755213992168

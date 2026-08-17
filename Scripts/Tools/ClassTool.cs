@@ -2612,9 +2612,9 @@ namespace Palexen.Tools
                 if (e.type == _pp.MouseBehaviour && e.button == 0)
                 {
                     _isPainting = true;
-                    int i = UnityEngine.Random.Range(0, _pp.Prefabs.Length);
+                    int i = UnityEngine.Random.Range(0, _pp.Collection.Prefabs.Length);
 
-                    GameObject[] prefab = _pp.Prefabs;
+                    GameObject[] prefab = _pp.Collection.Prefabs;
                     GameObject _t = prefab[i];
 
                     float size = UnityEngine.Random.Range(_pp.SizeRandomizer.x, _pp.SizeRandomizer.y);
