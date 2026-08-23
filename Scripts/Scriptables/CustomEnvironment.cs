@@ -20,6 +20,7 @@
 */
 using UnityEngine;
 using Palexen.Tools;
+using UnityEngine.Events;
 
 namespace Palexen.Scriptables
 {
@@ -27,6 +28,7 @@ namespace Palexen.Scriptables
 	public class CustomEnvironment : ScriptableObject
 	{
 		#region VARIABLES
+
 		[MyHeader("Script Description Setup")]
 		[SerializeField] private TurnOnScriptDescription scriptDescriptionState;
         [SerializeField] private string scriptNameSpace = "Palexen";
@@ -106,6 +108,34 @@ namespace Palexen.Scriptables
         [FieldColor(FieldPropertyColor.neonGreen)] [SerializeField] private GameObject neonGreenObject;
         [FieldColor(FieldPropertyColor.salmon)] [SerializeField] private GameObject salmonObject;
 
+        [MyHeader("Backgrounds")]
+        [Notepad("Customize your scripts with background colors! use <color=yellow>[Background(FieldColor.Color)]</color> attribute to use!")]
+        [SerializeField] [Background(FieldPropertyColor.preset1)] [TagField] private string _tagFieldExample;
+        [SerializeField] [Background(FieldPropertyColor.preset2)] private LayerMask _layerFieldExample;
+        [SerializeField] [Background(FieldPropertyColor.preset3)] [VectorSlider(0, 1)] private Vector2 _vectorSliderExample = new(.25f, .75f);
+        [SerializeField] [Background(FieldPropertyColor.preset4)] [TextArea(1, 10)] private string _textAreaExample;
+        [SerializeField] [Background(FieldPropertyColor.preset5)] private UnityEvent _eventsField;
+
+        [MyHeader("Color Presets")]
+        private readonly Color cyan = Color.cyan;
+        private readonly Color yellow = Color.yellow;
+        private readonly Color red = Color.red;
+        private readonly Color green = Color.green;
+        private readonly Color blue = new(.392f, .584f, .929f, 1);
+        private readonly Color magenta = Color.magenta;
+        private readonly Color orange = new(1, 0.388f, 0);
+        private readonly Color clearBlue = new(0, 0.671f, 1);
+        private readonly Color pink = new(1, 0.561f, 0.988f);
+        private readonly Color neonGreen = new(0.392f, 1, 0);
+        private readonly Color salmon = new(1, 0.549f, 0.412f);
+
+        [MyHeader("Custom Color Presets")]
+        [SerializeField] private Color preset1 = Color.white;
+        [SerializeField] private Color preset2 = Color.white;
+        [SerializeField] private Color preset3 = Color.white;
+        [SerializeField] private Color preset4 = Color.white;
+        [SerializeField] private Color preset5 = Color.white;
+
         #endregion
 
         #region PROPERTIES
@@ -118,6 +148,23 @@ namespace Palexen.Scriptables
         public Color ContextSeparatorColor { get { return contextSeparatorColor; } }
         public Color GizmoColor { get { return gizmosColor; } }
         public Color InactiveGizmosColor { get { return inactiveGizmosColor; } }
+
+        public Color Cyan { get {  return cyan; } }
+        public Color Yellow { get { return yellow; } }
+        public Color Red { get { return red; } }
+        public Color Green { get { return green; } }
+        public Color Blue { get { return blue; } }
+        public Color Magenta { get { return magenta; } }
+        public Color Orange { get { return orange; } }
+        public Color ClearBlue { get { return clearBlue; } }
+        public Color Pink { get { return pink; } }
+        public Color NeonGreen { get { return neonGreen; } }
+        public Color Salmon { get { return salmon; } }
+        public Color Preset1 {  get { return preset1; } set { preset1 = value; } }
+        public Color Preset2 { get { return preset2; } set { preset2 = value; } }
+        public Color Preset3 { get { return preset3; } set { preset3 = value; } }
+        public Color Preset4 { get { return preset4; } set { preset4 = value; } }
+        public Color Preset5 { get { return preset5; } set { preset5 = value; } }
 
         public int ScriptTitleSize { get { return scriptTitleSize; } }
         public int HeaderSize { get { return headerSize; } }

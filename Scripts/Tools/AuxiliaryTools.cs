@@ -37,7 +37,12 @@ namespace Palexen.Tools
 {
     #region ENUMS
 
-    public enum FieldPropertyColor { red, green, blue, yellow, cyan, magenta, orange, clearBlue, pink, neonGreen, salmon }
+    public enum FieldPropertyColor 
+    { 
+        red, green, blue, yellow, cyan, magenta, orange, clearBlue, 
+        pink, neonGreen, salmon, preset1, preset2, preset3, preset4, preset5 
+    }
+
     public enum ShowObjectMessage { no, message, warningMessage, errorMessage }
     public enum GizmoForm { sphere, cube, cylinder, cone, arrow, circle, square, dot }
     public enum TurnOnScriptDescription { On, Off }
@@ -73,7 +78,7 @@ namespace Palexen.Tools
 
             CustomEnvironment msj = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
 
-            Rect fieldRect = new Rect(position.x, position.y, position.width, EditorGUI.GetPropertyHeight(property, label));
+            Rect fieldRect = new(position.x, position.y, position.width, EditorGUI.GetPropertyHeight(property, label));
 
             if (!field.keepColor)
             {
@@ -164,61 +169,88 @@ namespace Palexen.Tools
         {
             keepColor = _keepColor;
 
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
+
             switch (_color)
             {
                 case FieldPropertyColor.red:
                     toShow = _message;
-                    color = Color.red;
+                    color = setting.Red;
                     break;
 
                 case FieldPropertyColor.green:
                     toShow = _message;
-                    color = Color.green;
+                    color = setting.Green;
                     break;
 
                 case FieldPropertyColor.blue:
                     toShow = _message;
-                    color = new Color(.392f, .584f, .929f, 1);
+                    color = setting.Blue;
                     break;
 
                 case FieldPropertyColor.yellow:
                     toShow = _message;
-                    color = Color.yellow;
+                    color = setting.Yellow;
                     break;
 
                 case FieldPropertyColor.cyan:
                     toShow = _message;
-                    color = Color.cyan;
+                    color = setting.Cyan;
                     break;
 
                 case FieldPropertyColor.magenta:
                     toShow = _message;
-                    color = Color.magenta;
+                    color = setting.Magenta;
                     break;
 
                 case FieldPropertyColor.orange:
                     toShow = _message;
-                    color = new Color(1, 0.388f, 0);
+                    color = setting.Orange;
                     break;
 
                 case FieldPropertyColor.clearBlue:
                     toShow = _message;
-                    color = new Color(0, 0.671f, 1);
+                    color = setting.ClearBlue;
                     break;
 
                 case FieldPropertyColor.pink:
                     toShow = _message;
-                    color = new Color(1, 0.561f, 0.988f);
+                    color = setting.Pink;
                     break;
 
                 case FieldPropertyColor.neonGreen:
                     toShow = _message;
-                    color = new Color(0.392f, 1, 0);
+                    color = setting.NeonGreen;
                     break;
 
                 case FieldPropertyColor.salmon:
                     toShow = _message;
-                    color = new Color(1, 0.549f, 0.412f);
+                    color = setting.Salmon;
+                    break;
+
+                case FieldPropertyColor.preset1:
+                    toShow = _message;
+                    color = setting.Preset1;
+                    break;
+
+                case FieldPropertyColor.preset2:
+                    toShow = _message;
+                    color = setting.Preset2;
+                    break;
+
+                case FieldPropertyColor.preset3:
+                    toShow = _message;
+                    color = setting.Preset3;
+                    break;
+
+                case FieldPropertyColor.preset4:
+                    toShow = _message;
+                    color = setting.Preset4;
+                    break;
+
+                case FieldPropertyColor.preset5:
+                    toShow = _message;
+                    color = setting.Preset5;
                     break;
             }
         }
@@ -1385,7 +1417,7 @@ namespace Palexen.Tools
 
     #region NOTES
 
-        [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class NotepadAttribute : PropertyAttribute
     {
         private string note;
@@ -1443,6 +1475,120 @@ namespace Palexen.Tools
 
             float baseHeight = EditorGUI.GetPropertyHeight(property, label, true);
             return boxHeight + 2 + baseHeight;
+        }
+    }
+
+#endif
+
+    #endregion
+
+    #region BACKGROUND
+
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+    public class BackgroundAttribute : PropertyAttribute
+    {
+        private FieldPropertyColor m_color;
+
+        public FieldPropertyColor BackgroundColor { get { return m_color; } }
+
+        public BackgroundAttribute(FieldPropertyColor color)
+        {
+            m_color = color;
+        }
+    }
+
+#if UNITY_EDITOR
+
+    [CustomPropertyDrawer(typeof(BackgroundAttribute))]
+    public class BackgroundDrawer : PropertyDrawer
+    {
+        Color color;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            BackgroundAttribute bg = (BackgroundAttribute)attribute;
+
+            CustomEnvironment setting = Resources.Load<CustomEnvironment>("Environment Settings/Palexen Environment Settings");
+
+            Rect r = new(position.x, position.y, position.width, EditorGUI.GetPropertyHeight(property, label));
+
+            switch (bg.BackgroundColor)
+            {
+                case FieldPropertyColor.red:
+                color = setting.Red;
+                    break;
+
+                case FieldPropertyColor.orange:
+                    color = setting.Orange;
+                    break;
+
+                case FieldPropertyColor.pink:
+                    color = setting.Pink;
+                    break;
+
+                case FieldPropertyColor.blue:
+                    color = setting.Blue;
+                    break;
+
+                case FieldPropertyColor.clearBlue:
+                    color = setting.ClearBlue;
+                    break;
+
+                case FieldPropertyColor.magenta:
+                    color = setting.Magenta;
+                    break;
+
+                case FieldPropertyColor.green:
+                    color = setting.Green;
+                    break;
+
+                case FieldPropertyColor.neonGreen:
+                    color = setting.NeonGreen;
+                    break;
+
+                case FieldPropertyColor.yellow:
+                    color = setting.Yellow;
+                    break;
+
+                case FieldPropertyColor.cyan:
+                    color = setting.Cyan;
+                    break;
+
+                case FieldPropertyColor.salmon:
+                    color = setting.Salmon;
+                    break;
+
+                case FieldPropertyColor.preset1:
+                    color = setting.Preset1;
+                    break;
+
+                case FieldPropertyColor.preset2:
+                    color = setting.Preset2;
+                    break;
+
+                case FieldPropertyColor.preset3:
+                    color = setting.Preset3;
+                    break;
+
+                case FieldPropertyColor.preset4:
+                    color = setting.Preset4;
+                    break;
+
+                case FieldPropertyColor.preset5:
+                    color = setting.Preset5;
+                    break;
+            }
+
+            GUI.backgroundColor = color;
+            EditorGUI.PropertyField(r, property, label, true);
+            GUI.backgroundColor = Color.white;
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            float h = EditorGUI.GetPropertyHeight(property, label, true);
+
+            return h;
         }
     }
 

@@ -29,9 +29,12 @@ namespace Palexen.Misc
     [ScriptDescription("Example Script", "This is an example, you not need do nothing")]
     public class ExampleScript : MonoBehaviour
     {
-        
         [VectorSlider(0, 10)] public Vector2 minMaxFloat = new(2, 8);
         [VectorSlider(0, 10)] public Vector2Int minMaxInt = new(2, 8);
+
+        [MyHeader("Sliders & Backgrounds")]
+        [Background(FieldPropertyColor.preset4)]
+        [VectorSlider(0, 10)] public Vector2Int[] arrrays;
 
         [MyHeader("Red Object Without Error")]
         [FieldColor] public GameObject redObject;
